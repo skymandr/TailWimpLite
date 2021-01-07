@@ -137,7 +137,7 @@ void win_initialise(void) {
     window_definition.ymin = 0;
     window_definition.icon_count = 0;
 
-    strncpy(win_title_text, APP_NAME, WIN_TITLE_TEXT_LEN);
+    strncpy(win_title_text, APP_TITLE, WIN_TITLE_TEXT_LEN);
     win_title_text[WIN_TITLE_TEXT_LEN - 1] = '\0';
 
     win_handle = wimp_create_window(&window_definition);
@@ -174,14 +174,16 @@ static wimp_i win_create_icon(void) {
     icon_definition.icon.extent.y0 = -260;
     icon_definition.icon.extent.y1 =  -60;
     icon_definition.icon.flags = wimp_ICON_SPRITE
-                                | wimp_ICON_TEXT
-                                | wimp_ICON_BORDER
                                 | wimp_ICON_HCENTRED
                                 | (wimp_COLOUR_BLACK
                                    << wimp_ICON_FG_COLOUR_SHIFT)
                                 | (wimp_COLOUR_CREAM
                                    << wimp_ICON_BG_COLOUR_SHIFT);
-    strncpy(icon_definition.icon.data.text_and_sprite, "application", 12);
+    strncpy(
+        icon_definition.icon.data.sprite,
+        "bumbarrelbbl",
+        osspriteop_NAME_LIMIT
+    );
 
     return wimp_create_icon(&icon_definition);
 }

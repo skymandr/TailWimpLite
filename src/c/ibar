@@ -51,7 +51,7 @@ void ibar_initialise(void) {
     wimp_icon_create icon_bar;
 
     // Icon bar menu:
-    ibar_menu = menu_create(APP_NAME, 4);
+    ibar_menu = menu_create(APP_TITLE, 4);
     menu_entry(ibar_menu, IBAR_MENU_INFO, "Info", NULL);
     menu_entry(ibar_menu, IBAR_MENU_CHOICES, "Choices", NULL);
     menu_entry(ibar_menu, IBAR_MENU_HELP, "Help...", NULL);
@@ -67,7 +67,7 @@ void ibar_initialise(void) {
                           | (wimp_BUTTON_CLICK << wimp_ICON_BUTTON_TYPE_SHIFT);
     strncpy(
         icon_bar.icon.data.sprite,
-        "application",
+        APP_NAME,
         osspriteop_NAME_LIMIT
     );
 

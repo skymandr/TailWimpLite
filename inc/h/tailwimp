@@ -25,7 +25,8 @@
 #define TAILWIMP_MAIN
 
 // Application name and version:
-#define APP_NAME        "TailWimp Lite"
+#define APP_TITLE       "TailWimp Lite"
+#define APP_NAME        "!tailwmplt"
 #define APP_VERSION     "0.0.1"
 
 // Application quit request flag:
