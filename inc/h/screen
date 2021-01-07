@@ -26,13 +26,6 @@
 
 #include "oslib/wimp.h"
 
-#define SCREEN_OFF     -1
-#define SCREEN_CENTRE   0
-#define SCREEN_LEFT     1
-#define SCREEN_RIGHT    2
-#define SCREEN_TOP      3
-#define SCREEN_BOTTOM   4
-
 
 // Screen dimensions struct:
 typedef struct screen_dim screen_dim;

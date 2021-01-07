@@ -1,4 +1,4 @@
-/*  File: win.h
+/*  File: choices.h
  *  Part of TailWimp Lite
  *  Copyright (C) 2021  Andreas Skyman (Bumbarrel Computing)
  * 
@@ -21,21 +21,20 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef TAILWIMP_WIN
-#define TAILWIMP_WIN
+#ifndef TAILWIMP_CHOICES
+#define TAILWIMP_CHOICES
 
-#define SCREEN_OFF     -1
-#define SCREEN_CENTRE   0
-#define SCREEN_LEFT     1
-#define SCREEN_RIGHT    2
-#define SCREEN_TOP      3
-#define SCREEN_BOTTOM   4
+#include "screen.h"
 
 
-// Window initialisation:
-void win_initialise(void);
+// Choices struct:
+typedef struct choices choices;
+struct choices {
+    screen_padding padding;
+    osbool to_top;
+};
 
-// Open the Window:
-void win_open(void);
+// Get default choices:
+void choices_get_default(choices* choices);
 
 #endif

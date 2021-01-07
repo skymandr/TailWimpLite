@@ -26,8 +26,9 @@
 #include "oslib/wimp.h"
 #include "oslib/wimpspriteop.h"
 
-#include "tailwimp.h"
+#include "choices.h"
 #include "screen.h"
+#include "tailwimp.h"
 #include "win.h"
 
 
@@ -81,8 +82,6 @@ static osbool window_is_bottom(
     wimp_window_state*  state,
     screen_padding*     pad
 );
-
-
 
 
 // Windoww initialisation:
