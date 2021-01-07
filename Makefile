@@ -25,7 +25,7 @@ OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 # Targets:
 all: tailwimp help
 
-$(ODIR)/%.o: $(SRCDIR)/%.c $(ODIR)
+$(ODIR)/%.o: $(SRCDIR)/%.c $(IDIR)/%.h $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 $(ODIR):

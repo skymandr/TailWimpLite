@@ -95,6 +95,14 @@ void ibar_mouse_click(wimp_pointer* pointer) {
 // Handle menu selection:
 static void ibar_menu_selection(wimp_menu *menu, wimp_selection *selection) {
     switch (selection->items[0]) {
+    case IBAR_MENU_INFO:
+        break;
+    case IBAR_MENU_CHOICES:
+        break;
+    case IBAR_MENU_HELP:
+        // TODO: Catch error and report!
+        xos_cli("%Filer_Run " APP_DIR ".!Help");
+        break;
     case IBAR_MENU_QUIT:
         main_quit_flag = TRUE;
         break;
