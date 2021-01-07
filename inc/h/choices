@@ -30,8 +30,8 @@
 // Choices struct:
 typedef struct choices choices;
 struct choices {
-    screen_padding padding;
-    osbool to_top;
+    screen_padding  padding;
+    osbool          to_top;
 };
 
 // Get default choices:

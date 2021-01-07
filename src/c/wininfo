@@ -1,0 +1,132 @@
+/*  File: wininfo.c
+ *  Part of TailWimp Lite
+ *  Copyright (C) 2021  Andreas Skyman (Bumbarrel Computing)
+ * 
+ *  Many features in this program are highly derivative of Steve Fryatt's
+ *  examples from http://www.stevefryatt.org.uk/risc-os/wimp-prog which
+ *  have been relicensed from European Union Public License v1.2 for the
+ *  purpose of this program.
+ * 
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ * 
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#include "oslib/wimp.h"
+
+#include "appwin.h"
+#include "screen.h"
+#include "tailwimp.h"
+#include "wininfo.h"
+
+
+// Function prototypes:
+static osbool wininfo_window_is_manageable(wimp_window_info* info);
+static osbool wininfo_window_is_left(wimp_window_info* info);
+static osbool wininfo_window_is_right(wimp_window_info* info);
+static osbool wininfo_window_is_top(wimp_window_info* info);
+static osbool wininfo_window_is_bottom(wimp_window_info* info);
+
+
+// Get active window:
+void wininfo_get_active_window(wimp_window_state* state) {
+    wimp_w handle = appwin_get_handle();
+    state->w = handle;
+    // TODO:
+    // Look through pile for
+    // 1) window with input focus
+    // 2) top window without that is manageable
+    wimp_get_window_state(state);
+}
+
+
+wininfo wininfo_get_info(wimp_window_info* wimp_wininfo) {
+    wininfo info;
+
+    info.is_left        = wininfo_window_is_left(wimp_wininfo);
+    info.is_right       = wininfo_window_is_right(wimp_wininfo);
+    info.is_top         = wininfo_window_is_top(wimp_wininfo);
+    info.is_bottom      = wininfo_window_is_bottom(wimp_wininfo);
+    info.width_current  = wimp_wininfo->visible.x1 - wimp_wininfo->visible.x0;
+    info.height_current = wimp_wininfo->visible.y1 - wimp_wininfo->visible.y0;
+    info.width_full     = wimp_wininfo->extent.x1 - wimp_wininfo->extent.x0;
+    info.height_full    = wimp_wininfo->extent.y1 - wimp_wininfo->extent.y0;
+
+    return info;
+}
+
+
+static osbool wininfo_window_is_manageable(wimp_window_info* info) {
+    return (info->flags & wimp_WINDOW_MOVEABLE)
+           & !(info->flags & (
+                wimp_WINDOW_PANE
+                | wimp_WINDOW_BACK
+                | wimp_WINDOW_FURNITURE_WINDOW
+                | wimp_WINDOW_FOREGROUND_WINDOW
+    ));
+}
+
+
+// Window is on the left of the screen:
+static osbool wininfo_window_is_left(
+    wimp_window_info* info
+) {
+    screen_padding* pad = &(app_choices.padding);
+    return info->visible.x0 - pad->left == 0;
+}
+
+
+// Window is on the right of the screen:
+static osbool wininfo_window_is_right(
+    wimp_window_info* info
+) {
+    screen_dim dimensions;
+    screen_padding* pad = &(app_choices.padding);
+    
+    screen_get_dim(&dimensions);
+
+    // I would like this to be:
+    // return info->visible.x1 + pad.right == dimensions.width;
+    // but that will require some extra error handling in to_right...
+    return info->visible.x0 == (dimensions.width - pad->left - pad->right) / 2
+                               + pad->left;
+}
+
+
+// Window is at the top of the screen:
+static osbool wininfo_window_is_top(
+    wimp_window_info* info
+) {
+    screen_dim dimensions;
+    screen_padding* pad = &(app_choices.padding);
+
+    screen_get_dim(&dimensions);
+
+    return info->visible.y1 + pad->top == dimensions.height;
+}
+
+
+// Window is at the bottom of the screen:
+static osbool wininfo_window_is_bottom(
+    wimp_window_info* info
+) {
+    screen_dim dimensions;
+    screen_padding* pad = &(app_choices.padding);
+
+    screen_get_dim(&dimensions);
+
+    // I would like this to be:
+    // return info->visible.y0 - pad.bottom == 0;
+    // but that will require some extra error handling/logic in to_bottom...
+    return info->visible.y1 == (dimensions.height - pad->top - pad->bottom)/ 2
+                               + pad->bottom;
+}

@@ -25,11 +25,11 @@
 
 #include "oslib/wimp.h"
 
+#include "appwin.h"
 #include "ibar.h"
 #include "menu.h"
 #include "report.h"
 #include "tailwimp.h"
-#include "win.h"
 
 
 // Icon bar menu entries:
@@ -90,7 +90,7 @@ void ibar_initialise(void) {
 void ibar_mouse_click(wimp_pointer* pointer) {
     switch (pointer->buttons) {
     case wimp_CLICK_SELECT:
-        win_open();
+        appwin_open();
         break;
     case wimp_CLICK_MENU:
         menu_open_ibar(ibar_menu, pointer, ibar_menu_selection);

@@ -24,12 +24,14 @@
 #include "oslib/wimp.h"
 
 #include "ibar.h"
+#include "keyboard.h"
 #include "tailwimp.h"
-#include "win.h"
+#include "appwin.h"
 
 
 // Global variables:
-osbool main_quit_flag       = FALSE;
+osbool main_quit_flag = FALSE;
+choices app_choices;
 
 
 // Function prototypes:
@@ -58,6 +60,7 @@ static wimp_t main_init(void) {
     wimp_t task;
 
     // Initialise application:
+    choices_get_default(&app_choices);
     task = wimp_initialise(
         wimp_VERSION_RO3,
         APP_NAME,
@@ -69,8 +72,8 @@ static wimp_t main_init(void) {
     ibar_initialise();
 
     // Initialise window:
-    win_initialise();
-    win_open();
+    appwin_initialise();
+    appwin_open();
 
     return task;
 }
@@ -110,6 +113,9 @@ static void main_poll(void) {
             break;
         case wimp_CLOSE_WINDOW_REQUEST:
             wimp_close_window(block.close.w);
+            break;
+        case wimp_KEY_PRESSED:
+            keyboard_process_key(block.key.c);
             break;
         default:
             break;

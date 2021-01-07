@@ -26,21 +26,17 @@
 
 #include "oslib/wimp.h"
 
-#include "screen.h"
 
+// Movement directions:
+typedef int direction;
+#define manage_OFF      -1
+#define manage_CENTRE    0
+#define manage_LEFT      1
+#define manage_RIGHT     2
+#define manage_TOP       3
+#define manage_BOTTOM    4
 
-// Function prototypes:
-osbool manage_window_is_left(wimp_window_state* state, screen_padding* pad);
-osbool manage_window_is_right(wimp_window_state* state, screen_padding* pad);
-osbool manage_window_is_top(wimp_window_state* state, screen_padding* pad);
-osbool manage_window_is_bottom(wimp_window_state* state, screen_padding* pad);
-void manage_window_to_centre(wimp_window_state* state);
-void manage_window_to_off_screen(wimp_window_state* state);
-void manage_window_to_left(wimp_window_state* state, screen_padding* pad);
-void manage_window_to_right(wimp_window_state* state, screen_padding* pad);
-void manage_window_to_top(wimp_window_state* state, screen_padding* pad);
-void manage_window_to_bottom(wimp_window_state* state, screen_padding* pad);
-void manage_window_max_width(wimp_window_state* state, screen_padding* pad);
-void manage_window_max_height(wimp_window_state* state, screen_padding* pad);
+// Manage windows:
+void manage_window(wimp_window_state* state, direction dir);
 
 #endif

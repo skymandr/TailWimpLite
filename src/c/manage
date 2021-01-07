@@ -23,66 +23,60 @@
 
 #include "oslib/wimp.h"
 
+#include "choices.h"
+#include "manage.h"
 #include "screen.h"
+#include "tailwimp.h"
+#include "appwin.h"
 
 
-///////////////////////////////
-/* Window location functions */
-///////////////////////////////
-
-// Window is on the left of the screen:
-osbool manage_window_is_left(
-    wimp_window_state*  state,
-    screen_padding*     pad
-) {
-    return state->visible.x0 - pad->left == 0;
-}
-
-
-// Window is on the right of the screen:
-osbool manage_window_is_right(
-    wimp_window_state*  state,
-    screen_padding*     pad
-) {
-    screen_dim dimensions;
-    
-    screen_get_dim(&dimensions);
-
-    // I would like this to be:
-    // return state->visible.x1 + pad.right == dimensions.width;
-    // but that will require some extra error handling in to_right...
-    return state->visible.x0 == (dimensions.width - pad->left - pad->right) / 2
-                                + pad->left;
-}
+// Function prototypes:
+static void manage_window_to_centre(wimp_window_state* state);
+static void manage_window_to_off_screen(wimp_window_state* state);
+static void manage_window_to_left(
+    wimp_window_state* state
+);
+static void manage_window_to_right(
+    wimp_window_state* state
+);
+static void manage_window_to_top(
+    wimp_window_state* state
+);
+static void manage_window_to_bottom(
+    wimp_window_state* state
+);
+static void manage_window_max_width(
+    wimp_window_state* state
+);
+static void manage_window_max_height(
+    wimp_window_state* state
+);
 
 
-// Window is at the top of the screen:
-osbool manage_window_is_top(
-    wimp_window_state*  state,
-    screen_padding*     pad
-) {
-    screen_dim dimensions;
-
-    screen_get_dim(&dimensions);
-
-    return state->visible.y1 + pad->top == dimensions.height;
-}
-
-
-// Window is at the bottom of the screen:
-osbool manage_window_is_bottom(
-    wimp_window_state*  state,
-    screen_padding*     pad
-) {
-    screen_dim dimensions;
-
-    screen_get_dim(&dimensions);
-
-    // I would like this to be:
-    // return state->visible.y0 - pad.bottom == 0;
-    // but that will require some extra error handling/logic in to_bottom...
-    return state->visible.y1 == (dimensions.height - pad->top - pad->bottom)/ 2
-                                + pad->bottom;
+// Manage windows:
+void manage_window(wimp_window_state* state, direction dir) {
+    switch (dir) {
+    case manage_OFF:
+        manage_window_to_off_screen(state);
+        break;
+    case manage_CENTRE:
+        manage_window_to_centre(state);
+        break;
+    case manage_LEFT:
+        manage_window_to_left(state);
+        break;
+    case manage_RIGHT:
+        manage_window_to_right(state);
+        break;
+    case manage_TOP:
+        manage_window_to_top(state);
+        break;
+    case manage_BOTTOM:
+        manage_window_to_bottom(state);
+        break;
+    default:
+        break;
+    }
 }
 
 
@@ -91,7 +85,7 @@ osbool manage_window_is_bottom(
 ///////////////////////////////
 
 // Centre window on screen:
-void manage_window_to_centre(wimp_window_state* state) {
+static void manage_window_to_centre(wimp_window_state* state) {
     screen_dim  dimensions;
     int         width, height;
 
@@ -109,7 +103,7 @@ void manage_window_to_centre(wimp_window_state* state) {
 
 
 // Put window off screen:
-void manage_window_to_off_screen(wimp_window_state* state) {
+static void manage_window_to_off_screen(wimp_window_state* state) {
     int width, height;
 
     width = state->visible.x1 - state->visible.x0;
@@ -124,11 +118,11 @@ void manage_window_to_off_screen(wimp_window_state* state) {
 
 
 // Move window to the left of the screen:
-void manage_window_to_left(
-    wimp_window_state*  state,
-    screen_padding*     pad
+static void manage_window_to_left(
+    wimp_window_state* state
 ) {
     screen_dim dimensions;
+    screen_padding* pad = &(app_choices.padding);
 
     screen_get_dim(&dimensions);
 
@@ -139,11 +133,11 @@ void manage_window_to_left(
 
 
 // Move window to the right of the screen:
-void manage_window_to_right(
-    wimp_window_state*  state,
-    screen_padding*     pad
+static void manage_window_to_right(
+    wimp_window_state* state
 ) {
     screen_dim dimensions;
+    screen_padding* pad = &(app_choices.padding);
 
     screen_get_dim(&dimensions);
 
@@ -156,11 +150,11 @@ void manage_window_to_right(
 
 
 // Move window to the top of the screen:
-void manage_window_to_top(
-    wimp_window_state*  state,
-    screen_padding*     pad
+static void manage_window_to_top(
+    wimp_window_state* state
 ) {
     screen_dim dimensions;
+    screen_padding* pad = &(app_choices.padding);
 
     screen_get_dim(&dimensions);
 
@@ -171,11 +165,11 @@ void manage_window_to_top(
 
 
 // Move window to the bottom of the screen:
-void manage_window_to_bottom(
-    wimp_window_state*  state,
-    screen_padding*     pad
+static void manage_window_to_bottom(
+    wimp_window_state* state
 ) {
     screen_dim dimensions;
+    screen_padding* pad = &(app_choices.padding);
 
     screen_get_dim(&dimensions);
 
@@ -192,11 +186,11 @@ void manage_window_to_bottom(
 /////////////////////////////
 
 // Maximize window width:
-void manange_window_max_width(
-    wimp_window_state*  state,
-    screen_padding*     pad
+static void manange_window_max_width(
+    wimp_window_state* state
 ) {
     screen_dim dimensions;
+    screen_padding* pad = &(app_choices.padding);
 
     screen_get_dim(&dimensions);
 
@@ -206,11 +200,11 @@ void manange_window_max_width(
 
 
 // Maximize window height:
-void manange_window_max_height(
-    wimp_window_state*  state,
-    screen_padding*     pad
+static void manange_window_max_height(
+    wimp_window_state* state
 ) {
     screen_dim dimensions;
+    screen_padding* pad = &(app_choices.padding);
 
     screen_get_dim(&dimensions);
 

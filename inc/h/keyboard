@@ -1,5 +1,5 @@
-/*
- *  TailWimp Lite - utility for rearranging Wimp windows using keyboard
+/*  File: keyboard.c
+ *  Part of TailWimp Lite
  *  Copyright (C) 2021  Andreas Skyman (Bumbarrel Computing)
  * 
  *  Many features in this program are highly derivative of Steve Fryatt's
@@ -21,20 +21,13 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef TAILWIMP_MAIN
-#define TAILWIMP_MAIN
+#ifndef TAILWIMP_KEYBOARD
+#define TAILWIMP_KEYBORD
 
-#include "choices.h"
+#include "oslib/wimp.h"
 
 
-// Application name and version:
-#define APP_TITLE       "TailWimp Lite"
-#define APP_NAME        "!tailwmplt"
-#define APP_DIR         "<TailWmpLt$Dir>"
-#define APP_VERSION     "0.0.1"
-
-// Application quit request flag:
-extern osbool main_quit_flag;
-extern choices app_choices;
+// Process keyboard input:
+void keyboard_process_key(wimp_key_no c);
 
 #endif

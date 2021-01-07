@@ -1,4 +1,4 @@
-/*  File: win.c
+/*  File: appwin.c
  *  Part of TailWimp Lite
  *  Copyright (C) 2021  Andreas Skyman (Bumbarrel Computing)
  * 
@@ -28,21 +28,27 @@
 
 #include "manage.h"
 #include "tailwimp.h"
-#include "win.h"
+#include "appwin.h"
 
 
 // Global variables
-static wimp_w win_handle;
-#define WIN_TITLE_TEXT_LEN 14
-static char win_title_text[WIN_TITLE_TEXT_LEN];
+static wimp_w appwin_handle;
+#define APPWIN_TITLE_TEXT_LEN 14
+static char appwin_title_text[APPWIN_TITLE_TEXT_LEN];
 
 
 // Function prototypes:
-static wimp_i win_create_icon(void);
+static wimp_i appwin_create_icon(void);
 
 
-// Windoww initialisation:
-void win_initialise(void) {
+// For debugging:
+wimp_w appwin_get_handle(void) {
+    return appwin_handle;
+}
+
+
+// Application window initialisation:
+void appwin_initialise(void) {
     wimp_window window_definition;
 
     window_definition.visible.x0 =   0;
@@ -83,8 +89,8 @@ void win_initialise(void) {
                                     | wimp_ICON_VCENTRED
                                     | wimp_ICON_FILLED
                                     | wimp_ICON_INDIRECTED;
-    window_definition.title_data.indirected_text.text = win_title_text;
-    window_definition.title_data.indirected_text.size = WIN_TITLE_TEXT_LEN;
+    window_definition.title_data.indirected_text.text = appwin_title_text;
+    window_definition.title_data.indirected_text.size = APPWIN_TITLE_TEXT_LEN;
     window_definition.title_data.indirected_text.validation = "";
     window_definition.work_flags = wimp_BUTTON_NEVER
                                    << wimp_ICON_BUTTON_TYPE_SHIFT;
@@ -93,25 +99,25 @@ void win_initialise(void) {
     window_definition.ymin = 0;
     window_definition.icon_count = 0;
 
-    strncpy(win_title_text, APP_TITLE, WIN_TITLE_TEXT_LEN);
-    win_title_text[WIN_TITLE_TEXT_LEN - 1] = '\0';
+    strncpy(appwin_title_text, APP_TITLE, APPWIN_TITLE_TEXT_LEN);
+    appwin_title_text[APPWIN_TITLE_TEXT_LEN - 1] = '\0';
 
-    win_handle = wimp_create_window(&window_definition);
-    win_create_icon();
+    appwin_handle = wimp_create_window(&window_definition);
+    appwin_create_icon();
 }
 
 
-// Open the window:
-void win_open(void) {
+// Open the main application window:
+void appwin_open(void) {
     wimp_window_state state;
 
     // Get window state:
-    state.w = win_handle;
+    state.w = appwin_handle;
     wimp_get_window_state(&state);
 
     // Set window position:
     if (!(state.flags & wimp_WINDOW_OPEN)) {
-        manage_window_to_centre(&state);
+        manage_window(&state, manage_CENTRE);
     }
     state.next = wimp_TOP;
 
@@ -120,11 +126,11 @@ void win_open(void) {
 }
 
 
-// Create icon in window:
-static wimp_i win_create_icon(void) {
+// Create icon in main application window:
+static wimp_i appwin_create_icon(void) {
     wimp_icon_create icon_definition;
 
-    icon_definition.w = win_handle;
+    icon_definition.w = appwin_handle;
     icon_definition.icon.extent.x0 =   60;
     icon_definition.icon.extent.x1 =  260;
     icon_definition.icon.extent.y0 = -260;

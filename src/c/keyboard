@@ -1,0 +1,62 @@
+/*  File: keyboard.c
+ *  Part of TailWimp Lite
+ *  Copyright (C) 2021  Andreas Skyman (Bumbarrel Computing)
+ * 
+ *  Many features in this program are highly derivative of Steve Fryatt's
+ *  examples from http://www.stevefryatt.org.uk/risc-os/wimp-prog which
+ *  have been relicensed from European Union Public License v1.2 for the
+ *  purpose of this program.
+ * 
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ * 
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#include "oslib/wimp.h"
+
+#include "appwin.h"
+#include "manage.h"
+#include "report.h"
+
+// Process keyboard input:
+void keyboard_process_key(wimp_key_no c) {
+    osbool open_win = TRUE;
+    // TODO: This is mostly placeholders:
+    wimp_window_state state;
+    wimp_w handle;
+    handle = appwin_get_handle();
+    state.w = handle;
+    wimp_get_window_state(&state);
+    state.next = wimp_TOP;
+
+    switch (c) {
+    case wimp_KEY_CONTROL | wimp_KEY_SHIFT | wimp_KEY_LEFT:
+        manage_window(&state, manage_LEFT);
+        break;
+    case wimp_KEY_CONTROL | wimp_KEY_SHIFT | wimp_KEY_RIGHT:
+        manage_window(&state, manage_RIGHT);
+        break;
+    case wimp_KEY_CONTROL | wimp_KEY_SHIFT | wimp_KEY_UP:
+        manage_window(&state, manage_TOP);
+        break;
+    case wimp_KEY_CONTROL | wimp_KEY_SHIFT | wimp_KEY_DOWN:
+        manage_window(&state, manage_CENTRE);
+        break;
+    default:
+        wimp_process_key(c);
+        open_win = FALSE;
+        break;
+    }
+    if (open_win) {
+        wimp_open_window((wimp_open*) &state);
+    }
+};
