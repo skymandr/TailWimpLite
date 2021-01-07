@@ -35,8 +35,10 @@ osbool main_quit_flag       = FALSE;
 // Function prototypes:
 static wimp_t main_init(void);
 static void main_poll(void);
-static void main_exit(wimp_t);
+static void main_exit(wimp_t task);
+static void main_user_message(wimp_message* message);
 static void main_quit_loop(void);
+static void main_mouse_click(wimp_pointer* pointer);
 
 
 // Main code entrypoint;
@@ -95,16 +97,10 @@ static void main_poll(void) {
         switch (reason) {
         case wimp_USER_MESSAGE:
         case wimp_USER_MESSAGE_RECORDED:
-            if (block.message.action == message_QUIT) {
-                main_quit_loop();
-            } else if (block.message.action == message_MENUS_DELETED) {
-                menu_message_menus_deleted(&block.message);
-            }
+            main_user_message(&(block.message));
             break;
         case wimp_MOUSE_CLICK:
-            if (block.pointer.w == wimp_ICON_BAR) {
-                ibar_mouse_click(&block.pointer);
-            }
+            main_mouse_click(&(block.pointer));
             break;
         case wimp_MENU_SELECTION:
             menu_process_event(&(block.selection));
@@ -128,7 +124,25 @@ static void main_exit(wimp_t task) {
 } 
 
 
+// Handle user message:
+static void main_user_message(wimp_message* message) {
+    if (message->action == message_QUIT) {
+        main_quit_loop();
+    } else if (message->action == message_MENUS_DELETED) {
+        menu_message_menus_deleted(message);
+    }
+}
+
+
 // Handle quit main loop:
 static void main_quit_loop(void) {
     main_quit_flag = TRUE;
+}
+
+
+// Handle quit mouse click:
+static void main_mouse_click(wimp_pointer* pointer) {
+    if (pointer->w == wimp_ICON_BAR) {
+        ibar_mouse_click(pointer);
+    }
 }
