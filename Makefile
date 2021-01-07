@@ -19,7 +19,7 @@ LDFLAGS = -lOSLib32
 CFLAGS = -O2 -L. -LOSLib: $(LDFLAGS) -I$(IDIR) -IOSLib:
 
 # Objects:
-_OBJ = tailwimp.o ibar.o menu.o win.o screen.o choices.o
+_OBJ = tailwimp.o ibar.o menu.o win.o screen.o choices.o manage.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 # Targets:
@@ -42,6 +42,7 @@ help: README.md
 clean:
 	$(RM) $(ODIR).o.tailwimp
 	$(RM) $(ODIR).o.choices
+	$(RM) $(ODIR).o.manage
 	$(RM) $(ODIR).o.screen
 	$(RM) $(ODIR).o.ibar
 	$(RM) $(ODIR).o.menu

@@ -1,0 +1,46 @@
+/*  File: manage.h
+ *  Part of TailWimp Lite
+ *  Copyright (C) 2021  Andreas Skyman (Bumbarrel Computing)
+ * 
+ *  Many features in this program are highly derivative of Steve Fryatt's
+ *  examples from http://www.stevefryatt.org.uk/risc-os/wimp-prog which
+ *  have been relicensed from European Union Public License v1.2 for the
+ *  purpose of this program.
+ * 
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ * 
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef TAILWIMP_WIN
+#define TAILWIMP_WIN
+
+#include "oslib/wimp.h"
+
+#include "screen.h"
+
+
+// Function prototypes:
+osbool manage_window_is_left(wimp_window_state* state, screen_padding* pad);
+osbool manage_window_is_right(wimp_window_state* state, screen_padding* pad);
+osbool manage_window_is_top(wimp_window_state* state, screen_padding* pad);
+osbool manage_window_is_bottom(wimp_window_state* state, screen_padding* pad);
+void manage_window_to_centre(wimp_window_state* state);
+void manage_window_to_off_screen(wimp_window_state* state);
+void manage_window_to_left(wimp_window_state* state, screen_padding* pad);
+void manage_window_to_right(wimp_window_state* state, screen_padding* pad);
+void manage_window_to_top(wimp_window_state* state, screen_padding* pad);
+void manage_window_to_bottom(wimp_window_state* state, screen_padding* pad);
+void manage_window_max_width(wimp_window_state* state, screen_padding* pad);
+void manage_window_max_height(wimp_window_state* state, screen_padding* pad);
+
+#endif
