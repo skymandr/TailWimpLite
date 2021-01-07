@@ -54,11 +54,14 @@ It is a polyglottal pun. Bumbarrels are best birds.
 
 
 ## License and disclaimer
-TailWimp Lite - utility for rearranging wimp windows using keyboard
+TailWimp Lite - utility for rearranging Wimp windows using keyboard
+
 Copyright (C) 2021  Andreas Skyman (Bumbarrel Computing)
 
 Many features in this program are highly derivative of Steve Fryatt's
-examples from http://www.stevefryatt.org.uk/risc-os/wimp-prog
+examples from http://www.stevefryatt.org.uk/risc-os/wimp-prog which have been
+relicensed from European Union Public License v1.2 for the purpose of this
+program.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
