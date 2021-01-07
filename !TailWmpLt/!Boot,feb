@@ -1,0 +1,5 @@
+| !Boot for !TailWmpLt
+| (C) Andreas Skyman (Bumbarrel Computing) 2021
+
+Set TailWmpLt$Dir <Obey$Dir>
+IconSprites <TailWmpLt$Dir>.Themes.!Sprites

@@ -9,6 +9,7 @@ MKDIR = cdir
 SRCDIR = src
 ODIR = obj
 IDIR = inc
+APPDIR = !TailWmpLt
 
 # Linking:
 LDFLAGS = -lOSLib32
@@ -30,7 +31,7 @@ $(ODIR):
 	$(MKDIR) $(ODIR)
 
 tailwimp: $(OBJ) $()
-	$(CC) -o $@ $^ $(CFLAGS)
+	$(CC) -o $(APPDIR)/!RunImage $^ $(CFLAGS)
 
 .PHONY: clean, cleanall
 
@@ -44,4 +45,4 @@ clean:
 	$(RM) $(ODIR)
 
 cleanall: clean
-	$(RM) tailwimp
+	$(RM) $(APPDIR).!RunImage
