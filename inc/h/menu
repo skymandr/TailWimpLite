@@ -1,0 +1,47 @@
+/*  File: menu.h
+ *  Part of TailWimp Lite
+ *  Copyright (C) 2021  Andreas Skyman (Bumbarrel Computing)
+ * 
+ *  Many features in this program are highly derivative of Steve Fryatt's
+ *  examples from http://www.stevefryatt.org.uk/risc-os/wimp-prog
+ * 
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ * 
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef TAILWIMP_MENU
+#define TAILWIMP_MENU
+
+#include "oslib/wimp.h"
+
+
+// Menu creation:
+wimp_menu* menu_create(char* title, int entries);
+
+// Menu entry configuration:
+void menu_entry(wimp_menu* menu, int entry, char* text, wimp_menu* sub_menu);
+
+// message_MENUS_DELETED event handler:
+osbool menu_message_menus_deleted(wimp_message* message);
+
+// Handle selection event:
+void menu_process_event(wimp_selection* selection);
+
+// Open an iconbar menu:
+void menu_open_ibar(
+    wimp_menu* menu,
+    wimp_pointer* pointer,
+    void (*callback)(wimp_menu* menu, wimp_selection* selection)
+);
+
+#endif

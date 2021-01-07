@@ -1,0 +1,2 @@
+src/c/** gitlab-language=c linguist-language=c linguist-detectable=true
+inc/h/** gitlab-language=c linguist-language=c linguist-detectable=true

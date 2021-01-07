@@ -1,0 +1,40 @@
+/*  File: screen.c
+ *  Part of TailWimp Lite
+ *  Copyright (C) 2021  Andreas Skyman (Bumbarrel Computing)
+ * 
+ *  Many features in this program are highly derivative of Steve Fryatt's
+ *  examples from http://www.stevefryatt.org.uk/risc-os/wimp-prog
+ * 
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ * 
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#include "oslib/os.h"
+
+#include "screen.h"
+
+
+// Get screen dimensions:
+void screen_get_dim(screen_dim* dimensions) {
+    int width, w_shift, height, h_shift;
+
+    // Read width:
+    os_read_mode_variable(os_CURRENT_MODE, os_MODEVAR_XWIND_LIMIT, &width);
+    os_read_mode_variable(os_CURRENT_MODE, os_MODEVAR_XEIG_FACTOR, &w_shift);
+    dimensions->width = (width << w_shift);
+
+    // Read height:
+    os_read_mode_variable(os_CURRENT_MODE, os_MODEVAR_YWIND_LIMIT, &height);
+    os_read_mode_variable(os_CURRENT_MODE, os_MODEVAR_YEIG_FACTOR, &h_shift);
+    dimensions->height = (height << h_shift);
+}

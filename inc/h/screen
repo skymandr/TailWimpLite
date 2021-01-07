@@ -1,0 +1,54 @@
+/*  File: screen.h
+ *  Part of TailWimp Lite
+ *  Copyright (C) 2021  Andreas Skyman (Bumbarrel Computing)
+ * 
+ *  Many features in this program are highly derivative of Steve Fryatt's
+ *  examples from http://www.stevefryatt.org.uk/risc-os/wimp-prog
+ * 
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ * 
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef TAILWIMP_SCREEN
+#define TAILWIMP_SCREEN
+
+#include "oslib/wimp.h"
+
+#define SCREEN_OFF     -1
+#define SCREEN_CENTRE   0
+#define SCREEN_LEFT     1
+#define SCREEN_RIGHT    2
+#define SCREEN_TOP      3
+#define SCREEN_BOTTOM   4
+
+
+// Screen dimensions struct:
+typedef struct screen_dim screen_dim;
+struct screen_dim {
+    int width;
+    int height;
+};
+
+// Paddings struct:
+typedef struct screen_padding screen_padding;
+struct screen_padding {
+    int left;
+    int right;
+    int top;
+    int bottom;
+};
+
+// Get screen dimensions:
+void screen_get_dim(screen_dim* dimensions);
+
+#endif

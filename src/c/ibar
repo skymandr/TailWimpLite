@@ -1,0 +1,102 @@
+/*  File: ibar.c
+ *  Part of TailWimp Lite
+ *  Copyright (C) 2021  Andreas Skyman (Bumbarrel Computing)
+ * 
+ *  Many features in this program are highly derivative of Steve Fryatt's
+ *  examples from http://www.stevefryatt.org.uk/risc-os/wimp-prog
+ * 
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ * 
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#include <string.h>
+
+#include "oslib/wimp.h"
+
+#include "ibar.h"
+#include "menu.h"
+#include "tailwimp.h"
+#include "win.h"
+
+
+// Icon bar menu entries:
+# define IBAR_MENU_INFO     0
+# define IBAR_MENU_CHOICES  1
+# define IBAR_MENU_HELP     2
+# define IBAR_MENU_QUIT     3
+
+
+//  Global variables:
+wimp_menu* ibar_menu;
+
+
+// Function prototypes:
+static void ibar_menu_selection(wimp_menu *menu, wimp_selection *selection);
+
+
+// Icon bar initialisation:
+void ibar_initialise(void) {
+    wimp_icon_create icon_bar;
+
+    // Icon bar menu:
+    ibar_menu = menu_create(APP_NAME, 4);
+    menu_entry(ibar_menu, IBAR_MENU_INFO, "Info", NULL);
+    menu_entry(ibar_menu, IBAR_MENU_CHOICES, "Choices", NULL);
+    menu_entry(ibar_menu, IBAR_MENU_HELP, "Help...", NULL);
+    menu_entry(ibar_menu, IBAR_MENU_QUIT, "Quit", NULL);
+
+    // Icon bar icon:
+    icon_bar.w = wimp_ICON_BAR_RIGHT;
+    icon_bar.icon.extent.x0 = 0;
+    icon_bar.icon.extent.y0 = 0;
+    icon_bar.icon.extent.x1 = 68;
+    icon_bar.icon.extent.y1 = 68;
+    icon_bar.icon.flags = wimp_ICON_SPRITE
+                          | (wimp_BUTTON_CLICK << wimp_ICON_BUTTON_TYPE_SHIFT);
+    strncpy(
+        icon_bar.icon.data.sprite,
+        "application",
+        osspriteop_NAME_LIMIT
+    );
+
+    wimp_create_icon(&icon_bar);
+}
+
+
+// Handle mouse click on icon bar:
+void ibar_mouse_click(wimp_pointer* pointer) {
+    switch (pointer->buttons) {
+    case wimp_CLICK_SELECT:
+        win_open();
+        break;
+    case wimp_CLICK_MENU:
+        menu_open_ibar(ibar_menu, pointer, ibar_menu_selection);
+        break;
+    case wimp_CLICK_ADJUST:
+        break;
+    default:
+        break;
+    }
+}
+
+
+// Handle menu selection:
+static void ibar_menu_selection(wimp_menu *menu, wimp_selection *selection) {
+    switch (selection->items[0]) {
+    case IBAR_MENU_QUIT:
+        main_quit_flag = TRUE;
+        break;
+    default:
+        break;
+    }
+}

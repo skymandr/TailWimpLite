@@ -1,0 +1,132 @@
+/*
+ *  TailWimp Lite - utility for rearranging Wimp windows using keyboard
+ *  Copyright (C) 2021  Andreas Skyman (Bumbarrel Computing)
+ * 
+ *  Many features in this program are highly derivative of Steve Fryatt's
+ *  examples from http://www.stevefryatt.org.uk/risc-os/wimp-prog
+ * 
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ * 
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#include "oslib/wimp.h"
+
+#include "ibar.h"
+#include "tailwimp.h"
+#include "win.h"
+
+
+// Global variables:
+osbool main_quit_flag       = FALSE;
+
+
+// Function prototypes:
+static wimp_t main_init(void);
+static void main_poll(void);
+static void main_exit(wimp_t);
+static void main_quit_loop(void);
+
+
+// Main code entrypoint;
+int main() {
+    wimp_t task;
+
+    task = main_init();
+    main_poll();
+    main_exit(task);
+
+    return 0;
+}
+
+
+// Global application initialisation:
+static wimp_t main_init(void) {
+    wimp_t task;
+
+    // Initialise application:
+    task = wimp_initialise(
+        wimp_VERSION_RO3,
+        APP_NAME,
+        NULL,
+        NULL
+    );
+    
+    // Initialise iconbar:
+    ibar_initialise();
+
+    // Initialise window:
+    win_initialise();
+    win_open();
+
+    return task;
+}
+
+
+// Main wimp poll loop:
+static void main_poll(void) {
+    wimp_event_no   reason;
+    wimp_block      block;
+    int             pollword;
+
+    while(!main_quit_flag) {
+        reason = wimp_poll(
+            wimp_MASK_NULL
+            | wimp_MASK_ENTERING
+            | wimp_MASK_LEAVING
+            | wimp_MASK_GAIN
+            | wimp_MASK_LOSE
+            | wimp_MASK_POLLWORD,
+            &block,
+            &pollword
+        );
+
+        switch (reason) {
+        case wimp_USER_MESSAGE:
+        case wimp_USER_MESSAGE_RECORDED:
+            if (block.message.action == message_QUIT) {
+                main_quit_loop();
+            } else if (block.message.action == message_MENUS_DELETED) {
+                menu_message_menus_deleted(&block.message);
+            }
+            break;
+        case wimp_MOUSE_CLICK:
+            if (block.pointer.w == wimp_ICON_BAR) {
+                ibar_mouse_click(&block.pointer);
+            }
+            break;
+        case wimp_MENU_SELECTION:
+            menu_process_event(&(block.selection));
+            break;
+        case wimp_OPEN_WINDOW_REQUEST:
+            wimp_open_window(&(block.open));
+            break;
+        case wimp_CLOSE_WINDOW_REQUEST:
+            wimp_close_window(block.close.w);
+            break;
+        default:
+            break;
+        }
+    }
+}
+
+
+// Global application termination:
+static void main_exit(wimp_t task) {
+    wimp_close_down(task);
+} 
+
+
+// Handle quit main loop:
+static void main_quit_loop(void) {
+    main_quit_flag = TRUE;
+}
