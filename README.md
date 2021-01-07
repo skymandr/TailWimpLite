@@ -3,8 +3,8 @@
 ## What is it and what is it not?
 _TailWimp Lite_ is a simple utility for rearranging _Risc OS Wimp_ windows
 using keyboard short cuts, inspired by tiling window managers [0] such as
-_i3_ and _Sway_ [1]. It supports moving and reshaping windows to cover halves
-of the screen (horizontally or vertically), as well as the four corner
+_i3_ [1] and _Sway_ [2]. It supports moving and reshaping windows to cover
+halves of the screen (horizontally or vertically), as well as the four corner
 quadrants, minus optional paddings, to allow for access to the icon bar,
 iconised windows etc.
 
@@ -35,17 +35,18 @@ the window pile when moving it. This defaults to `TRUE`.
 
 
 ## System requirements and compatibility
-This software has been tested on Risc OS Open 5.X [2] on Raspberry Pi and in
-the RPCEmu emulator [3]. It might work on earlier versions of Risc OS as
+This software has been tested on Risc OS Open 5.X [3] on Raspberry Pi and in
+the RPCEmu emulator [4]. It might work on earlier versions of Risc OS as
 well. If you try it, pleas let me know!
 
 
 ## Getting more help, making suggestions and reporting problems
 The preferred way of communicating a suggestion or a problem is to submit an
-issue in the GitHub project [4]. If you have questions, you can also try
-asking in the Risc OS Open forum [5] if you think the question is of general
-interest, or contact me directly on for example _!ChatCube_, _Telegram_,
-_matrix_, or by email [6].
+issue in the GitHub project [5]. If you have questions, you can also try
+asking in the Risc OS Open forum [6] if you think the question is of general
+interest, or contact me directly on for example _!ChatCube_ [7], _Telegram_
+[8], _matrix_ [9], or by email me @fripost.org. I use the handle `skymandr`
+for all of these.
 
 
 ## Why TailWimp?
@@ -76,15 +77,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 ## References:
 [0]: https://en.wikipedia.org/wiki/Tiling_window_manager
 
-[1]: https://i3wm.org and https://swaywm.org respectively
+[1]: https://i3wm.org
 
-[2]: https://www.riscosopen.org
+[2]: https://swaywm.org
 
-[3]: http://www.marutan.net/rpcemu
+[3]: https://www.riscosopen.org
 
-[4]: https://github.com/skymandr/TailWimpLite
+[4]: http://www.marutan.net/rpcemu
 
-[5]: https://www.riscosopen.org/forum
+[5]: https://github.com/skymandr/TailWimpLite
 
-[6]: http://chatcube.org, https://telegram.org/ https://matrix.org and
-     @fripost.org respectively. I use the handle `skymandr` on all of these.
+[6]: https://www.riscosopen.org/forum
+
+[7]: http://chatcube.org
+
+[8]: https://telegram.org/
+
+[9]: https://matrix.org 
