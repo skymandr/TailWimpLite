@@ -77,7 +77,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>
 
 
-## References:
+---
 [0]: https://en.wikipedia.org/wiki/Tiling_window_manager
 
 [1]: https://i3wm.org
