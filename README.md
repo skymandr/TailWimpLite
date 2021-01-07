@@ -5,7 +5,7 @@ _TailWimp Lite_ is a simple utility for rearranging _Risc OS Wimp_ windows
 using keyboard short cuts, inspired by tiling window managers [0] such as
 _i3_ [1] and _Sway_ [2]. It supports moving and reshaping windows to cover
 halves of the screen (horizontally or vertically), as well as the four corner
-quadrants, minus optional paddings, to allow for access to the icon bar,
+quadrants, minus optional paddings to allow for access to the icon bar,
 iconised windows etc.
 
 As signified by the _Lite_ in the name, _TailWimp Lite_ is _not_ a fully
@@ -20,7 +20,7 @@ input focus, or the topmost window over all if there is no window with focus.
 Two moves – one vertical and one horizontal in any order – are needed to get
 the window into a corner quadrant. This will also move the window to the top
 of the window pile, unless this has choice has been deactivated. If padding
-is specified, space on the desktop will be reserved around the windows, to
+is specified, space on the desktop will be reserved around the windows to
 allow access to the icon bar, iconized windows and the like. By default, only
 bottom padding is non-zero, in order to show the icon bar.
 
