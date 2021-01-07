@@ -33,9 +33,12 @@
 
 // Global variables
 static wimp_w win_handle;
+#define WIN_TITLE_TEXT_LEN 14
+static char win_title_text[WIN_TITLE_TEXT_LEN];
 
 
 // Function prototypes:
+static wimp_i win_create_icon(void);
 static void window_to_centre(wimp_window_state* state);
 static void window_to_off_screen(wimp_window_state* state);
 static void window_to_left(
@@ -80,14 +83,16 @@ static osbool window_is_bottom(
 );
 
 
+
+
 // Windoww initialisation:
 void win_initialise(void) {
     wimp_window window_definition;
 
-    window_definition.visible.x0 = 200;
-    window_definition.visible.y0 = 200;
-    window_definition.visible.x1 = 456;
-    window_definition.visible.y1 = 456;
+    window_definition.visible.x0 =   0;
+    window_definition.visible.x1 = 320;
+    window_definition.visible.y0 =   0;
+    window_definition.visible.y1 = 320;
     window_definition.xscroll = 0;
     window_definition.yscroll = 0;
     window_definition.next = wimp_TOP;
@@ -112,24 +117,31 @@ void win_initialise(void) {
     window_definition.scroll_inner = wimp_COLOUR_VERY_LIGHT_GREY;
     window_definition.highlight_bg = wimp_COLOUR_CREAM;
     window_definition.extra_flags = 0;
-    window_definition.extent.x0 = 0;
-    window_definition.extent.y0 = -1256;
-    window_definition.extent.x1 = 1256;
-    window_definition.extent.y1 = 0;
+    window_definition.extent.x0 =     0;
+    window_definition.extent.x1 =  1000;
+    window_definition.extent.y0 = -1000;
+    window_definition.extent.y1 =     0;
     window_definition.title_flags = wimp_ICON_TEXT
                                     | wimp_ICON_BORDER 
                                     | wimp_ICON_HCENTRED
                                     | wimp_ICON_VCENTRED
-                                    | wimp_ICON_FILLED;
+                                    | wimp_ICON_FILLED
+                                    | wimp_ICON_INDIRECTED;
+    window_definition.title_data.indirected_text.text = win_title_text;
+    window_definition.title_data.indirected_text.size = WIN_TITLE_TEXT_LEN;
+    window_definition.title_data.indirected_text.validation = "";
     window_definition.work_flags = wimp_BUTTON_NEVER
                                    << wimp_ICON_BUTTON_TYPE_SHIFT;
     window_definition.sprite_area = wimpspriteop_AREA;
     window_definition.xmin = 0;
     window_definition.ymin = 0;
-    strncpy(window_definition.title_data.text, APP_NAME_SHORT, 12);
     window_definition.icon_count = 0;
 
+    strncpy(win_title_text, APP_NAME, WIN_TITLE_TEXT_LEN);
+    win_title_text[WIN_TITLE_TEXT_LEN - 1] = '\0';
+
     win_handle = wimp_create_window(&window_definition);
+    win_create_icon();
 }
 
 
@@ -151,6 +163,33 @@ void win_open(void) {
     wimp_open_window((wimp_open*) &state);
 }
 
+
+// Create icon in window:
+static wimp_i win_create_icon(void) {
+    wimp_icon_create icon_definition;
+
+    icon_definition.w = win_handle;
+    icon_definition.icon.extent.x0 =   60;
+    icon_definition.icon.extent.x1 =  260;
+    icon_definition.icon.extent.y0 = -260;
+    icon_definition.icon.extent.y1 =  -60;
+    icon_definition.icon.flags = wimp_ICON_SPRITE
+                                | wimp_ICON_TEXT
+                                | wimp_ICON_BORDER
+                                | wimp_ICON_HCENTRED
+                                | (wimp_COLOUR_BLACK
+                                   << wimp_ICON_FG_COLOUR_SHIFT)
+                                | (wimp_COLOUR_CREAM
+                                   << wimp_ICON_BG_COLOUR_SHIFT);
+    strncpy(icon_definition.icon.data.text_and_sprite, "application", 12);
+
+    return wimp_create_icon(&icon_definition);
+}
+
+
+//////////////////////////////////
+/* Window interaction functions */
+//////////////////////////////////
 
 // Window is on the left of the screen:
 static osbool window_is_left(
