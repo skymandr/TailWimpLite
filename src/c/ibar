@@ -27,6 +27,7 @@
 
 #include "ibar.h"
 #include "menu.h"
+#include "report.h"
 #include "tailwimp.h"
 #include "win.h"
 
@@ -44,14 +45,20 @@ wimp_menu* ibar_menu;
 
 // Function prototypes:
 static void ibar_menu_selection(wimp_menu *menu, wimp_selection *selection);
+static void ibar_open_help(void);
 
 
 // Icon bar initialisation:
 void ibar_initialise(void) {
-    wimp_icon_create icon_bar;
+    os_error*           error;
+    wimp_icon_create    icon_bar;
 
     // Icon bar menu:
     ibar_menu = menu_create(APP_TITLE, 4);
+    if (ibar_menu == NULL) {
+        report_error("Failed to create icon bar menu");
+        return;
+    }
     menu_entry(ibar_menu, IBAR_MENU_INFO, "Info", NULL);
     menu_entry(ibar_menu, IBAR_MENU_CHOICES, "Choices", NULL);
     menu_entry(ibar_menu, IBAR_MENU_HELP, "Help...", NULL);
@@ -71,7 +78,11 @@ void ibar_initialise(void) {
         osspriteop_NAME_LIMIT
     );
 
-    wimp_create_icon(&icon_bar);
+    error = xwimp_create_icon(&icon_bar, NULL);
+    if (error != NULL) {
+        report_os_error(error);
+        return;
+    }
 }
 
 
@@ -93,20 +104,32 @@ void ibar_mouse_click(wimp_pointer* pointer) {
 
 
 // Handle menu selection:
-static void ibar_menu_selection(wimp_menu *menu, wimp_selection *selection) {
+static void ibar_menu_selection(
+    wimp_menu*      menu,
+    wimp_selection* selection
+) {
     switch (selection->items[0]) {
     case IBAR_MENU_INFO:
         break;
     case IBAR_MENU_CHOICES:
         break;
     case IBAR_MENU_HELP:
-        // TODO: Catch error and report!
-        xos_cli("%Filer_Run " APP_DIR ".!Help");
+        ibar_open_help();
         break;
     case IBAR_MENU_QUIT:
         main_quit_flag = TRUE;
         break;
     default:
         break;
+    }
+}
+
+
+static void ibar_open_help(void) {
+    os_error* error;
+
+    error = xos_cli("%Filer_Run " APP_DIR ".!Help");
+    if (error != NULL) {
+        report_os_error(error);
     }
 }

@@ -170,8 +170,9 @@ void menu_process_event(wimp_selection* selection) {
 
     // Read the mouse button used to make the selection:
     error = xwimp_get_pointer_info(&pointer);
-    if (error != NULL)
+    if (error != NULL) {
             pointer.buttons = wimp_CLICK_SELECT;
+    }
 
     if (menu_current_callback != NULL && selection != NULL) {
         menu_current_callback(menu_current_menu, selection);

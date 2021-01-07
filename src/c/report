@@ -1,0 +1,68 @@
+
+/*  File: report.c
+ *  Part of TailWimp Lite
+ *  Copyright (C) 2021  Andreas Skyman (Bumbarrel Computing)
+ * 
+ *  Many features in this program are highly derivative of Steve Fryatt's
+ *  examples from http://www.stevefryatt.org.uk/risc-os/wimp-prog which
+ *  have been relicensed from European Union Public License v1.2 for the
+ *  purpose of this program.
+ * 
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ * 
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#include <string.h>
+
+#include "oslib/os.h"
+#include "oslib/wimp.h"
+#include "oslib/wimpspriteop.h"
+
+#include "report.h"
+#include "tailwimp.h"
+
+
+// Report an OS error:
+void report_os_error(os_error* error) {
+    wimp_report_error_by_category(
+        error,
+        wimp_ERROR_BOX_GIVEN_CATEGORY
+        | (wimp_ERROR_BOX_CATEGORY_ERROR << wimp_ERROR_BOX_CATEGORY_SHIFT)
+        | wimp_ERROR_BOX_OK_ICON,
+        APP_TITLE,
+        APP_NAME,
+        wimpspriteop_AREA,
+        NULL
+    );
+}
+
+
+// Report an internal error:
+void report_error(char* message) {
+    os_error error;
+
+    error.errnum = 0xFF;
+    strncpy(error.errmess, message, os_ERROR_LIMIT);
+    error.errmess[os_ERROR_LIMIT - 1] =  '\0';
+
+    wimp_report_error_by_category(
+        &error,
+        wimp_ERROR_BOX_GIVEN_CATEGORY
+        | (wimp_ERROR_BOX_CATEGORY_ERROR << wimp_ERROR_BOX_CATEGORY_SHIFT)
+        | wimp_ERROR_BOX_OK_ICON,
+        APP_TITLE,
+        APP_NAME,
+        wimpspriteop_AREA,
+        NULL
+    );
+}
