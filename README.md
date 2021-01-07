@@ -75,10 +75,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 
 ## References:
 [0]: https://en.wikipedia.org/wiki/Tiling_window_manager
+
 [1]: https://i3wm.org and https://swaywm.org respectively
+
 [2]: https://www.riscosopen.org
+
 [3]: http://www.marutan.net/rpcemu
+
 [4]: https://github.com/skymandr/TailWimpLite
+
 [5]: https://www.riscosopen.org/forum
+
 [6]: http://chatcube.org, https://telegram.org/ https://matrix.org and
      @fripost.org respectively. I use the handle `skymandr` on all of these.
