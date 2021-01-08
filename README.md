@@ -14,15 +14,23 @@ any state of what windows are managed and acts only on the selected window.
 
 
 ## Usage
-`Ctrl+Shift+Arrow Key` moves the current window in the direction
-specified, where current window is defined as either the topmost window with
-input focus, or the topmost window over all if there is no window with focus.
-Two moves – one vertical and one horizontal in any order – are needed to get
-the window into a corner quadrant. This will also move the window to the top
-of the window pile, unless this has choice has been deactivated. If padding
-is specified, space on the desktop will be reserved around the windows to
-allow access to the icon bar, iconized windows and the like. By default, only
-bottom padding is non-zero, in order to show the icon bar.
+`Ctrl+Shift+Arrow Key` moves the current window in the direction specified,
+anchoring it to the margin in the direction of movement. Current window is
+defined as either the topmost window with input focus, or the topmost window
+over all if there is no window with focus. This will also move the window to
+the top of the window pile, unless this has choice has been deactivated.
+
+The window will be maximized in the perpendicular dirction to the movement,
+unless it is already anchored to one of those margins. This means that two
+moves, one vertical and one horizontal in any order, will get the window into
+a corner quadrant. The exception is if a window in a corner is moved in one of
+the directions where it is already anchored. It will then be maximized in the
+perpendicular direction, _i.e_ a window in the bottom left corner moved left
+will be maximized vertically.
+
+If padding is specified, space on the desktop will be reserved around the
+windows to allow access to the icon bar, iconized windows and the like. By
+default, only bottom padding is non-zero, in order to show the icon bar.
 
 
 ## Choices

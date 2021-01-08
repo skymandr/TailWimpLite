@@ -52,10 +52,14 @@ void wininfo_get_active_window(wimp_window_state* state) {
 wininfo wininfo_get_info(wimp_window_info* wimp_wininfo) {
     wininfo info;
 
-    info.is_left        = wininfo_window_is_left(wimp_wininfo);
-    info.is_right       = wininfo_window_is_right(wimp_wininfo);
-    info.is_top         = wininfo_window_is_top(wimp_wininfo);
-    info.is_bottom      = wininfo_window_is_bottom(wimp_wininfo);
+    info.is_left        = wininfo_window_is_left(wimp_wininfo)
+                          && !wininfo_window_is_right(wimp_wininfo);
+    info.is_right       = wininfo_window_is_right(wimp_wininfo)
+                          && !wininfo_window_is_left(wimp_wininfo);
+    info.is_top         = wininfo_window_is_top(wimp_wininfo)
+                          && !wininfo_window_is_bottom(wimp_wininfo);
+    info.is_bottom      = wininfo_window_is_bottom(wimp_wininfo)
+                          && !wininfo_window_is_top(wimp_wininfo);
     info.has_headrow    = (wimp_wininfo->flags & wimp_WINDOW_TITLE_ICON) != 0;
     info.has_hscroll    = (wimp_wininfo->flags & wimp_WINDOW_HSCROLL) != 0;
     info.has_vscroll    = (wimp_wininfo->flags & wimp_WINDOW_VSCROLL) != 0;
@@ -94,14 +98,11 @@ static osbool wininfo_window_is_right(
 ) {
     screen_dim dimensions;
     screen_padding* pad = &(app_choices.padding);
+    int scroll_pad = ((info->flags | wimp_WINDOW_VSCROLL) != 0) * DECO_PADDING;
     
     screen_get_dim(&dimensions);
 
-    // I would like this to be:
-    // return info->visible.x1 + pad.right == dimensions.width;
-    // but that will require some extra error handling in to_right...
-    return info->visible.x0 == (dimensions.width - pad->left - pad->right) / 2
-                               + pad->left;
+    return info->visible.x1 + pad->right + scroll_pad == dimensions.width;
 }
 
 
@@ -111,10 +112,11 @@ static osbool wininfo_window_is_top(
 ) {
     screen_dim dimensions;
     screen_padding* pad = &(app_choices.padding);
+    int header_pad = ((info->flags | wimp_WINDOW_VSCROLL) != 0) * DECO_PADDING;
 
     screen_get_dim(&dimensions);
 
-    return info->visible.y1 + pad->top == dimensions.height;
+    return info->visible.y1 + pad->top + header_pad == dimensions.height;
 }
 
 
@@ -124,12 +126,9 @@ static osbool wininfo_window_is_bottom(
 ) {
     screen_dim dimensions;
     screen_padding* pad = &(app_choices.padding);
+    int scroll_pad = ((info->flags | wimp_WINDOW_HSCROLL) != 0) * DECO_PADDING;
 
     screen_get_dim(&dimensions);
 
-    // I would like this to be:
-    // return info->visible.y0 - pad.bottom == 0;
-    // but that will require some extra error handling/logic in to_bottom...
-    return info->visible.y1 == (dimensions.height - pad->top - pad->bottom)/ 2
-                               + pad->bottom;
+    return info->visible.y0 - pad->bottom - scroll_pad == 0;
 }

@@ -26,6 +26,10 @@
 
 #include "oslib/wimp.h"
 
+
+// Padding to add if window has decorations:
+#define DECO_PADDING 38
+
 // Window info struct:
 typedef struct wininfo wininfo;
 struct wininfo {

@@ -90,3 +90,24 @@ void report_number(int number) {
         NULL
     );
 }
+
+
+// Report a text message:
+void report_message(char* message) {
+    os_error error;
+    
+    error.errnum = 0xFF;
+    strncpy(error.errmess, message, os_ERROR_LIMIT);
+    error.errmess[os_ERROR_LIMIT - 1] =  '\0';
+
+    wimp_report_error_by_category(
+        &error,
+        wimp_ERROR_BOX_GIVEN_CATEGORY
+        | (wimp_ERROR_BOX_CATEGORY_INFO << wimp_ERROR_BOX_CATEGORY_SHIFT)
+        | wimp_ERROR_BOX_OK_ICON,
+        APP_TITLE,
+        APP_NAME,
+        wimpspriteop_AREA,
+        NULL
+    );
+}

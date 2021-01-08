@@ -80,8 +80,8 @@ void appwin_initialise(void) {
     window_definition.highlight_bg = wimp_COLOUR_CREAM;
     window_definition.extra_flags = 0;
     window_definition.extent.x0 =     0;
-    window_definition.extent.x1 =  1000;
-    window_definition.extent.y0 = -1000;
+    window_definition.extent.x1 =  3000;
+    window_definition.extent.y0 = -3000;
     window_definition.extent.y1 =     0;
     window_definition.title_flags = wimp_ICON_TEXT
                                     | wimp_ICON_BORDER 

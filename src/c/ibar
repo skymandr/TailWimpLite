@@ -110,8 +110,10 @@ static void ibar_menu_selection(
 ) {
     switch (selection->items[0]) {
     case IBAR_MENU_INFO:
+        report_message("Info has not been implemented yet.");
         break;
     case IBAR_MENU_CHOICES:
+        report_message("Choices has not been implemented yet.");
         break;
     case IBAR_MENU_HELP:
         ibar_open_help();

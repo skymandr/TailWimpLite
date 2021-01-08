@@ -153,8 +153,14 @@ static void manage_window_to_left(
 
     screen_get_dim(&dimensions);
 
-    width = (dimensions.width - pad->left - pad->right) / 2
-            - info->has_vscroll * DECO_PADDING;
+    if (info->is_left || !(info->is_top || info->is_bottom)) {
+        manage_window_max_height(state, info);
+    }
+
+    width = (
+        dimensions.width - pad->left - pad->right
+        - info->has_vscroll * DECO_PADDING
+    ) / 2;
     if (width > info->width_full) {
         width = info->width_full;
     }
@@ -175,8 +181,14 @@ static void manage_window_to_right(
 
     screen_get_dim(&dimensions);
 
-    width = (dimensions.width - pad->left - pad->right) / 2
-            - info->has_vscroll * DECO_PADDING;
+    if (info->is_right || !(info->is_top || info->is_bottom)) {
+        manage_window_max_height(state, info);
+    }
+
+    width = (
+        dimensions.width - pad->left - pad->right
+        - info->has_vscroll * DECO_PADDING
+    ) / 2;
     if (width > info->width_full) {
         width = info->width_full;
     }
@@ -198,9 +210,15 @@ static void manage_window_to_top(
 
     screen_get_dim(&dimensions);
 
-    height = (dimensions.height - pad->top - pad->bottom) / 2
-             - info->has_hscroll * DECO_PADDING
-             - info->has_headrow * DECO_PADDING;
+    if (info->is_top || !(info->is_left || info->is_right)) {
+        manage_window_max_width(state, info);
+    }
+
+    height = (
+        dimensions.height - pad->top - pad->bottom
+        - info->has_hscroll * DECO_PADDING
+        - info->has_headrow * DECO_PADDING
+    ) / 2;
     if (height > info->height_full) {
         height = info->height_full;
     }
@@ -221,9 +239,15 @@ static void manage_window_to_bottom(
 
     screen_get_dim(&dimensions);
 
-    height = (dimensions.height - pad->top - pad->bottom) / 2
-             - info->has_hscroll * DECO_PADDING
-             - info->has_headrow * DECO_PADDING;
+    if (info->is_bottom || !(info->is_left || info->is_right)) {
+        manage_window_max_width(state, info);
+    }
+
+    height = (
+        dimensions.height - pad->top - pad->bottom
+        - info->has_hscroll * DECO_PADDING
+        - info->has_headrow * DECO_PADDING
+    ) / 2;
     if (height > info->height_full) {
         height = info->height_full;
     }
@@ -237,7 +261,7 @@ static void manage_window_to_bottom(
 /////////////////////////////
 
 // Maximize window width:
-static void manange_window_max_width(
+static void manage_window_max_width(
     wimp_window_state*  state,
     wininfo*            info
 ) {
@@ -246,13 +270,14 @@ static void manange_window_max_width(
 
     screen_get_dim(&dimensions);
 
-    state->visible.x0 == pad->left;
-    state->visible.x1 == dimensions.width - pad->right;
+    state->visible.x0 = pad->left;
+    state->visible.x1 = dimensions.width - pad->right
+                        - info->has_vscroll * DECO_PADDING;
 };
 
 
 // Maximize window height:
-static void manange_window_max_height(
+static void manage_window_max_height(
     wimp_window_state*  state,
     wininfo*            info
 ) {
@@ -261,6 +286,8 @@ static void manange_window_max_height(
 
     screen_get_dim(&dimensions);
 
-    state->visible.y0 == pad->bottom;
-    state->visible.y1 == dimensions.height - pad->top;
+    state->visible.y0 = pad->bottom
+                        + info->has_hscroll * DECO_PADDING;
+    state->visible.y1 = dimensions.height - pad->top
+                        - info->has_headrow * DECO_PADDING;
 };

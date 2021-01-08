@@ -27,9 +27,6 @@
 #include "oslib/wimp.h"
 
 
-// Padding to add if window has decorations:
-#define DECO_PADDING 38
-
 // Movement directions:
 typedef int direction;
 #define manage_OFF      -1

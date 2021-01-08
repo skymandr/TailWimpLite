@@ -31,5 +31,6 @@
 void report_os_error(os_error* error);
 void report_error(char* message);
 void report_number(int number);
+void report_message(char* message);
 
 #endif
