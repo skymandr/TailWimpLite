@@ -33,6 +33,9 @@ struct wininfo {
     osbool is_right;
     osbool is_top;
     osbool is_bottom;
+    osbool has_headrow;
+    osbool has_hscroll;
+    osbool has_vscroll;
     int width_current;
     int height_current;
     int width_full;

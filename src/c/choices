@@ -31,7 +31,7 @@ choices choices_global;
 void choices_get_default(choices* choices) {
     choices->padding.left      =    0;
     choices->padding.right     =    0;
-    choices->padding.top       =   38;
+    choices->padding.top       =    0;
     choices->padding.bottom    =  136;
     choices->to_top = TRUE;
 }
