@@ -1,4 +1,4 @@
-/*  File: keyboard.c
+/*  File: control.h
  *  Part of TailWimp Lite
  *  Copyright (C) 2021  Andreas Skyman (Bumbarrel Computing)
  * 
@@ -21,13 +21,13 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef TAILWIMP_KEYBOARD
-#define TAILWIMP_KEYBORD
+#ifndef TAILWIMP_CONTROL
+#define TAILWIMP_CONTROL
 
 #include "oslib/wimp.h"
 
 
 // Process keyboard input:
-void keyboard_process_key(wimp_key_no c);
+void control_process_key(wimp_key_no c);
 
 #endif

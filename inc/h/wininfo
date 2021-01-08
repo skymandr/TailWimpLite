@@ -47,7 +47,7 @@ struct wininfo {
 };
 
 // Function prototypes:
-void wininfo_get_active_window(wimp_window_state* state);
+wimp_w wininfo_get_active_window(void);
 wininfo wininfo_get_info(wimp_window_info* info);
 
 #endif

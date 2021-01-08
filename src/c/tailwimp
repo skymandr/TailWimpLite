@@ -25,7 +25,7 @@
 
 #include "appwin.h"
 #include "ibar.h"
-#include "keyboard.h"
+#include "control.h"
 #include "screen.h"
 #include "tailwimp.h"
 
@@ -117,7 +117,7 @@ static void main_poll(void) {
             wimp_close_window(block.close.w);
             break;
         case wimp_KEY_PRESSED:
-            keyboard_process_key(block.key.c);
+            control_process_key(block.key.c);
             break;
         default:
             break;

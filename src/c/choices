@@ -29,7 +29,6 @@
 
 // Get default choices:
 void choices_get_default(choices* choices, screen_padding* padding) {
-    choices->to_top     = TRUE;
     choices->mod_key    = wimp_KEY_CONTROL | wimp_KEY_SHIFT;
     choices->padding    = padding;
     padding->left       =    0;

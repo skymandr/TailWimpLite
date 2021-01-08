@@ -96,9 +96,7 @@ void manage_window(wimp_window_state* state, direction dir) {
     default:
         break;
     }
-    if (app_choices.to_top) {
-        state->next = wimp_TOP;
-    }
+    state->next = wimp_TOP;
 }
 
 

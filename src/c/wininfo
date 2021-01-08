@@ -30,7 +30,7 @@
 
 
 // Function prototypes:
-static osbool wininfo_window_is_manageable(wimp_window_info* info);
+static osbool wininfo_window_is_manageable(wimp_window_state* state);
 static osbool wininfo_window_is_left(wimp_window_info* info);
 static osbool wininfo_window_is_right(wimp_window_info* info);
 static osbool wininfo_window_is_top(wimp_window_info* info);
@@ -38,12 +38,21 @@ static osbool wininfo_window_is_bottom(wimp_window_info* info);
 
 
 // Get active window:
-void wininfo_get_active_window(wimp_window_state* state) {
-    // TODO:
-    // Look through pile for
-    // 1) window with input focus
-    // 2) top window without that is manageable
-    wimp_get_window_state(state);
+wimp_w wininfo_get_active_window(void) {
+    wimp_window_state   state;
+    wimp_w              handle = wimp_BOTTOM;
+
+    state.next = handle;
+    while(state.next != wimp_TOP) {
+        state.w = state.next;
+        wimp_get_window_state(&state);
+
+        if (wininfo_window_is_manageable(&state)) {
+            handle = state.w;
+        }
+    }
+    
+    return handle;
 }
 
 
@@ -70,9 +79,9 @@ wininfo wininfo_get_info(wimp_window_info* wimp_wininfo) {
 }
 
 
-static osbool wininfo_window_is_manageable(wimp_window_info* info) {
-    return (info->flags & wimp_WINDOW_MOVEABLE)
-           & !(info->flags & (
+static osbool wininfo_window_is_manageable(wimp_window_state* state) {
+    return (state->flags & wimp_WINDOW_MOVEABLE)
+           && !(state->flags & (
                 wimp_WINDOW_PANE
                 | wimp_WINDOW_BACK
                 | wimp_WINDOW_FURNITURE_WINDOW

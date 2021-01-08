@@ -16,9 +16,7 @@ any state of what windows are managed and acts only on the selected window.
 ## Usage
 `Ctrl+Shift+Arrow Key` moves the current window in the direction specified,
 anchoring it to the margin in the direction of movement. Current window is
-defined as either the topmost window with input focus, or the topmost window
-over all if there is no window with focus. This will also move the window to
-the top of the window pile, unless this has choice has been deactivated.
+defined as the topmost window over all.
 
 The window will be maximized in the perpendicular dirction to the movement,
 unless it is already anchored to one of those margins. This means that two
@@ -37,9 +35,6 @@ default, only bottom padding is non-zero, in order to show the icon bar.
 Paddings for left, right, top and bottom margins in os screen units (usually
 2 per 1 px). By default only bottom padding is non-zero, in order to show the
 icon bar.
-
-There is also the option of whether to send the moved window to the top of
-the window pile when moving it. This defaults to `TRUE`.
 
 
 ## System requirements and compatibility

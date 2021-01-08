@@ -32,7 +32,6 @@
 // Choices struct:
 typedef struct choices choices;
 struct choices {
-    osbool          to_top;
     wimp_key_no     mod_key;
     screen_padding* padding;
 };

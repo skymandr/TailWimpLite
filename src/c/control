@@ -1,4 +1,4 @@
-/*  File: keyboard.c
+/*  File: control.c
  *  Part of TailWimp Lite
  *  Copyright (C) 2021  Andreas Skyman (Bumbarrel Computing)
  * 
@@ -24,19 +24,23 @@
 #include "oslib/wimp.h"
 
 #include "appwin.h"
+#include "control.h"
 #include "manage.h"
-#include "tailwimp.h"
 #include "report.h"
+#include "tailwimp.h"
 
 
 // Process keyboard input:
-void keyboard_process_key(wimp_key_no c) {
-    direction   dir;
-    wimp_window_state state;
-    wimp_key_no mod_key = wimp_KEY_CONTROL | wimp_KEY_SHIFT;
+void control_process_key(wimp_key_no c) {
+    os_error*           error;
+    direction           dir;
+    wimp_w              handle;
+    wimp_window_state   state;
 
-    wimp_w handle;
-    handle = appwin_get_handle();
+    handle = wininfo_get_active_window();
+    if (handle == wimp_BOTTOM) {
+        return;
+    }
     state.w = handle;
     wimp_get_window_state(&state);
 
