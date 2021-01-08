@@ -25,7 +25,6 @@
 
 #include "appwin.h"
 #include "manage.h"
-#include "report.h"
 
 
 // Process keyboard input:
@@ -42,19 +41,21 @@ void keyboard_process_key(wimp_key_no c) {
     state.next = wimp_TOP;
 
     // Use if rather than switch to allow for mod_key setting in future:
-    if (c == mod_key | wimp_KEY_LEFT) {
+    if (c == (mod_key | wimp_KEY_LEFT)) {
         dir = manage_LEFT;
-    } else if (c == mod_key | wimp_KEY_RIGHT) {
+    } else if (c == (mod_key | wimp_KEY_RIGHT)) {
         dir = manage_RIGHT;
-    } else if (c == mod_key | wimp_KEY_UP) {
+    } else if (c == (mod_key | wimp_KEY_UP)) {
         dir = manage_TOP;
-    } else if (c == mod_key | wimp_KEY_DOWN) {
+    } else if (c == (mod_key | wimp_KEY_DOWN)) {
+        dir = manage_BOTTOM;
+    } else if (c == (mod_key | wimp_KEY_HOME)) {
         dir = manage_CENTRE;
     } else {
         wimp_process_key(c);
         return;
     }
     
-    manage_window(&state, manage_LEFT);
+    manage_window(&state, dir);
     wimp_open_window((wimp_open*) &state);
 };

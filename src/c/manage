@@ -27,52 +27,71 @@
 #include "manage.h"
 #include "screen.h"
 #include "tailwimp.h"
-#include "appwin.h"
+#include "wininfo.h"
 
 
 // Function prototypes:
-static void manage_window_to_centre(wimp_window_state* state);
-static void manage_window_to_off_screen(wimp_window_state* state);
+static void manage_window_to_centre(
+    wimp_window_state*  state,
+    wininfo*            info
+);
+static void manage_window_to_off_screen(
+    wimp_window_state*  state,
+    wininfo*            info
+);
 static void manage_window_to_left(
-    wimp_window_state* state
+    wimp_window_state*  state,
+    wininfo*            info
 );
 static void manage_window_to_right(
-    wimp_window_state* state
+    wimp_window_state*  state,
+    wininfo*            info
 );
 static void manage_window_to_top(
-    wimp_window_state* state
+    wimp_window_state*  state,
+    wininfo*            info
 );
 static void manage_window_to_bottom(
-    wimp_window_state* state
+    wimp_window_state*  state,
+    wininfo*            info;
 );
 static void manage_window_max_width(
-    wimp_window_state* state
+    wimp_window_state*  state,
+    wininfo*            info
 );
 static void manage_window_max_height(
-    wimp_window_state* state
+    wimp_window_state*  state,
+    wininfo*            info
 );
 
 
 // Manage windows:
 void manage_window(wimp_window_state* state, direction dir) {
+    wimp_window_info    wimp_wininfo;
+    wininfo             info;
+
+    wimp_wininfo.w = state->w;
+    wimp_get_window_info(&wimp_wininfo);
+    info = wininfo_get_info(&wimp_wininfo);
+
     switch (dir) {
     case manage_OFF:
-        manage_window_to_off_screen(state);
+        manage_window_to_off_screen(state, &info);
         break;
     case manage_CENTRE:
-        manage_window_to_centre(state);
+        manage_window_to_centre(state, &info);
         break;
     case manage_LEFT:
-        manage_window_to_left(state);
+        manage_window_to_left(state, &info);
         break;
     case manage_RIGHT:
-        manage_window_to_right(state);
+        manage_window_to_right(state, &info);
         break;
     case manage_TOP:
-        manage_window_to_top(state);
+        manage_window_to_top(state, &info);
         break;
     case manage_BOTTOM:
-        manage_window_to_bottom(state);
+        manage_window_to_bottom(state, &info);
         break;
     default:
         break;
@@ -85,7 +104,10 @@ void manage_window(wimp_window_state* state, direction dir) {
 ///////////////////////////////
 
 // Centre window on screen:
-static void manage_window_to_centre(wimp_window_state* state) {
+static void manage_window_to_centre(
+    wimp_window_state*  state,
+    wininfo*            info
+) {
     screen_dim  dimensions;
     int         width, height;
 
@@ -103,7 +125,10 @@ static void manage_window_to_centre(wimp_window_state* state) {
 
 
 // Put window off screen:
-static void manage_window_to_off_screen(wimp_window_state* state) {
+static void manage_window_to_off_screen(
+    wimp_window_state*  state,
+    wininfo*            info
+) {
     int width, height;
 
     width = state->visible.x1 - state->visible.x0;
@@ -119,65 +144,87 @@ static void manage_window_to_off_screen(wimp_window_state* state) {
 
 // Move window to the left of the screen:
 static void manage_window_to_left(
-    wimp_window_state* state
+    wimp_window_state*  state,
+    wininfo*            info
 ) {
-    screen_dim dimensions;
+    screen_dim      dimensions;
     screen_padding* pad = &(app_choices.padding);
+    int             width, height;
 
     screen_get_dim(&dimensions);
 
-    state->visible.x0 == pad->left;
-    state->visible.x1 == (dimensions.width - pad->left - pad->right) / 2
-                         + pad->left;
+    width = (dimensions.width - pad->left - pad->right) / 2;
+    // Adapt for scroll bars...
+    if (width > info->width_full) {
+        width = info->width_full;
+    }
+
+    state->visible.x0 = pad->left;
+    state->visible.x1 = pad->left + width;
 };
 
 
 // Move window to the right of the screen:
 static void manage_window_to_right(
-    wimp_window_state* state
+    wimp_window_state*  state,
+    wininfo*            info
 ) {
-    screen_dim dimensions;
+    screen_dim      dimensions;
     screen_padding* pad = &(app_choices.padding);
+    int             width, height;
 
     screen_get_dim(&dimensions);
 
-    // This should ideally check that this is possible with max dimensions and
-    // pad x0 if not:
-    state->visible.x0 == (dimensions.width - pad->left - pad->right) / 2
-                         + pad->left;
-    state->visible.x1 == dimensions.width - pad->right;
+    width = (dimensions.width - pad->left - pad->right) / 2;
+    // Adapt for scroll bars...
+    if (width > info->width_full) {
+        width = info->width_full;
+    }
+
+    state->visible.x0 = dimensions.width - pad->right - width;
+    state->visible.x1 = dimensions.width - pad->right;
 };
 
 
 // Move window to the top of the screen:
 static void manage_window_to_top(
-    wimp_window_state* state
+    wimp_window_state*  state,
+    wininfo*            info
 ) {
     screen_dim dimensions;
     screen_padding* pad = &(app_choices.padding);
+    int             width, height;
 
     screen_get_dim(&dimensions);
 
-    state->visible.y0 == (dimensions.height - pad->top - pad->bottom) / 2
-                         + pad->bottom;
-    state->visible.y1 == dimensions.height - pad->right;
+    height = (dimensions.height - pad->top - pad->bottom) / 2;
+    // Adapt for scroll bars...
+    if (height > info->height_full) {
+        height = info->height_full;
+    }
+    state->visible.y0 = dimensions.height - pad->top - height;
+    state->visible.y1 = dimensions.height - pad->top;
 }
 
 
 // Move window to the bottom of the screen:
 static void manage_window_to_bottom(
-    wimp_window_state* state
+    wimp_window_state*  state,
+    wininfo*            info
 ) {
     screen_dim dimensions;
     screen_padding* pad = &(app_choices.padding);
+    int             width, height;
 
     screen_get_dim(&dimensions);
 
-    state->visible.y0 == pad->bottom;
-    // This should ideally check that this is possible with max dimensions and
-    // pad y1 if not:
-    state->visible.y1 == (dimensions.height - pad->top - pad->bottom) / 2
-                         + pad->bottom;
+    height = (dimensions.height - pad->top - pad->bottom) / 2;
+    // Adapt for scroll bars...
+    if (height > info->height_full) {
+        height = info->height_full;
+    }
+    state->visible.y0 = pad->bottom;
+    state->visible.y1 = pad->bottom + height;
 }
 
 
@@ -187,7 +234,8 @@ static void manage_window_to_bottom(
 
 // Maximize window width:
 static void manange_window_max_width(
-    wimp_window_state* state
+    wimp_window_state*  state,
+    wininfo*            info
 ) {
     screen_dim dimensions;
     screen_padding* pad = &(app_choices.padding);
@@ -201,7 +249,8 @@ static void manange_window_max_width(
 
 // Maximize window height:
 static void manange_window_max_height(
-    wimp_window_state* state
+    wimp_window_state*  state,
+    wininfo*            info
 ) {
     screen_dim dimensions;
     screen_padding* pad = &(app_choices.padding);
