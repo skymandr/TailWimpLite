@@ -46,8 +46,7 @@ struct wininfo {
     int height_full;
 };
 
-// Funtion prototypes:
-// TODO: should not be state
+// Function prototypes:
 void wininfo_get_active_window(wimp_window_state* state);
 wininfo wininfo_get_info(wimp_window_info* info);
 

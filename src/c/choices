@@ -21,17 +21,19 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "oslib/wimp.h"
+
 #include "choices.h"
 #include "screen.h"
 
-// Global variables:
-choices choices_global;
 
 // Get default choices:
-void choices_get_default(choices* choices) {
-    choices->padding.left      =    0;
-    choices->padding.right     =    0;
-    choices->padding.top       =    0;
-    choices->padding.bottom    =  136;
-    choices->to_top = TRUE;
+void choices_get_default(choices* choices, screen_padding* padding) {
+    choices->to_top     = TRUE;
+    choices->mod_key    = wimp_KEY_CONTROL | wimp_KEY_SHIFT;
+    choices->padding    = padding;
+    padding->left       =    0;
+    padding->right      =    0;
+    padding->top        =    0;
+    padding->bottom     =  136;
 }

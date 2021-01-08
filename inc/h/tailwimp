@@ -25,6 +25,7 @@
 #define TAILWIMP_MAIN
 
 #include "choices.h"
+#include "screen.h"
 
 
 // Application name and version:
@@ -36,5 +37,6 @@
 // Application quit request flag:
 extern osbool main_quit_flag;
 extern choices app_choices;
+extern screen_padding app_padding;
 
 #endif

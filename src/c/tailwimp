@@ -23,15 +23,17 @@
 
 #include "oslib/wimp.h"
 
+#include "appwin.h"
 #include "ibar.h"
 #include "keyboard.h"
+#include "screen.h"
 #include "tailwimp.h"
-#include "appwin.h"
 
 
 // Global variables:
 osbool main_quit_flag = FALSE;
 choices app_choices;
+screen_padding app_padding;
 
 
 // Function prototypes:
@@ -60,7 +62,7 @@ static wimp_t main_init(void) {
     wimp_t task;
 
     // Initialise application:
-    choices_get_default(&app_choices);
+    choices_get_default(&app_choices, &app_padding);
     task = wimp_initialise(
         wimp_VERSION_RO3,
         APP_NAME,

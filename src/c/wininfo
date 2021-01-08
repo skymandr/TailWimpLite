@@ -39,8 +39,6 @@ static osbool wininfo_window_is_bottom(wimp_window_info* info);
 
 // Get active window:
 void wininfo_get_active_window(wimp_window_state* state) {
-    wimp_w handle = appwin_get_handle();
-    state->w = handle;
     // TODO:
     // Look through pile for
     // 1) window with input focus
@@ -87,7 +85,7 @@ static osbool wininfo_window_is_manageable(wimp_window_info* info) {
 static osbool wininfo_window_is_left(
     wimp_window_info* info
 ) {
-    screen_padding* pad = &(app_choices.padding);
+    screen_padding* pad = app_choices.padding;
     return info->visible.x0 - pad->left == 0;
 }
 
@@ -96,8 +94,8 @@ static osbool wininfo_window_is_left(
 static osbool wininfo_window_is_right(
     wimp_window_info* info
 ) {
-    screen_dim dimensions;
-    screen_padding* pad = &(app_choices.padding);
+    screen_dim      dimensions;
+    screen_padding* pad = app_choices.padding;
     int scroll_pad = ((info->flags | wimp_WINDOW_VSCROLL) != 0) * DECO_PADDING;
     
     screen_get_dim(&dimensions);
@@ -110,8 +108,8 @@ static osbool wininfo_window_is_right(
 static osbool wininfo_window_is_top(
     wimp_window_info* info
 ) {
-    screen_dim dimensions;
-    screen_padding* pad = &(app_choices.padding);
+    screen_dim      dimensions;
+    screen_padding* pad = app_choices.padding;
     int header_pad = ((info->flags | wimp_WINDOW_VSCROLL) != 0) * DECO_PADDING;
 
     screen_get_dim(&dimensions);
@@ -124,8 +122,8 @@ static osbool wininfo_window_is_top(
 static osbool wininfo_window_is_bottom(
     wimp_window_info* info
 ) {
-    screen_dim dimensions;
-    screen_padding* pad = &(app_choices.padding);
+    screen_dim      dimensions;
+    screen_padding* pad = app_choices.padding;
     int scroll_pad = ((info->flags | wimp_WINDOW_HSCROLL) != 0) * DECO_PADDING;
 
     screen_get_dim(&dimensions);

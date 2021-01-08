@@ -25,31 +25,31 @@
 
 #include "appwin.h"
 #include "manage.h"
+#include "tailwimp.h"
+#include "report.h"
 
 
 // Process keyboard input:
 void keyboard_process_key(wimp_key_no c) {
-    const wimp_key_no mod_key = wimp_KEY_CONTROL | wimp_KEY_SHIFT;
     direction   dir;
-
-    // TODO: This is mostly placeholders:
     wimp_window_state state;
+    wimp_key_no mod_key = wimp_KEY_CONTROL | wimp_KEY_SHIFT;
+
     wimp_w handle;
     handle = appwin_get_handle();
     state.w = handle;
     wimp_get_window_state(&state);
-    state.next = wimp_TOP;
 
     // Use if rather than switch to allow for mod_key setting in future:
-    if (c == (mod_key | wimp_KEY_LEFT)) {
+    if (c == (app_choices.mod_key | wimp_KEY_LEFT)) {
         dir = manage_LEFT;
-    } else if (c == (mod_key | wimp_KEY_RIGHT)) {
+    } else if (c == (app_choices.mod_key | wimp_KEY_RIGHT)) {
         dir = manage_RIGHT;
-    } else if (c == (mod_key | wimp_KEY_UP)) {
+    } else if (c == (app_choices.mod_key | wimp_KEY_UP)) {
         dir = manage_TOP;
-    } else if (c == (mod_key | wimp_KEY_DOWN)) {
+    } else if (c == (app_choices.mod_key | wimp_KEY_DOWN)) {
         dir = manage_BOTTOM;
-    } else if (c == (mod_key | wimp_KEY_HOME)) {
+    } else if (c == (app_choices.mod_key | wimp_KEY_HOME)) {
         dir = manage_CENTRE;
     } else {
         wimp_process_key(c);

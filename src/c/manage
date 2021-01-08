@@ -96,6 +96,9 @@ void manage_window(wimp_window_state* state, direction dir) {
     default:
         break;
     }
+    if (app_choices.to_top) {
+        state->next = wimp_TOP;
+    }
 }
 
 
@@ -148,7 +151,7 @@ static void manage_window_to_left(
     wininfo*            info
 ) {
     screen_dim      dimensions;
-    screen_padding* pad = &(app_choices.padding);
+    screen_padding* pad = app_choices.padding;
     int             width, height;
 
     screen_get_dim(&dimensions);
@@ -176,7 +179,7 @@ static void manage_window_to_right(
     wininfo*            info
 ) {
     screen_dim      dimensions;
-    screen_padding* pad = &(app_choices.padding);
+    screen_padding* pad = app_choices.padding;
     int             width, height;
 
     screen_get_dim(&dimensions);
@@ -205,7 +208,7 @@ static void manage_window_to_top(
     wininfo*            info
 ) {
     screen_dim dimensions;
-    screen_padding* pad = &(app_choices.padding);
+    screen_padding* pad = app_choices.padding;
     int             width, height;
 
     screen_get_dim(&dimensions);
@@ -234,7 +237,7 @@ static void manage_window_to_bottom(
     wininfo*            info
 ) {
     screen_dim dimensions;
-    screen_padding* pad = &(app_choices.padding);
+    screen_padding* pad = app_choices.padding;
     int             width, height;
 
     screen_get_dim(&dimensions);
@@ -266,7 +269,7 @@ static void manage_window_max_width(
     wininfo*            info
 ) {
     screen_dim dimensions;
-    screen_padding* pad = &(app_choices.padding);
+    screen_padding* pad = app_choices.padding;
 
     screen_get_dim(&dimensions);
 
@@ -282,7 +285,7 @@ static void manage_window_max_height(
     wininfo*            info
 ) {
     screen_dim dimensions;
-    screen_padding* pad = &(app_choices.padding);
+    screen_padding* pad = app_choices.padding;
 
     screen_get_dim(&dimensions);
 
