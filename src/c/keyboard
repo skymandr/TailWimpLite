@@ -27,9 +27,12 @@
 #include "manage.h"
 #include "report.h"
 
+
 // Process keyboard input:
 void keyboard_process_key(wimp_key_no c) {
-    osbool open_win = TRUE;
+    const wimp_key_no mod_key = wimp_KEY_CONTROL | wimp_KEY_SHIFT;
+    direction   dir;
+
     // TODO: This is mostly placeholders:
     wimp_window_state state;
     wimp_w handle;
@@ -38,25 +41,20 @@ void keyboard_process_key(wimp_key_no c) {
     wimp_get_window_state(&state);
     state.next = wimp_TOP;
 
-    switch (c) {
-    case wimp_KEY_CONTROL | wimp_KEY_SHIFT | wimp_KEY_LEFT:
-        manage_window(&state, manage_LEFT);
-        break;
-    case wimp_KEY_CONTROL | wimp_KEY_SHIFT | wimp_KEY_RIGHT:
-        manage_window(&state, manage_RIGHT);
-        break;
-    case wimp_KEY_CONTROL | wimp_KEY_SHIFT | wimp_KEY_UP:
-        manage_window(&state, manage_TOP);
-        break;
-    case wimp_KEY_CONTROL | wimp_KEY_SHIFT | wimp_KEY_DOWN:
-        manage_window(&state, manage_CENTRE);
-        break;
-    default:
+    // Use if rather than switch to allow for mod_key setting in future:
+    if (c == mod_key | wimp_KEY_LEFT) {
+        dir = manage_LEFT;
+    } else if (c == mod_key | wimp_KEY_RIGHT) {
+        dir = manage_RIGHT;
+    } else if (c == mod_key | wimp_KEY_UP) {
+        dir = manage_TOP;
+    } else if (c == mod_key | wimp_KEY_DOWN) {
+        dir = manage_CENTRE;
+    } else {
         wimp_process_key(c);
-        open_win = FALSE;
-        break;
+        return;
     }
-    if (open_win) {
-        wimp_open_window((wimp_open*) &state);
-    }
+    
+    manage_window(&state, manage_LEFT);
+    wimp_open_window((wimp_open*) &state);
 };
