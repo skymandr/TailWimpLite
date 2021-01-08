@@ -21,10 +21,10 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <stdlib.h>
 #include <string.h>
 
 #include "oslib/wimp.h"
-#include "oslib/wimpspriteop.h"
 
 #include "manage.h"
 #include "tailwimp.h"
@@ -33,13 +33,10 @@
 
 // Global variables
 static wimp_w appwin_handle;
-#define APPWIN_TITLE_TEXT_LEN 14
-static char appwin_title_text[APPWIN_TITLE_TEXT_LEN];
 
 
 // Function prototypes:
-static wimp_i appwin_create_icon(void);
-
+static wimp_window* appwin_load_template(char* name);
 
 // For debugging:
 wimp_w appwin_get_handle(void) {
@@ -49,61 +46,22 @@ wimp_w appwin_get_handle(void) {
 
 // Application window initialisation:
 void appwin_initialise(void) {
-    wimp_window window_definition;
+    wimp_window*    window_definition;
+    char*           title_text;
+    int             title_size;
 
-    window_definition.visible.x0 =   0;
-    window_definition.visible.x1 = 320;
-    window_definition.visible.y0 =   0;
-    window_definition.visible.y1 = 320;
-    window_definition.xscroll = 0;
-    window_definition.yscroll = 0;
-    window_definition.next = wimp_TOP;
-    window_definition.flags = wimp_WINDOW_NEW_FORMAT
-                              | wimp_WINDOW_MOVEABLE
-                              | wimp_WINDOW_AUTO_REDRAW
-                              | wimp_WINDOW_BOUNDED_ONCE
-                              | wimp_WINDOW_BACK_ICON
-                              | wimp_WINDOW_CLOSE_ICON
-                              | wimp_WINDOW_TITLE_ICON
-                              | wimp_WINDOW_TOGGLE_ICON
-                              | wimp_WINDOW_VSCROLL
-                              | wimp_WINDOW_SIZE_ICON
-                              | wimp_WINDOW_HSCROLL
-                              | wimp_WINDOW_NO_BOUNDS
-                              | wimp_WINDOW_HOT_KEYS;
-    window_definition.title_fg = wimp_COLOUR_BLACK;
-    window_definition.title_bg = wimp_COLOUR_LIGHT_GREY;
-    window_definition.work_fg = wimp_COLOUR_BLACK;
-    window_definition.work_bg = wimp_COLOUR_CREAM;
-    window_definition.scroll_outer = wimp_COLOUR_MID_LIGHT_GREY;
-    window_definition.scroll_inner = wimp_COLOUR_VERY_LIGHT_GREY;
-    window_definition.highlight_bg = wimp_COLOUR_CREAM;
-    window_definition.extra_flags = 0;
-    window_definition.extent.x0 =     0;
-    window_definition.extent.x1 =  3000;
-    window_definition.extent.y0 = -3000;
-    window_definition.extent.y1 =     0;
-    window_definition.title_flags = wimp_ICON_TEXT
-                                    | wimp_ICON_BORDER 
-                                    | wimp_ICON_HCENTRED
-                                    | wimp_ICON_VCENTRED
-                                    | wimp_ICON_FILLED
-                                    | wimp_ICON_INDIRECTED;
-    window_definition.title_data.indirected_text.text = appwin_title_text;
-    window_definition.title_data.indirected_text.size = APPWIN_TITLE_TEXT_LEN;
-    window_definition.title_data.indirected_text.validation = "";
-    window_definition.work_flags = wimp_BUTTON_NEVER
-                                   << wimp_ICON_BUTTON_TYPE_SHIFT;
-    window_definition.sprite_area = wimpspriteop_AREA;
-    window_definition.xmin = 0;
-    window_definition.ymin = 0;
-    window_definition.icon_count = 0;
+    window_definition = appwin_load_template("TailWimp");
+    if (window_definition == NULL) {
+        report_error("Failed to load Main template");
+        return;
+    }
+    title_text = window_definition->title_data.indirected_text.text;
+    title_size = window_definition->title_data.indirected_text.size;
+    strncpy(title_text, APP_TITLE, title_size);
+    title_text[title_size - 1] = '\0';
 
-    strncpy(appwin_title_text, APP_TITLE, APPWIN_TITLE_TEXT_LEN);
-    appwin_title_text[APPWIN_TITLE_TEXT_LEN - 1] = '\0';
-
-    appwin_handle = wimp_create_window(&window_definition);
-    appwin_create_icon();
+    appwin_handle = wimp_create_window(window_definition);
+    free(window_definition);
 }
 
 
@@ -126,26 +84,50 @@ void appwin_open(void) {
 }
 
 
-// Create icon in main application window:
-static wimp_i appwin_create_icon(void) {
-    wimp_icon_create icon_definition;
+// Load window template:
+static wimp_window* appwin_load_template(char* name) {
+    wimp_window*    window_def = NULL;
+    byte*           ind_data = NULL;
+    int             def_size, ind_size, context = 0;
+    os_error*       error;
 
-    icon_definition.w = appwin_handle;
-    icon_definition.icon.extent.x0 =   60;
-    icon_definition.icon.extent.x1 =  260;
-    icon_definition.icon.extent.y0 = -260;
-    icon_definition.icon.extent.y1 =  -60;
-    icon_definition.icon.flags = wimp_ICON_SPRITE
-                                | wimp_ICON_HCENTRED
-                                | (wimp_COLOUR_BLACK
-                                   << wimp_ICON_FG_COLOUR_SHIFT)
-                                | (wimp_COLOUR_CREAM
-                                   << wimp_ICON_BG_COLOUR_SHIFT);
-    strncpy(
-        icon_definition.icon.data.sprite,
-        "bumbarrelbbl",
-        osspriteop_NAME_LIMIT
-    );
+    // Call Wimp_LoadTemplate to request the amounts of memory required:
+    error = xwimp_load_template(wimp_GET_SIZE, 0, 0, wimp_NO_FONTS, name, 0,
+                                &def_size, &ind_size, &context);
+    if (error != NULL || context == 0) {
+            return NULL;
+    }
 
-    return wimp_create_icon(&icon_definition);
+    // Allocate the memory and verify that it was available:
+    window_def  = malloc(def_size);
+    ind_data    = malloc(ind_size);
+
+    if (window_def == NULL || (ind_size > 0 && ind_data == NULL)) {
+        if (window_def != NULL) {
+            free(window_def);
+        }
+        if (ind_data != NULL) {
+            free(ind_data);
+        }
+
+        return NULL;
+    }
+
+    // Call Wimp_LoadTemplate again to load the template into our memory:
+    error = xwimp_load_template(window_def,
+                                (char*) ind_data,
+                                (const char*) ind_data+ind_size,
+                                wimp_NO_FONTS, name, 0, NULL, NULL, &context);
+    if (error != NULL || context == 0) {
+        if (window_def != NULL) {
+            free(window_def);
+        }
+        if (ind_data != NULL) {
+            free(ind_data);
+        }
+
+        return NULL;
+    }
+
+    return window_def;
 }

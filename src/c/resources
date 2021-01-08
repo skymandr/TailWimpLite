@@ -1,0 +1,95 @@
+
+/*  File: resources.c
+ *  Part of TailWimp Lite
+ *  Copyright (C) 2021  Andreas Skyman (Bumbarrel Computing)
+ *  Copyright (C) 2003-2020, Stephen Fryatt (info@stevefryatt.org.uk)
+ * 
+ *  This file has been adapted from Steven Fryatt's SFLib:
+ *      https://github.com/steve-fryatt/sflib
+ *  and has been relicensed from European Union Public License v1.2 for the
+ *  purpose of this program.
+ * 
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ * 
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "oslib/os.h"
+#include "oslib/osfile.h"
+#include "oslib/osspriteop.h"
+#include "oslib/fileswitch.h"
+#include "oslib/wimpreadsysinfo.h"
+
+#include "resources.h"
+
+
+// Load local sprite area:
+osspriteop_area* resources_load_user_sprite_area(char* file) {
+    int                     size;
+    bits                    type;
+    fileswitch_object_type  object;
+    osspriteop_area*        area;
+    char*                   suffix, full_file[RESOURCES_MAX_FILENAME];
+    os_error*               error;
+
+    if (file == NULL) {
+        return NULL;
+    }
+
+    // Identify the current mode sprite suffix:
+    suffix = wimpreadsysinfo_sprite_suffix();
+    snprintf(full_file, RESOURCES_MAX_FILENAME, "%s%s", file, suffix);
+    full_file[RESOURCES_MAX_FILENAME - 1] = '\0';
+
+    // Check for a suffixed sprite file:
+    object = osfile_read_stamped_no_path(
+            full_file, NULL, NULL, &size, NULL, &type
+    );
+
+    // If not found, check for an un-suffixed sprite file:
+    if (object != fileswitch_IS_FILE || type != osfile_TYPE_SPRITE) {
+        strncpy(full_file, file, RESOURCES_MAX_FILENAME);
+        full_file[RESOURCES_MAX_FILENAME - 1] = '\0';
+        object = osfile_read_stamped_no_path(
+            full_file, NULL, NULL, &size, NULL, &type
+        );
+    }
+
+    // If neither found, exit:
+    if (object != fileswitch_IS_FILE || type != osfile_TYPE_SPRITE) {
+        return NULL;
+    }
+
+    // Allocate the sprite area memory:
+    size += sizeof(int);
+    area = malloc(size);
+    if (area == NULL) {
+            return NULL;
+    }
+
+    // Initialise the sprite area:
+    area->size = size;
+    area->first = 16;
+
+    // Load the sprite file into the area:
+    error = xosspriteop_load_sprite_file(osspriteop_USER_AREA, area, full_file);
+    if (error != NULL) {
+            free(area);
+            return NULL;
+    }
+
+    return area;
+}

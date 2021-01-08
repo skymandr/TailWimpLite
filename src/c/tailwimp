@@ -26,6 +26,7 @@
 #include "appwin.h"
 #include "ibar.h"
 #include "control.h"
+#include "report.h"
 #include "screen.h"
 #include "tailwimp.h"
 
@@ -60,6 +61,7 @@ int main() {
 // Global application initialisation:
 static wimp_t main_init(void) {
     wimp_t task;
+    os_error* error;
 
     // Initialise application:
     choices_get_default(&app_choices, &app_padding);
@@ -69,6 +71,13 @@ static wimp_t main_init(void) {
         NULL,
         NULL
     );
+
+    // Open templates files:
+    error = xwimp_open_template(APP_DIR ".Templates");
+    if (error != NULL) {
+        report_os_error(error);
+        main_exit(task);
+    }
     
     // Initialise iconbar:
     ibar_initialise();
