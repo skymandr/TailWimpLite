@@ -16,11 +16,11 @@ APPDIR = !TailWmpLt
 LDFLAGS = -lOSLib32
 
 # Compiler options:
-CFLAGS = -L. -LOSLib: $(LDFLAGS) -I$(IDIR) -IOSLib: -std=gnu99
+CFLAGS = -std=gnu99 -LOSLib: $(LDFLAGS) -I$(IDIR) -IOSLib:
 
 # Objects:
 _OBJ = tailwimp.o ibar.o menu.o appwin.o screen.o choices.o manage.o report.o \
-       control.o wininfo.o resources.o
+       control.o wininfo.o resources.o sfstring.o sfconfig.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 # Targets:
@@ -42,6 +42,9 @@ help: README.md
 
 clean:
 	$(RM) $(ODIR).o.resources
+	$(RM) $(ODIR).o.sfconfig
+	$(RM) $(ODIR).o.sfconfig
+	$(RM) $(ODIR).o.sfstring
 	$(RM) $(ODIR).o.tailwimp
 	$(RM) $(ODIR).o.choices
 	$(RM) $(ODIR).o.control
