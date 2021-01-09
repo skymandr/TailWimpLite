@@ -36,7 +36,26 @@ struct choices {
     screen_padding* padding;
 };
 
-// Get default choices:
-void choices_get_default(choices* choices, screen_padding* padding);
+// Defaults:
+#define CHOICES_PAD_LEFT    0
+#define CHOICES_PAD_RIGHT   0
+#define CHOICES_PAD_TOP     0
+#define CHOICES_PAD_BOTTOM  136
+#define CHOICES_MODKEY      wimp_KEY_CONTROL | wimp_KEY_SHIFT
+
+// Get choices:
+void choices_get(choices* choices, screen_padding* padding);
+
+// Initialise choices:
+osbool choices_init(void);
+
+// Set default choices:
+void choices_set_defaults(void);
+
+// Write choices to disk:
+osbool choices_load(void);
+
+// Write choices to disk:
+osbool choices_save(void);
 
 #endif

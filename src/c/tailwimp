@@ -31,6 +31,7 @@
 #include "report.h"
 #include "resources.h"
 #include "screen.h"
+#include "sfconfig.h"
 #include "tailwimp.h"
 
 
@@ -68,10 +69,14 @@ static wimp_t main_init(void) {
     osspriteop_area*    sprites;
 
     // Initialise application:
-    choices_get_default(&app_choices, &app_padding);
+    if (!choices_init()) {
+        report_error("Could not initialise Choices");
+        main_exit(0);
+    }
+    choices_get(&app_choices, &app_padding);
     task = wimp_initialise(
         wimp_VERSION_RO3,
-        APP_NAME,
+        APP_TITLE,
         NULL,
         NULL
     );

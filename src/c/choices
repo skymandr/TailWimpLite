@@ -25,14 +25,61 @@
 
 #include "choices.h"
 #include "screen.h"
+#include "sfconfig.h"
+#include "report.h"
+#include "tailwimp.h"
 
 
-// Get default choices:
-void choices_get_default(choices* choices, screen_padding* padding) {
-    choices->mod_key    = wimp_KEY_CONTROL | wimp_KEY_SHIFT;
+// Get choices:
+void choices_get(choices* choices, screen_padding* padding) {
+    choices->mod_key    = config_int_read("modkey");
     choices->padding    = padding;
-    padding->left       =    0;
-    padding->right      =    0;
-    padding->top        =    0;
-    padding->bottom     =  136;
+    padding->left       = config_int_read("pad_left");
+    padding->right      = config_int_read("pad_right");
+    padding->top        = config_int_read("pad_top");
+    padding->bottom     = config_int_read("pad_bottom");
+}
+
+
+// Initialise choices:
+osbool choices_init(void) {
+    if (!config_initialise(APP_TITLE, APP_CHOICES, APP_DIR)) {
+        return FALSE;
+    }
+
+    config_int_init("modkey",       CHOICES_MODKEY);
+    config_int_init("pad_left",     CHOICES_PAD_LEFT);
+    config_int_init("pad_right",    CHOICES_PAD_RIGHT);
+    config_int_init("pad_top",      CHOICES_PAD_RIGHT);
+    config_int_init("pad_bottom",   CHOICES_PAD_BOTTOM);
+
+    choices_load();
+
+    return TRUE;
+}
+
+
+// Set default choices:
+void choices_set_defaults(void) {
+    config_int_set("modkey",        CHOICES_MODKEY);
+    config_int_set("pad_left",      CHOICES_PAD_LEFT);
+    config_int_set("pad_right",     CHOICES_PAD_RIGHT);
+    config_int_set("pad_top",       CHOICES_PAD_RIGHT);
+    config_int_set("pad_bottom",    CHOICES_PAD_BOTTOM);
+}
+
+
+// Load choices from disk or default:
+osbool choices_load(void) {
+    if (!config_load()) {
+        choices_set_defaults();
+        return FALSE;
+    }
+    return TRUE;
+}
+
+
+// Write choices to disk:
+osbool choices_save(void) {
+    return config_save();
 }
