@@ -56,6 +56,7 @@ wimp_menu* ibar_menu;
 static void ibar_menu_selection(wimp_menu *menu, wimp_selection *selection);
 static void ibar_open_help(void);
 static wimp_w ibar_init_prog_info(osspriteop_area* sprites);
+static wimp_w ibar_init_choices(void);
 static osbool ibar_init_menu(wimp_w prop_info);
 
 
@@ -63,14 +64,18 @@ static osbool ibar_init_menu(wimp_w prop_info);
 void ibar_initialise(osspriteop_area* sprites) {
     os_error*           error;
     wimp_icon_create    icon_bar;
-    wimp_w              prog_info;
+    wimp_w              prog_info, choices;
 
-    // Program Info window:
-
+    // Application Info window:
     prog_info = ibar_init_prog_info(sprites);
     if (prog_info == NULL) {
         report_error("Failed to create Info window");
-        return;
+    }
+
+    // Application Choices window:
+    choices = ibar_init_choices();
+    if (prog_info == NULL) {
+        report_error("Failed to create Choices window");
     }
 
     // Icon bar menu:
@@ -152,7 +157,7 @@ static void ibar_open_help(void) {
 }
 
 
-// Initialise program info window:
+// Initialise application info window:
 static wimp_w ibar_init_prog_info(osspriteop_area* sprites) {
     wimp_w              prog_info;
     wimp_window*        window_definition;
@@ -196,6 +201,22 @@ static wimp_w ibar_init_prog_info(osspriteop_area* sprites) {
     prog_info = wimp_create_window(window_definition);
     free(window_definition);
     return prog_info;
+}
+
+
+// Initialise application choices window:
+static wimp_w ibar_init_choices(void) {
+    wimp_w              choices;
+    wimp_window*        window_definition;
+
+    window_definition = appwin_load_template("Choices");
+    if (window_definition == NULL) {
+        return NULL;
+    }
+
+    choices = wimp_create_window(window_definition);
+    free(window_definition);
+    return choices;
 }
 
 
