@@ -21,12 +21,14 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "oslib/osspriteop.h"
 #include "oslib/wimp.h"
 
 #include "appwin.h"
 #include "ibar.h"
 #include "control.h"
 #include "report.h"
+#include "resources.h"
 #include "screen.h"
 #include "tailwimp.h"
 
@@ -60,8 +62,9 @@ int main() {
 
 // Global application initialisation:
 static wimp_t main_init(void) {
-    wimp_t task;
-    os_error* error;
+    wimp_t              task;
+    os_error*           error;
+    osspriteop_area*    sprites;
 
     // Initialise application:
     choices_get_default(&app_choices, &app_padding);
@@ -71,6 +74,13 @@ static wimp_t main_init(void) {
         NULL,
         NULL
     );
+    
+    // Load application sprites:
+    sprites = resources_load_user_sprite_area(APP_DIR ".Themes.Sprites");
+    if (sprites == NULL) {
+        report_error("Failed to load application Sprites");
+        main_exit(task);
+    }
 
     // Open templates files:
     error = xwimp_open_template(APP_DIR ".Templates");
@@ -83,7 +93,7 @@ static wimp_t main_init(void) {
     ibar_initialise();
 
     // Initialise window:
-    appwin_initialise();
+    appwin_initialise(sprites);
     appwin_open();
 
     return task;

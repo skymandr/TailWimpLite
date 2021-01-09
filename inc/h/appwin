@@ -24,11 +24,12 @@
 #ifndef TAILWIMP_APPWIN
 #define TAILWIMP_APPWIN
 
+#include "oslib/osspriteop.h"
 #include "oslib/wimp.h"
 
 
 // Window initialisation:
-void appwin_initialise(void);
+void appwin_initialise(osspriteop_area* sprites);
 
 // Open the Window:
 void appwin_open(void);

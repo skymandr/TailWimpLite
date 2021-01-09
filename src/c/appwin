@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "oslib/osspriteop.h"
 #include "oslib/wimp.h"
 
 #include "manage.h"
@@ -33,6 +34,7 @@
 
 // Global variables
 static wimp_w appwin_handle;
+#define BBL_ICON 0
 
 
 // Function prototypes:
@@ -45,8 +47,9 @@ wimp_w appwin_get_handle(void) {
 
 
 // Application window initialisation:
-void appwin_initialise(void) {
+void appwin_initialise(osspriteop_area* sprites) {
     wimp_window*    window_definition;
+    wimp_icon*      icons;
     char*           title_text;
     int             title_size;
 
@@ -59,6 +62,9 @@ void appwin_initialise(void) {
     title_size = window_definition->title_data.indirected_text.size;
     strncpy(title_text, APP_TITLE, title_size);
     title_text[title_size - 1] = '\0';
+
+    icons = window_definition->icons;
+    icons[BBL_ICON].data.indirected_sprite.area = sprites;
 
     appwin_handle = wimp_create_window(window_definition);
     free(window_definition);
