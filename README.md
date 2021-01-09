@@ -10,7 +10,8 @@ iconised windows etc.
 
 As signified by the _Lite_ in the name, _TailWimp Lite_ is _not_ a fully
 fledged tiling window manager, nor an approximation of one. It doesn't keep
-any state of what windows are managed and acts only on the selected window.
+any state of what windows are managed and acts only on the current (topmost)
+window.
 
 
 ## Usage
