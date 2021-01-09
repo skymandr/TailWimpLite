@@ -36,9 +36,10 @@
 
 
 // Global variables:
-osbool main_quit_flag = FALSE;
-choices app_choices;
-screen_padding app_padding;
+osbool          main_quit_flag = FALSE;
+wimp_w          app_handle;
+choices         app_choices;
+screen_padding  app_padding;
 
 
 // Function prototypes:
@@ -99,8 +100,8 @@ static wimp_t main_init(void) {
     ibar_initialise(sprites);
 
     // Initialise window:
-    appwin_initialise(sprites);
-    appwin_open();
+    app_handle = appwin_initialise(sprites);
+    appwin_open(app_handle);
 
     return task;
 }

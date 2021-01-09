@@ -49,14 +49,15 @@
 
 
 //  Global variables:
-wimp_menu* ibar_menu;
+wimp_menu*  ibar_menu;
+wimp_w      ibar_choices_handle;
 
 
 // Function prototypes:
 static void ibar_menu_selection(wimp_menu *menu, wimp_selection *selection);
 static void ibar_open_help(void);
 static wimp_w ibar_init_prog_info(osspriteop_area* sprites);
-static wimp_w ibar_init_choices(void);
+static osbool ibar_init_choices(void);
 static osbool ibar_init_menu(wimp_w prop_info);
 
 
@@ -64,7 +65,7 @@ static osbool ibar_init_menu(wimp_w prop_info);
 void ibar_initialise(osspriteop_area* sprites) {
     os_error*           error;
     wimp_icon_create    icon_bar;
-    wimp_w              prog_info, choices;
+    wimp_w              prog_info;
 
     // Application Info window:
     prog_info = ibar_init_prog_info(sprites);
@@ -73,8 +74,7 @@ void ibar_initialise(osspriteop_area* sprites) {
     }
 
     // Application Choices window:
-    choices = ibar_init_choices();
-    if (prog_info == NULL) {
+    if (!ibar_init_choices()) {
         report_error("Failed to create Choices window");
     }
 
@@ -109,7 +109,7 @@ void ibar_initialise(osspriteop_area* sprites) {
 void ibar_mouse_click(wimp_pointer* pointer) {
     switch (pointer->buttons) {
     case wimp_CLICK_SELECT:
-        appwin_open();
+        appwin_open(app_handle);
         break;
     case wimp_CLICK_MENU:
         menu_open_ibar(ibar_menu, pointer, ibar_menu_selection);
@@ -132,7 +132,7 @@ static void ibar_menu_selection(
         report_message("Info has not been implemented yet.");
         break;
     case IBAR_MENU_CHOICES:
-        report_message("Choices has not been implemented yet.");
+        appwin_open(ibar_choices_handle);
         break;
     case IBAR_MENU_HELP:
         ibar_open_help();
@@ -205,18 +205,18 @@ static wimp_w ibar_init_prog_info(osspriteop_area* sprites) {
 
 
 // Initialise application choices window:
-static wimp_w ibar_init_choices(void) {
-    wimp_w              choices;
+static osbool ibar_init_choices(void) {
     wimp_window*        window_definition;
 
     window_definition = appwin_load_template("Choices");
     if (window_definition == NULL) {
-        return NULL;
+        return FALSE;
     }
 
-    choices = wimp_create_window(window_definition);
+    ibar_choices_handle = wimp_create_window(window_definition);
     free(window_definition);
-    return choices;
+
+    return TRUE;
 }
 
 

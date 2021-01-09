@@ -39,9 +39,10 @@
 #define APP_DIR         "<TailWmpLt$Dir>"
 #define APP_CHOICES     "TailWmpLt"
 
-// Application quit request flag:
-extern osbool main_quit_flag;
-extern choices app_choices;
-extern screen_padding app_padding;
+// Global variables:
+extern osbool           main_quit_flag;
+extern wimp_w           app_handle;
+extern choices          app_choices;
+extern screen_padding   app_padding;
 
 #endif

@@ -34,20 +34,14 @@
 
 
 // Global variables
-static wimp_w appwin_handle;
 #define BBL_ICON 0
 
 
-// For debugging:
-wimp_w appwin_get_handle(void) {
-    return appwin_handle;
-}
-
-
 // Application window initialisation:
-void appwin_initialise(osspriteop_area* sprites) {
+wimp_w appwin_initialise(osspriteop_area* sprites) {
     wimp_window*    window_definition;
     wimp_icon*      icons;
+    wimp_w          handle;
     char*           title_text;
     int             title_size;
 
@@ -64,17 +58,19 @@ void appwin_initialise(osspriteop_area* sprites) {
     icons = window_definition->icons;
     icons[BBL_ICON].data.indirected_sprite.area = sprites;
 
-    appwin_handle = wimp_create_window(window_definition);
+    handle = wimp_create_window(window_definition);
     free(window_definition);
+
+    return handle;
 }
 
 
-// Open the main application window:
-void appwin_open(void) {
+// Open a window:
+void appwin_open(wimp_w handle) {
     wimp_window_state state;
 
     // Get window state:
-    state.w = appwin_handle;
+    state.w = handle;
     wimp_get_window_state(&state);
 
     // Set window position:
