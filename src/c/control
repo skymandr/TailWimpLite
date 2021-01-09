@@ -26,7 +26,6 @@
 #include "appwin.h"
 #include "control.h"
 #include "manage.h"
-#include "report.h"
 #include "tailwimp.h"
 #include "wininfo.h"
 
