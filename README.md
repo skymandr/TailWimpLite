@@ -40,7 +40,7 @@ icon bar.
 ## System requirements and compatibility
 This software has been tested on Risc OS Open 5.X [3] on Raspberry Pi and in
 the RPCEmu emulator [4]. It might work on earlier versions of Risc OS as
-well. If you try it, pleas let me know!
+well. If you try it, please let me know!
 
 
 ## Getting more help, making suggestions and reporting problems
@@ -52,8 +52,16 @@ interest, or contact me directly on for example _!ChatCube_ [7], _Telegram_
 for all of these.
 
 
-## Why TailWimp?
-It is a polyglottal pun. Bumbarrels are best birds.
+## Why _TailWimp_?
+It's a polyglottal pun. Bumbarrels are best birds.
+
+
+## Why _Lite_
+Shortened from _light_ due to space restrictions. This refers to the fact that
+this is not a full tiling window manager, just a tool for moving windows
+about. If some day I can get this to work in a satisfactory manner, I may
+give making a more comprehensive windom management tool a go, in which case
+that will be called just _TailWimp_.
 
 
 ## License and disclaimer
