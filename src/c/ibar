@@ -55,6 +55,8 @@ wimp_menu* ibar_menu;
 // Function prototypes:
 static void ibar_menu_selection(wimp_menu *menu, wimp_selection *selection);
 static void ibar_open_help(void);
+static wimp_w ibar_init_prog_info(osspriteop_area* sprites);
+static osbool ibar_init_menu(wimp_w prop_info);
 
 
 // Icon bar initialisation:
@@ -62,59 +64,19 @@ void ibar_initialise(osspriteop_area* sprites) {
     os_error*           error;
     wimp_icon_create    icon_bar;
     wimp_w              prog_info;
-    wimp_window*        window_definition;
-    wimp_icon*          icons;
-    char*               text;
-    int                 size;
 
     // Program Info window:
-    window_definition = appwin_load_template("ProgInfo");
-    if (window_definition == NULL) {
-        report_error("Failed to load info template");
+
+    prog_info = ibar_init_prog_info(sprites);
+    if (prog_info == NULL) {
+        report_error("Failed to create Info window");
         return;
     }
-    icons = window_definition->icons;
-    for (int i = 0; i < window_definition->icon_count; i++) {
-        text = icons[i].data.indirected_text.text;
-        size = icons[i].data.indirected_text.size;
-        switch (i) {
-        case IBAR_PROGINFO_ICON_NAME:
-            strncpy(text, APP_TITLE, size);
-            text[size - 1] = '\0';
-            break;
-        case IBAR_PROGINFO_ICON_PURPOSE:
-            strncpy(text, APP_PURPOSE, size);
-            text[size - 1] = '\0';
-            break;
-        case IBAR_PROGINFO_ICON_AUTHOR:
-            strncpy(text, APP_AUTHOR, size);
-            text[size - 1] = '\0';
-            break;
-        case IBAR_PROGINFO_ICON_VERSION:
-            strncpy(text, APP_VERSION " (" APP_DATE ")", size);
-            text[size - 1] = '\0';
-            break;
-        case IBAR_PROGINFO_ICON_BBL:
-            icons[i].data.indirected_sprite.area = sprites;
-            break;
-        default:
-            break;
-        }
-    } 
-
-    prog_info = wimp_create_window(window_definition);
-    free(window_definition);
 
     // Icon bar menu:
-    ibar_menu = menu_create(APP_TITLE, 4);
-    if (ibar_menu == NULL) {
-        report_error("Failed to create icon bar menu");
-        return;
+    if (!ibar_init_menu(prog_info)) {
+        report_error("Failed to create Icon bar menu");
     }
-    menu_entry(ibar_menu, IBAR_MENU_INFO, "Info", (wimp_menu*) prog_info);
-    menu_entry(ibar_menu, IBAR_MENU_CHOICES, "Choices...", NULL);
-    menu_entry(ibar_menu, IBAR_MENU_HELP, "Help...", NULL);
-    menu_entry(ibar_menu, IBAR_MENU_QUIT, "Quit", NULL);
 
     // Icon bar icon:
     icon_bar.w = wimp_ICON_BAR_RIGHT;
@@ -187,4 +149,66 @@ static void ibar_open_help(void) {
     if (error != NULL) {
         report_os_error(error);
     }
+}
+
+
+// Initialise program info window:
+static wimp_w ibar_init_prog_info(osspriteop_area* sprites) {
+    wimp_w              prog_info;
+    wimp_window*        window_definition;
+    wimp_icon*          icons;
+    char*               text;
+    int                 size;
+
+    window_definition = appwin_load_template("ProgInfo");
+    if (window_definition == NULL) {
+        return NULL;
+    }
+    icons = window_definition->icons;
+    for (int i = 0; i < window_definition->icon_count; i++) {
+        text = icons[i].data.indirected_text.text;
+        size = icons[i].data.indirected_text.size;
+        switch (i) {
+        case IBAR_PROGINFO_ICON_NAME:
+            strncpy(text, APP_TITLE, size);
+            text[size - 1] = '\0';
+            break;
+        case IBAR_PROGINFO_ICON_PURPOSE:
+            strncpy(text, APP_PURPOSE, size);
+            text[size - 1] = '\0';
+            break;
+        case IBAR_PROGINFO_ICON_AUTHOR:
+            strncpy(text, APP_AUTHOR, size);
+            text[size - 1] = '\0';
+            break;
+        case IBAR_PROGINFO_ICON_VERSION:
+            strncpy(text, APP_VERSION " (" APP_DATE ")", size);
+            text[size - 1] = '\0';
+            break;
+        case IBAR_PROGINFO_ICON_BBL:
+            icons[i].data.indirected_sprite.area = sprites;
+            break;
+        default:
+            break;
+        }
+    } 
+
+    prog_info = wimp_create_window(window_definition);
+    free(window_definition);
+    return prog_info;
+}
+
+
+// Initialise icon bar menu:
+static osbool ibar_init_menu(wimp_w prog_info) {
+    ibar_menu = menu_create(APP_TITLE, 4);
+    if (ibar_menu == NULL) {
+        return FALSE;
+    }
+    menu_entry(ibar_menu, IBAR_MENU_INFO, "Info", (wimp_menu*) prog_info);
+    menu_entry(ibar_menu, IBAR_MENU_CHOICES, "Choices...", NULL);
+    menu_entry(ibar_menu, IBAR_MENU_HELP, "Help...", NULL);
+    menu_entry(ibar_menu, IBAR_MENU_QUIT, "Quit", NULL);
+
+    return TRUE;
 }
