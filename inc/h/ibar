@@ -24,11 +24,12 @@
 #ifndef TAILWIMP_IBAR
 #define TAILWIMP_IBAR
 
+#include "oslib/osspriteop.h"
 #include "oslib/wimp.h"
 
 
 // Icon bar initialisation:
-void ibar_initialise(void);
+void ibar_initialise(osspriteop_area* sprites);
 
 // Handle mouse click on icon bar:
 void ibar_mouse_click(wimp_pointer* pointer);

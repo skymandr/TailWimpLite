@@ -27,6 +27,7 @@
 #include "appwin.h"
 #include "ibar.h"
 #include "control.h"
+#include "menu.h"
 #include "report.h"
 #include "resources.h"
 #include "screen.h"
@@ -90,7 +91,7 @@ static wimp_t main_init(void) {
     }
     
     // Initialise iconbar:
-    ibar_initialise();
+    ibar_initialise(sprites);
 
     // Initialise window:
     appwin_initialise(sprites);

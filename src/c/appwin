@@ -27,18 +27,16 @@
 #include "oslib/osspriteop.h"
 #include "oslib/wimp.h"
 
-#include "manage.h"
-#include "tailwimp.h"
 #include "appwin.h"
+#include "manage.h"
+#include "report.h"
+#include "tailwimp.h"
 
 
 // Global variables
 static wimp_w appwin_handle;
 #define BBL_ICON 0
 
-
-// Function prototypes:
-static wimp_window* appwin_load_template(char* name);
 
 // For debugging:
 wimp_w appwin_get_handle(void) {
@@ -55,7 +53,7 @@ void appwin_initialise(osspriteop_area* sprites) {
 
     window_definition = appwin_load_template("TailWimp");
     if (window_definition == NULL) {
-        report_error("Failed to load Main template");
+        report_error("Failed to load main template");
         return;
     }
     title_text = window_definition->title_data.indirected_text.text;
@@ -91,7 +89,7 @@ void appwin_open(void) {
 
 
 // Load window template:
-static wimp_window* appwin_load_template(char* name) {
+wimp_window* appwin_load_template(char* name) {
     wimp_window*    window_def = NULL;
     byte*           ind_data = NULL;
     int             def_size, ind_size, context = 0;

@@ -34,6 +34,9 @@ void appwin_initialise(osspriteop_area* sprites);
 // Open the Window:
 void appwin_open(void);
 
+// Load window template:
+wimp_window* appwin_load_template(char* name);
+
 // For debugging:
 wimp_w appwin_get_handle(void);
 

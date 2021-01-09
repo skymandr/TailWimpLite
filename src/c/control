@@ -28,6 +28,7 @@
 #include "manage.h"
 #include "report.h"
 #include "tailwimp.h"
+#include "wininfo.h"
 
 
 // Process keyboard input:
