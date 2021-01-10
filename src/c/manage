@@ -79,10 +79,12 @@ void manage_window(wimp_w handle, direction dir) {
 
     state.w = handle;
     wimp_get_window_state(&state);
+    state.next = wimp_TOP;
 
     switch (dir) {
     case manage_OFF:
         manage_window_to_off_screen(&state, &info);
+        state.next = wimp_BOTTOM;
         break;
     case manage_CENTRE:
         manage_window_to_centre(&state, &info);
@@ -102,7 +104,6 @@ void manage_window(wimp_w handle, direction dir) {
     default:
         break;
     }
-    state.next = wimp_TOP;
 
     wimp_open_window((wimp_open*) &state);
 }
@@ -145,6 +146,10 @@ static void manage_window_to_off_screen(
 
     state->visible.x1 = state->visible.x0 + width;
     state->visible.y1 = state->visible.y0 + height;
+
+    if ((state->flags & wimp_WINDOW_MOVEABLE) != 0) {
+        state->flags &= !wimp_WINDOW_MOVEABLE;
+    }
 }
 
 

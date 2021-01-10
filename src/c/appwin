@@ -75,9 +75,9 @@ void appwin_open(wimp_w handle) {
 
     // Set window position or open:
     if (!(state.flags & wimp_WINDOW_OPEN)) {
-        manage_window(handle, manage_CENTRE);
+        manage_window(handle, manage_OFF);
     } else {
-        state.next = wimp_TOP;
+        state.next = wimp_BOTTOM;
         wimp_open_window((wimp_open*) &state);
     }
 }
