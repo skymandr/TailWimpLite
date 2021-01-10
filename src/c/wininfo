@@ -24,9 +24,14 @@
 #include "oslib/wimp.h"
 
 #include "appwin.h"
+#include "report.h"
 #include "screen.h"
 #include "tailwimp.h"
 #include "wininfo.h"
+
+
+// Global variables:
+screen_dim dimensions;
 
 
 // Function prototypes:
@@ -56,26 +61,28 @@ wimp_w wininfo_get_active_window(void) {
 }
 
 
-wininfo wininfo_get_info(wimp_window_info* wimp_wininfo) {
-    wininfo info;
+void wininfo_get_info(wimp_w handle, wininfo* info) {
+    screen_get_dim(&dimensions);
 
-    info.is_left        = wininfo_window_is_left(wimp_wininfo)
-                          && !wininfo_window_is_right(wimp_wininfo);
-    info.is_right       = wininfo_window_is_right(wimp_wininfo)
-                          && !wininfo_window_is_left(wimp_wininfo);
-    info.is_top         = wininfo_window_is_top(wimp_wininfo)
-                          && !wininfo_window_is_bottom(wimp_wininfo);
-    info.is_bottom      = wininfo_window_is_bottom(wimp_wininfo)
-                          && !wininfo_window_is_top(wimp_wininfo);
-    info.has_headrow    = (wimp_wininfo->flags & wimp_WINDOW_TITLE_ICON) != 0;
-    info.has_hscroll    = (wimp_wininfo->flags & wimp_WINDOW_HSCROLL) != 0;
-    info.has_vscroll    = (wimp_wininfo->flags & wimp_WINDOW_VSCROLL) != 0;
-    info.width_current  = wimp_wininfo->visible.x1 - wimp_wininfo->visible.x0;
-    info.height_current = wimp_wininfo->visible.y1 - wimp_wininfo->visible.y0;
-    info.width_full     = wimp_wininfo->extent.x1 - wimp_wininfo->extent.x0;
-    info.height_full    = wimp_wininfo->extent.y1 - wimp_wininfo->extent.y0;
+    wimp_window_info    wimp_wininfo;
+    wimp_wininfo.w = handle;
+    wimp_get_window_info(&wimp_wininfo);
 
-    return info;
+    info->is_left        = wininfo_window_is_left(&wimp_wininfo)
+                           && !wininfo_window_is_right(&wimp_wininfo);
+    info->is_right       = wininfo_window_is_right(&wimp_wininfo)
+                           && !wininfo_window_is_left(&wimp_wininfo);
+    info->is_top         = wininfo_window_is_top(&wimp_wininfo)
+                           && !wininfo_window_is_bottom(&wimp_wininfo);
+    info->is_bottom      = wininfo_window_is_bottom(&wimp_wininfo)
+                           && !wininfo_window_is_top(&wimp_wininfo);
+    info->has_headrow    = (wimp_wininfo.flags & wimp_WINDOW_TITLE_ICON) != 0;
+    info->has_hscroll    = (wimp_wininfo.flags & wimp_WINDOW_HSCROLL) != 0;
+    info->has_vscroll    = (wimp_wininfo.flags & wimp_WINDOW_VSCROLL) != 0;
+    info->width_current  = wimp_wininfo.visible.x1 - wimp_wininfo.visible.x0;
+    info->height_current = wimp_wininfo.visible.y1 - wimp_wininfo.visible.y0;
+    info->width_full     = wimp_wininfo.extent.x1 - wimp_wininfo.extent.x0;
+    info->height_full    = wimp_wininfo.extent.y1 - wimp_wininfo.extent.y0;
 }
 
 
@@ -103,12 +110,9 @@ static osbool wininfo_window_is_left(
 static osbool wininfo_window_is_right(
     wimp_window_info* info
 ) {
-    screen_dim      dimensions;
     screen_padding* pad = app_choices.padding;
     int scroll_pad = ((info->flags | wimp_WINDOW_VSCROLL) != 0) * DECO_PADDING;
     
-    screen_get_dim(&dimensions);
-
     return info->visible.x1 + pad->right + scroll_pad == dimensions.width;
 }
 
@@ -117,11 +121,8 @@ static osbool wininfo_window_is_right(
 static osbool wininfo_window_is_top(
     wimp_window_info* info
 ) {
-    screen_dim      dimensions;
     screen_padding* pad = app_choices.padding;
     int header_pad = ((info->flags | wimp_WINDOW_VSCROLL) != 0) * DECO_PADDING;
-
-    screen_get_dim(&dimensions);
 
     return info->visible.y1 + pad->top + header_pad == dimensions.height;
 }
@@ -131,11 +132,8 @@ static osbool wininfo_window_is_top(
 static osbool wininfo_window_is_bottom(
     wimp_window_info* info
 ) {
-    screen_dim      dimensions;
     screen_padding* pad = app_choices.padding;
     int scroll_pad = ((info->flags | wimp_WINDOW_HSCROLL) != 0) * DECO_PADDING;
-
-    screen_get_dim(&dimensions);
 
     return info->visible.y0 - pad->bottom - scroll_pad == 0;
 }

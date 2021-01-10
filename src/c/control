@@ -60,6 +60,5 @@ void control_process_key(wimp_key_no c) {
         return;
     }
     
-    manage_window(&state, dir);
-    wimp_open_window((wimp_open*) &state);
+    manage_window(handle, dir);
 };

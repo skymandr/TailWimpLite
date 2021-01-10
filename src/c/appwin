@@ -48,7 +48,7 @@ wimp_w appwin_initialise(osspriteop_area* sprites) {
     window_definition = appwin_load_template("TailWimp");
     if (window_definition == NULL) {
         report_error("Failed to load main template");
-        return;
+        return NULL;
     }
     title_text = window_definition->title_data.indirected_text.text;
     title_size = window_definition->title_data.indirected_text.size;
@@ -73,14 +73,13 @@ void appwin_open(wimp_w handle) {
     state.w = handle;
     wimp_get_window_state(&state);
 
-    // Set window position:
+    // Set window position or open:
     if (!(state.flags & wimp_WINDOW_OPEN)) {
-        manage_window(&state, manage_CENTRE);
+        manage_window(handle, manage_CENTRE);
+    } else {
+        state.next = wimp_TOP;
+        wimp_open_window((wimp_open*) &state);
     }
-    state.next = wimp_TOP;
-
-    // Open window:
-    wimp_open_window((wimp_open*) &state);
 }
 
 

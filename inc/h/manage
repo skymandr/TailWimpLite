@@ -37,6 +37,6 @@ typedef int direction;
 #define manage_BOTTOM    4
 
 // Manage windows:
-void manage_window(wimp_window_state* state, direction dir);
+void manage_window(wimp_w handle, direction dir);
 
 #endif

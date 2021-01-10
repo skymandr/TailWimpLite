@@ -101,6 +101,10 @@ static wimp_t main_init(void) {
 
     // Initialise window:
     app_handle = appwin_initialise(sprites);
+    if (app_handle == NULL) {
+        report_error("Failed to open application window");
+        main_exit(task);
+    }
     appwin_open(app_handle);
 
     return task;

@@ -25,9 +25,14 @@
 
 #include "choices.h"
 #include "manage.h"
+#include "report.h"
 #include "screen.h"
 #include "tailwimp.h"
 #include "wininfo.h"
+
+
+// Global variables:
+screen_dim dimensions;
 
 
 // Function prototypes:
@@ -66,37 +71,42 @@ static void manage_window_max_height(
 
 
 // Manage windows:
-void manage_window(wimp_window_state* state, direction dir) {
-    wimp_window_info    wimp_wininfo;
-    wininfo             info;
+void manage_window(wimp_w handle, direction dir) {
+    wininfo           info;
+    wimp_window_state state;
 
-    wimp_wininfo.w = state->w;
-    wimp_get_window_info(&wimp_wininfo);
-    info = wininfo_get_info(&wimp_wininfo);
+    wininfo_get_info(handle, &info);
+
+    screen_get_dim(&dimensions);
+
+    state.w = handle;
+    wimp_get_window_state(&state);
 
     switch (dir) {
     case manage_OFF:
-        manage_window_to_off_screen(state, &info);
+        manage_window_to_off_screen(&state, &info);
         break;
     case manage_CENTRE:
-        manage_window_to_centre(state, &info);
+        manage_window_to_centre(&state, &info);
         break;
     case manage_LEFT:
-        manage_window_to_left(state, &info);
+        manage_window_to_left(&state, &info);
         break;
     case manage_RIGHT:
-        manage_window_to_right(state, &info);
+        manage_window_to_right(&state, &info);
         break;
     case manage_TOP:
-        manage_window_to_top(state, &info);
+        manage_window_to_top(&state, &info);
         break;
     case manage_BOTTOM:
-        manage_window_to_bottom(state, &info);
+        manage_window_to_bottom(&state, &info);
         break;
     default:
         break;
     }
-    state->next = wimp_TOP;
+    state.next = wimp_TOP;
+
+    wimp_open_window((wimp_open*) &state);
 }
 
 
@@ -109,13 +119,10 @@ static void manage_window_to_centre(
     wimp_window_state*  state,
     wininfo*            info
 ) {
-    screen_dim  dimensions;
     int         width, height;
 
     width = state->visible.x1 - state->visible.x0;
     height = state->visible.y1 - state->visible.y0;
-
-    screen_get_dim(&dimensions);
 
     state->visible.x0 = (dimensions.width - width) / 2;
     state->visible.y0 = (dimensions.height - height) / 2;
@@ -148,11 +155,8 @@ static void manage_window_to_left(
     wimp_window_state*  state,
     wininfo*            info
 ) {
-    screen_dim      dimensions;
     screen_padding* pad = app_choices.padding;
     int             width, height;
-
-    screen_get_dim(&dimensions);
 
     if (info->is_left || !(info->is_top || info->is_bottom)) {
         manage_window_max_height(state, info);
@@ -176,11 +180,8 @@ static void manage_window_to_right(
     wimp_window_state*  state,
     wininfo*            info
 ) {
-    screen_dim      dimensions;
     screen_padding* pad = app_choices.padding;
     int             width, height;
-
-    screen_get_dim(&dimensions);
 
     if (info->is_right || !(info->is_top || info->is_bottom)) {
         manage_window_max_height(state, info);
@@ -205,11 +206,8 @@ static void manage_window_to_top(
     wimp_window_state*  state,
     wininfo*            info
 ) {
-    screen_dim dimensions;
     screen_padding* pad = app_choices.padding;
     int             width, height;
-
-    screen_get_dim(&dimensions);
 
     if (info->is_top || !(info->is_left || info->is_right)) {
         manage_window_max_width(state, info);
@@ -234,11 +232,8 @@ static void manage_window_to_bottom(
     wimp_window_state*  state,
     wininfo*            info
 ) {
-    screen_dim dimensions;
     screen_padding* pad = app_choices.padding;
     int             width, height;
-
-    screen_get_dim(&dimensions);
 
     if (info->is_bottom || !(info->is_left || info->is_right)) {
         manage_window_max_width(state, info);
@@ -266,10 +261,7 @@ static void manage_window_max_width(
     wimp_window_state*  state,
     wininfo*            info
 ) {
-    screen_dim dimensions;
     screen_padding* pad = app_choices.padding;
-
-    screen_get_dim(&dimensions);
 
     state->visible.x0 = pad->left;
     state->visible.x1 = dimensions.width - pad->right
@@ -282,10 +274,7 @@ static void manage_window_max_height(
     wimp_window_state*  state,
     wininfo*            info
 ) {
-    screen_dim dimensions;
     screen_padding* pad = app_choices.padding;
-
-    screen_get_dim(&dimensions);
 
     state->visible.y0 = pad->bottom
                         + info->has_hscroll * DECO_PADDING;
