@@ -42,6 +42,7 @@
 // Global variables:
 extern osbool           main_quit_flag;
 extern wimp_w           app_handle;
+extern wimp_w           app_choices_handle;
 extern choices          app_choices;
 extern screen_padding   app_padding;
 

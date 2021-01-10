@@ -61,28 +61,31 @@ wimp_w wininfo_get_active_window(void) {
 }
 
 
-void wininfo_get_info(wimp_w handle, wininfo* info) {
-    screen_get_dim(&dimensions);
-
+wininfo wininfo_get_info(wimp_w handle) {
     wimp_window_info    wimp_wininfo;
+    wininfo             info;
+
+    screen_get_dim(&dimensions);
     wimp_wininfo.w = handle;
     wimp_get_window_info(&wimp_wininfo);
 
-    info->is_left        = wininfo_window_is_left(&wimp_wininfo)
-                           && !wininfo_window_is_right(&wimp_wininfo);
-    info->is_right       = wininfo_window_is_right(&wimp_wininfo)
-                           && !wininfo_window_is_left(&wimp_wininfo);
-    info->is_top         = wininfo_window_is_top(&wimp_wininfo)
-                           && !wininfo_window_is_bottom(&wimp_wininfo);
-    info->is_bottom      = wininfo_window_is_bottom(&wimp_wininfo)
-                           && !wininfo_window_is_top(&wimp_wininfo);
-    info->has_headrow    = (wimp_wininfo.flags & wimp_WINDOW_TITLE_ICON) != 0;
-    info->has_hscroll    = (wimp_wininfo.flags & wimp_WINDOW_HSCROLL) != 0;
-    info->has_vscroll    = (wimp_wininfo.flags & wimp_WINDOW_VSCROLL) != 0;
-    info->width_current  = wimp_wininfo.visible.x1 - wimp_wininfo.visible.x0;
-    info->height_current = wimp_wininfo.visible.y1 - wimp_wininfo.visible.y0;
-    info->width_full     = wimp_wininfo.extent.x1 - wimp_wininfo.extent.x0;
-    info->height_full    = wimp_wininfo.extent.y1 - wimp_wininfo.extent.y0;
+    info.is_left        = wininfo_window_is_left(&wimp_wininfo)
+                          && !wininfo_window_is_right(&wimp_wininfo);
+    info.is_right       = wininfo_window_is_right(&wimp_wininfo)
+                          && !wininfo_window_is_left(&wimp_wininfo);
+    info.is_top         = wininfo_window_is_top(&wimp_wininfo)
+                          && !wininfo_window_is_bottom(&wimp_wininfo);
+    info.is_bottom      = wininfo_window_is_bottom(&wimp_wininfo)
+                          && !wininfo_window_is_top(&wimp_wininfo);
+    info.has_headrow    = (wimp_wininfo.flags & wimp_WINDOW_TITLE_ICON) != 0;
+    info.has_hscroll    = (wimp_wininfo.flags & wimp_WINDOW_HSCROLL) != 0;
+    info.has_vscroll    = (wimp_wininfo.flags & wimp_WINDOW_VSCROLL) != 0;
+    info.width_current  = wimp_wininfo.visible.x1 - wimp_wininfo.visible.x0;
+    info.height_current = wimp_wininfo.visible.y1 - wimp_wininfo.visible.y0;
+    info.width_full     = wimp_wininfo.extent.x1 - wimp_wininfo.extent.x0;
+    info.height_full    = wimp_wininfo.extent.y1 - wimp_wininfo.extent.y0;
+
+    return info;
 }
 
 

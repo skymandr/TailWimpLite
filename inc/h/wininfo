@@ -48,6 +48,6 @@ struct wininfo {
 
 // Function prototypes:
 wimp_w wininfo_get_active_window(void);
-void wininfo_get_info(wimp_w handle, wininfo* info);
+wininfo wininfo_get_info(wimp_w handle);
 
 #endif

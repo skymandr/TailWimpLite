@@ -38,6 +38,7 @@
 // Global variables:
 osbool          main_quit_flag = FALSE;
 wimp_w          app_handle;
+wimp_w          app_choices_handle;
 choices         app_choices;
 screen_padding  app_padding;
 
@@ -182,5 +183,7 @@ static void main_quit_loop(void) {
 static void main_mouse_click(wimp_pointer* pointer) {
     if (pointer->w == wimp_ICON_BAR) {
         ibar_mouse_click(pointer);
+    } else if (pointer->w == app_choices_handle) {
+        ibar_choices_mouse_click(pointer);
     }
 }

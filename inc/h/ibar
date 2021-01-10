@@ -31,8 +31,9 @@
 // Icon bar initialisation:
 void ibar_initialise(osspriteop_area* sprites);
 
-// Handle mouse click on icon bar:
+// Handle mouse click on icon bar and choices:
 void ibar_mouse_click(wimp_pointer* pointer);
+void ibar_choices_mouse_click(wimp_pointer* pointer);
 
 // Icon bar menu:
 extern wimp_menu* ibar_menu;
