@@ -58,4 +58,10 @@ osbool choices_load(void);
 // Write choices to disk:
 osbool choices_save(void);
 
+// Initialise application choices window:
+wimp_w choices_init_choices(void);
+
+// Handle mouse click in Choices
+void choices_mouse_click(wimp_pointer* pointer);
+
 #endif

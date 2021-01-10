@@ -28,6 +28,7 @@
 #include "oslib/wimp.h"
 
 #include "appwin.h"
+#include "choices.h"
 #include "ibar.h"
 #include "menu.h"
 #include "report.h"
@@ -40,18 +41,6 @@
 # define IBAR_PROGINFO_ICON_AUTHOR  2
 # define IBAR_PROGINFO_ICON_VERSION 3
 # define IBAR_PROGINFO_ICON_BBL     4
-
-// Choice icons:
-# define IBAR_CHOICES_ICON_LEFT     2
-# define IBAR_CHOICES_ICON_RIGHT    3
-# define IBAR_CHOICES_ICON_TOP      4
-# define IBAR_CHOICES_ICON_BOTTOM   5
-# define IBAR_CHOICES_ICON_MODKEY   6
-# define IBAR_CHOICES_ICON_SET      7
-# define IBAR_CHOICES_ICON_DEFAULT  8
-# define IBAR_CHOICES_ICON_CANCEL   9
-# define IBAR_CHOICES_BUFFER_LEN    7
-
 
 // Icon bar menu entries:
 # define IBAR_MENU_INFO     0
@@ -66,9 +55,8 @@ wimp_menu*  ibar_menu;
 // Function prototypes:
 static void ibar_menu_selection(wimp_menu *menu, wimp_selection *selection);
 static void ibar_open_help(void);
-static wimp_w ibar_init_prog_info(osspriteop_area* sprites);
-static wimp_w ibar_init_choices(void);
 static osbool ibar_init_menu(wimp_w prop_info);
+static wimp_w ibar_init_prog_info(osspriteop_area* sprites);
 
 
 // Icon bar initialisation:
@@ -84,7 +72,7 @@ void ibar_initialise(osspriteop_area* sprites) {
     }
 
     // Application Choices window:
-    app_choices_handle = ibar_init_choices();
+    app_choices_handle = choices_init_choices();
     if (app_choices_handle == NULL) {
         report_error("Failed to create Choices window");
     }
@@ -226,92 +214,4 @@ static wimp_w ibar_init_prog_info(osspriteop_area* sprites) {
     prog_info = wimp_create_window(window_definition);
     free(window_definition);
     return prog_info;
-}
-
-
-// Initialise application choices window:
-static wimp_w ibar_init_choices(void) {
-    wimp_window*        window_definition;
-    wimp_icon*          icons;
-    char*               text;
-    char                ftext[IBAR_CHOICES_BUFFER_LEN];
-    int                 size;
-
-    window_definition = appwin_load_template("Choices");
-    if (window_definition == NULL) {
-        return FALSE;
-    }
-    icons = window_definition->icons;
-    for (int i = 0; i < window_definition->icon_count; i++) {
-        text = icons[i].data.indirected_text.text;
-        size = icons[i].data.indirected_text.size;
-        switch (i) {
-        case IBAR_CHOICES_ICON_LEFT:
-            sprintf(ftext, "%d", app_choices.padding->left);
-            strncpy(text, ftext, size);
-            text[size - 1] = '\0';
-            // icons[i].data.indirected_text.validation = "0-9";
-            break;
-        case IBAR_CHOICES_ICON_RIGHT:
-            sprintf(ftext, "%d", app_choices.padding->right);
-            strncpy(text, ftext, size);
-            text[size - 1] = '\0';
-            // icons[i].data.indirected_text.validation = "0-9";
-            break;
-        case IBAR_CHOICES_ICON_TOP:
-            sprintf(ftext, "%d", app_choices.padding->top);
-            strncpy(text, ftext, size);
-            text[size - 1] = '\0';
-            // icons[i].data.indirected_text.validation = "0-9";
-            break;
-        case IBAR_CHOICES_ICON_BOTTOM:
-            sprintf(ftext, "%d", app_choices.padding->bottom);
-            strncpy(text, ftext, size);
-            text[size - 1] = '\0';
-            // icons[i].data.indirected_text.validation = "0-9";
-            break;
-        case IBAR_CHOICES_ICON_MODKEY:
-            break;
-        default:
-            break;
-        }
-    }
-
-    app_choices_handle = wimp_create_window(window_definition);
-    free(window_definition);
-    wimp_set_icon_state(
-        app_choices_handle,
-        IBAR_CHOICES_ICON_MODKEY,
-        wimp_ICON_SELECTED,
-        wimp_ICON_SELECTED
-    );
-
-    return app_choices_handle;
-}
-
-
-// Handle mouse click on icon bar:
-void ibar_choices_mouse_click(wimp_pointer* pointer) {
-    switch (pointer->button) {
-    case wimp_CLICK_ADJUST:
-    case wimp_CLICK_SELECT:
-        switch (pointer->i) {
-        case IBAR_CHOICES_ICON_SET:
-            // set settings from icons to mem and file
-            break;
-        case IBAR_CHOICES_ICON_DEFAULT:
-            // reset icons to default settings and save to mem and file
-            break;
-        case IBAR_CHOICES_ICON_CANCEL:
-            // reset icons to current settings
-            break;
-        default:
-            return;
-        }
-    default:
-        return;
-    }
-    if (pointer->button == wimp_CLICK_SELECT) {
-        // Close window
-    }
 }

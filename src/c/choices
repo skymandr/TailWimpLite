@@ -21,13 +21,37 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <stdlib.h>
+#include <string.h>
+
 #include "oslib/wimp.h"
 
+#include "appwin.h"
 #include "choices.h"
 #include "screen.h"
 #include "sfconfig.h"
 #include "tailwimp.h"
 
+
+// Choice icons:
+# define IBAR_CHOICES_ICON_LEFT     2
+# define IBAR_CHOICES_ICON_RIGHT    3
+# define IBAR_CHOICES_ICON_TOP      4
+# define IBAR_CHOICES_ICON_BOTTOM   5
+# define IBAR_CHOICES_ICON_MODKEY   6
+# define IBAR_CHOICES_ICON_SET      7
+# define IBAR_CHOICES_ICON_DEFAULT  8
+# define IBAR_CHOICES_ICON_CANCEL   9
+# define IBAR_CHOICES_BUFFER_LEN    7
+
+
+// Function prototypes:
+static void choices_icons_reset(wimp_icon* icons, int icon_count);
+
+
+/////////////////////
+/* Choices backend */
+/////////////////////
 
 // Get choices:
 void choices_get(choices* choices, screen_padding* padding) {
@@ -81,4 +105,118 @@ osbool choices_load(void) {
 // Write choices to disk:
 osbool choices_save(void) {
     return config_save();
+}
+
+
+//////////////////////
+/* Choices frontend */
+//////////////////////
+
+// Initialise application choices window:
+wimp_w choices_init_choices(void) {
+    wimp_window*        window_definition;
+
+    window_definition = appwin_load_template("Choices");
+    if (window_definition == NULL) {
+        return FALSE;
+    }
+
+    choices_icons_reset(
+        window_definition->icons,
+        window_definition->icon_count
+    );
+
+    app_choices_handle = wimp_create_window(window_definition);
+    free(window_definition);
+    wimp_set_icon_state(
+        app_choices_handle,
+        IBAR_CHOICES_ICON_MODKEY,
+        wimp_ICON_SELECTED,
+        wimp_ICON_SELECTED
+    );
+
+    return app_choices_handle;
+}
+
+
+// Set Choices icon values to currently stored state:
+static void choices_icons_reset(wimp_icon* icons, int icon_count) {
+    char*               text;
+    char                ftext[IBAR_CHOICES_BUFFER_LEN];
+    int                 size;
+
+    for (int i = 0; i < icon_count; i++) {
+        text = icons[i].data.indirected_text.text;
+        size = icons[i].data.indirected_text.size;
+        switch (i) {
+        case IBAR_CHOICES_ICON_LEFT:
+            sprintf(ftext, "%d", app_choices.padding->left);
+            strncpy(text, ftext, size);
+            text[size - 1] = '\0';
+            // icons[i].data.indirected_text.validation = "0-9";
+            break;
+        case IBAR_CHOICES_ICON_RIGHT:
+            sprintf(ftext, "%d", app_choices.padding->right);
+            strncpy(text, ftext, size);
+            text[size - 1] = '\0';
+            // icons[i].data.indirected_text.validation = "0-9";
+            break;
+        case IBAR_CHOICES_ICON_TOP:
+            sprintf(ftext, "%d", app_choices.padding->top);
+            strncpy(text, ftext, size);
+            text[size - 1] = '\0';
+            // icons[i].data.indirected_text.validation = "0-9";
+            break;
+        case IBAR_CHOICES_ICON_BOTTOM:
+            sprintf(ftext, "%d", app_choices.padding->bottom);
+            strncpy(text, ftext, size);
+            text[size - 1] = '\0';
+            // icons[i].data.indirected_text.validation = "0-9";
+            break;
+        case IBAR_CHOICES_ICON_MODKEY:
+            break;
+        default:
+            break;
+        }
+    }
+}
+
+
+// Handle mouse click in Choices
+void choices_mouse_click(wimp_pointer* pointer) {
+    wimp_window_info    window;
+    osbool              close = FALSE;
+
+    switch (pointer->buttons) {
+    case wimp_CLICK_MENU:
+        return;
+    case wimp_CLICK_SELECT:
+        close = TRUE;
+    }
+
+    window.w = pointer->w;
+    wimp_get_window_info(&window);
+
+    switch (pointer->i) {
+    case IBAR_CHOICES_ICON_SET:
+        // Set settings from icons to mem and file
+        break;
+    case IBAR_CHOICES_ICON_CANCEL:
+        // Reset icon states from mem:
+        choices_icons_reset(window.icons, window.icon_count);
+        break;
+    case IBAR_CHOICES_ICON_DEFAULT:
+        // Reset icons to default settings and save to mem and file:
+        choices_set_defaults();
+        choices_save();
+        choices_get(&app_choices, &app_padding);
+        choices_icons_reset(window.icons, window.icon_count);
+        break;
+    default:
+        return;
+    }
+
+    if (close) {
+        wimp_close_window(pointer->w);
+    }
 }
