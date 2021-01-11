@@ -91,7 +91,7 @@ static wimp_t main_init(void) {
     }
 
     // Open templates files:
-    error = xwimp_open_template(APP_DIR ".Templates");
+    error = xwimp_open_template(APP_DIR ".Resources.Templates");
     if (error != NULL) {
         report_os_error(error);
         main_exit(task);
