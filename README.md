@@ -61,7 +61,7 @@ It's a polyglottal pun. Bumbarrels are best birds.
 Shortened from _light_ due to space restrictions. This refers to the fact that
 this is not a full tiling window manager, just a tool for moving windows
 about. If some day I can get this to work in a satisfactory manner, I may
-give making a more comprehensive windom management tool a go, in which case
+give making a more comprehensive window management tool a go, in which case
 that will be called just _TailWimp_.
 
 
