@@ -62,8 +62,8 @@ wimp_w wininfo_get_active_window(void) {
 
 
 wininfo wininfo_get_info(wimp_w handle) {
-    wimp_window_info    wimp_wininfo;
     wininfo             info;
+    wimp_window_info    wimp_wininfo;
 
     screen_get_dim(&dimensions);
     wimp_wininfo.w = handle;
@@ -77,9 +77,9 @@ wininfo wininfo_get_info(wimp_w handle) {
                           && !wininfo_window_is_bottom(&wimp_wininfo);
     info.is_bottom      = wininfo_window_is_bottom(&wimp_wininfo)
                           && !wininfo_window_is_top(&wimp_wininfo);
-    info.has_headrow    = (wimp_wininfo.flags & wimp_WINDOW_TITLE_ICON) != 0;
-    info.has_hscroll    = (wimp_wininfo.flags & wimp_WINDOW_HSCROLL) != 0;
-    info.has_vscroll    = (wimp_wininfo.flags & wimp_WINDOW_VSCROLL) != 0;
+    info.has_headrow    = (wimp_wininfo.flags & wininfo_TOP_DECO) != 0;
+    info.has_hscroll    = (wimp_wininfo.flags & wininfo_BOTTOM_DECO) != 0;
+    info.has_vscroll    = (wimp_wininfo.flags & wininfo_RIGHT_DECO) != 0;
     info.width_current  = wimp_wininfo.visible.x1 - wimp_wininfo.visible.x0;
     info.height_current = wimp_wininfo.visible.y1 - wimp_wininfo.visible.y0;
     info.width_full     = wimp_wininfo.extent.x1 - wimp_wininfo.extent.x0;
@@ -104,8 +104,7 @@ static osbool wininfo_window_is_manageable(wimp_window_state* state) {
 static osbool wininfo_window_is_left(
     wimp_window_info* info
 ) {
-    screen_padding* pad = app_choices.padding;
-    return info->visible.x0 - pad->left == 0;
+    return info->visible.x0 - app_choices.padding->left == 0;
 }
 
 
@@ -113,10 +112,11 @@ static osbool wininfo_window_is_left(
 static osbool wininfo_window_is_right(
     wimp_window_info* info
 ) {
-    screen_padding* pad = app_choices.padding;
-    int scroll_pad = ((info->flags | wimp_WINDOW_VSCROLL) != 0) * DECO_PADDING;
+    int scroll_pad = ((info->flags | wininfo_RIGHT_DECO) != 0) * DECO_PADDING;
     
-    return info->visible.x1 + pad->right + scroll_pad == dimensions.width;
+    // I don't knomw why >= is needed, something wrond with the flags it seems:
+    return info->visible.x1 + app_choices.padding->right + scroll_pad
+           >= dimensions.width;
 }
 
 
@@ -124,10 +124,10 @@ static osbool wininfo_window_is_right(
 static osbool wininfo_window_is_top(
     wimp_window_info* info
 ) {
-    screen_padding* pad = app_choices.padding;
-    int header_pad = ((info->flags | wimp_WINDOW_VSCROLL) != 0) * DECO_PADDING;
+    int header_pad = ((info->flags | wininfo_TOP_DECO) != 0) * DECO_PADDING;
 
-    return info->visible.y1 + pad->top + header_pad == dimensions.height;
+    return info->visible.y1 + app_choices.padding->top + header_pad
+           == dimensions.height;
 }
 
 
@@ -135,8 +135,9 @@ static osbool wininfo_window_is_top(
 static osbool wininfo_window_is_bottom(
     wimp_window_info* info
 ) {
-    screen_padding* pad = app_choices.padding;
-    int scroll_pad = ((info->flags | wimp_WINDOW_HSCROLL) != 0) * DECO_PADDING;
+    int scroll_pad = ((info->flags | wininfo_BOTTOM_DECO) != 0) * DECO_PADDING;
+    scroll_pad = DECO_PADDING;
 
-    return info->visible.y0 - pad->bottom - scroll_pad == 0;
+    // I don't knomw why <= is needed, something wrond with the flags it seems:
+    return info->visible.y0 - app_choices.padding->bottom - scroll_pad <= 0;
 }

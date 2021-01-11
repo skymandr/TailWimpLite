@@ -28,7 +28,12 @@
 
 
 // Padding to add if window has decorations:
-#define DECO_PADDING 38
+#define DECO_PADDING        38
+
+// Padding flags:
+#define wininfo_RIGHT_DECO  wimp_WINDOW_VSCROLL
+#define wininfo_TOP_DECO    wimp_WINDOW_TITLE_ICON | wimp_WINDOW_BACK_ICON | wimp_WINDOW_CLOSE_ICON | wimp_WINDOW_TOGGLE_ICON
+#define wininfo_BOTTOM_DECO wimp_WINDOW_HSCROLL
 
 // Window info struct:
 typedef struct wininfo wininfo;

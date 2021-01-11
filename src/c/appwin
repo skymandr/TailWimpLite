@@ -66,7 +66,7 @@ wimp_w appwin_initialise(osspriteop_area* sprites) {
 
 
 // Open a window:
-void appwin_open(wimp_w handle) {
+void appwin_open(wimp_w handle, direction dir) {
     wimp_window_state state;
 
     // Get window state:
@@ -75,9 +75,8 @@ void appwin_open(wimp_w handle) {
 
     // Set window position or open:
     if (!(state.flags & wimp_WINDOW_OPEN)) {
-        manage_window(handle, manage_OFF);
+        manage_window(handle, dir);
     } else {
-        state.next = wimp_BOTTOM;
         wimp_open_window((wimp_open*) &state);
     }
 }

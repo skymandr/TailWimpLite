@@ -27,6 +27,7 @@
 #include "appwin.h"
 #include "ibar.h"
 #include "control.h"
+#include "manage.h"
 #include "menu.h"
 #include "report.h"
 #include "resources.h"
@@ -106,7 +107,7 @@ static wimp_t main_init(void) {
         report_error("Failed to open application window");
         main_exit(task);
     }
-    appwin_open(app_handle);
+    appwin_open(app_handle, manage_OFF);
 
     return task;
 }

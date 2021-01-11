@@ -165,10 +165,8 @@ static void manage_window_to_left(
         manage_window_max_height(state, info);
     }
 
-    width = (
-        dimensions.width - pad->left - pad->right
-        - info->has_vscroll * DECO_PADDING
-    ) / 2;
+    width = (dimensions.width - pad->left - pad->right) / 2
+            - info->has_vscroll * DECO_PADDING;
     if (width > info->width_full) {
         width = info->width_full;
     }
@@ -190,15 +188,14 @@ static void manage_window_to_right(
         manage_window_max_height(state, info);
     }
 
-    width = (
-        dimensions.width - pad->left - pad->right
-        - info->has_vscroll * DECO_PADDING
-    ) / 2;
+    width = (dimensions.width - pad->left - pad->right) / 2
+            - info->has_vscroll * DECO_PADDING;
     if (width > info->width_full) {
         width = info->width_full;
     }
 
-    state->visible.x0 = dimensions.width - pad->right - width;
+    state->visible.x0 = dimensions.width - width - pad->right
+                        - info->has_vscroll * DECO_PADDING;
     state->visible.x1 = dimensions.width - pad->right
                         - info->has_vscroll * DECO_PADDING;
 };
@@ -216,15 +213,13 @@ static void manage_window_to_top(
         manage_window_max_width(state, info);
     }
 
-    height = (
-        dimensions.height - pad->top - pad->bottom
-        - info->has_hscroll * DECO_PADDING
-        - info->has_headrow * DECO_PADDING
-    ) / 2;
+    height = (dimensions.height - pad->top - pad->bottom) / 2
+             - (info->has_hscroll + info->has_headrow) * DECO_PADDING;
     if (height > info->height_full) {
         height = info->height_full;
     }
-    state->visible.y0 = dimensions.height - pad->top - height;
+    state->visible.y0 = dimensions.height - height - pad->top
+                        - info->has_headrow * DECO_PADDING;
     state->visible.y1 = dimensions.height - pad->top
                         - info->has_headrow * DECO_PADDING;
 }
@@ -242,16 +237,13 @@ static void manage_window_to_bottom(
         manage_window_max_width(state, info);
     }
 
-    height = (
-        dimensions.height - pad->top - pad->bottom
-        - info->has_hscroll * DECO_PADDING
-        - info->has_headrow * DECO_PADDING
-    ) / 2;
+    height = (dimensions.height - pad->top - pad->bottom) / 2
+             - (info->has_hscroll + info->has_headrow) * DECO_PADDING;
     if (height > info->height_full) {
         height = info->height_full;
     }
     state->visible.y0 = pad->bottom + info->has_hscroll * DECO_PADDING;
-    state->visible.y1 = pad->bottom + height;
+    state->visible.y1 = pad->bottom + height + info->has_hscroll * DECO_PADDING;
 }
 
 

@@ -30,6 +30,7 @@
 #include "appwin.h"
 #include "choices.h"
 #include "ibar.h"
+#include "manage.h"
 #include "menu.h"
 #include "report.h"
 #include "tailwimp.h"
@@ -108,7 +109,7 @@ void ibar_initialise(osspriteop_area* sprites) {
 void ibar_mouse_click(wimp_pointer* pointer) {
     switch (pointer->buttons) {
     case wimp_CLICK_SELECT:
-        appwin_open(app_handle);
+        appwin_open(app_handle, manage_OFF);
         break;
     case wimp_CLICK_MENU:
         menu_open_ibar(ibar_menu, pointer, ibar_menu_selection);
@@ -145,7 +146,7 @@ static void ibar_menu_selection(
     case IBAR_MENU_INFO:
         break;
     case IBAR_MENU_CHOICES:
-        appwin_open(app_choices_handle);
+        appwin_open(app_choices_handle, manage_CENTRE);
         break;
     case IBAR_MENU_HELP:
         ibar_open_help();

@@ -27,12 +27,14 @@
 #include "oslib/osspriteop.h"
 #include "oslib/wimp.h"
 
+#include "manage.h"
+
 
 // Window initialisation:
 wimp_w appwin_initialise(osspriteop_area* sprites);
 
 // Open a window:
-void appwin_open(wimp_w handle);
+void appwin_open(wimp_w handle, direction dir);
 
 // Load window template:
 wimp_window* appwin_load_template(char* name);
