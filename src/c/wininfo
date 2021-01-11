@@ -67,7 +67,7 @@ wininfo wininfo_get_info(wimp_w handle) {
 
     screen_get_dim(&dimensions);
     wimp_wininfo.w = handle;
-    wimp_get_window_info(&wimp_wininfo);
+    wimp_get_window_info_header_only(&wimp_wininfo);
 
     info.is_left        = wininfo_window_is_left(&wimp_wininfo)
                           && !wininfo_window_is_right(&wimp_wininfo);

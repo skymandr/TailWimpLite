@@ -32,7 +32,7 @@
 #define APP_TITLE       "TailWimp Lite"
 #define APP_PURPOSE     "Rearrange windows using keyboard"
 #define APP_AUTHOR      "(C) Andreas Skyman, 2021"
-#define APP_VERSION     "0.1.0"
+#define APP_VERSION     "0.1.1"
 #define APP_DATE        __DATE__
 #define APP_URL         "https://github.com/skymandr/TailWimpLite"
 #define APP_NAME        "!TailWmpLt"

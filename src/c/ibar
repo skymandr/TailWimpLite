@@ -128,7 +128,7 @@ static osbool ibar_init_menu(wimp_w prog_info) {
         return FALSE;
     }
     menu_entry(ibar_menu, IBAR_MENU_INFO, "Info", (wimp_menu*) prog_info);
-    menu_entry(ibar_menu, IBAR_MENU_CHOICES, "Choices...", (wimp_menu*) app_choices_handle);
+    menu_entry(ibar_menu, IBAR_MENU_CHOICES, "Choices...", NULL);
     menu_entry(ibar_menu, IBAR_MENU_HELP, "Help...", NULL);
     menu_entry(ibar_menu, IBAR_MENU_QUIT, "Quit", NULL);
 

@@ -153,25 +153,21 @@ static void choices_icons_reset(wimp_icon* icons, int icon_count) {
             sprintf(ftext, "%d", app_choices.padding->left);
             strncpy(text, ftext, size);
             text[size - 1] = '\0';
-            // icons[i].data.indirected_text.validation = "0-9";
             break;
         case IBAR_CHOICES_ICON_RIGHT:
             sprintf(ftext, "%d", app_choices.padding->right);
             strncpy(text, ftext, size);
             text[size - 1] = '\0';
-            // icons[i].data.indirected_text.validation = "0-9";
             break;
         case IBAR_CHOICES_ICON_TOP:
             sprintf(ftext, "%d", app_choices.padding->top);
             strncpy(text, ftext, size);
             text[size - 1] = '\0';
-            // icons[i].data.indirected_text.validation = "0-9";
             break;
         case IBAR_CHOICES_ICON_BOTTOM:
             sprintf(ftext, "%d", app_choices.padding->bottom);
             strncpy(text, ftext, size);
             text[size - 1] = '\0';
-            // icons[i].data.indirected_text.validation = "0-9";
             break;
         case IBAR_CHOICES_ICON_MODKEY:
             break;
