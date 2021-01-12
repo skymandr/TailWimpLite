@@ -38,6 +38,7 @@ tailwimp: $(OBJ) $()
 help: README.md ReleaseNotes.md
 	$(CP) README/md $(APPDIR).!Help ~C F
 	$(CP) ReleaseNotes/md $(APPDIR).ReleaseNotes ~C F
+	$(CP) LICENSE $(APPDIR).LICENSE ~C F
 
 .PHONY: clean, cleanall
 
@@ -63,3 +64,4 @@ cleanall: clean
 	$(RM) $(APPDIR).!RunImage
 	$(RM) $(APPDIR).!Help
 	$(RM) $(APPDIR).ReleaseNotes
+	$(RM) $(APPDIR).LICENSE

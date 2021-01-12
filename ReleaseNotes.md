@@ -6,7 +6,7 @@ fix for undecorated windows is a bit hacky (issue #11). In addition,
 functions for moving windows to centre and to maximize have been implemented
 and documented (issue #14), and windows moved to top or bottom will be
 centred if they cannot cover the whole width (issue #15). Finally, Release
-Notes have been added and can be opened in the menu (issue #16).
+Notes and License have been added and can be opened in the menu (issue #16).
 
 The main issue that remains is the redrawing bug (issue #6). This is actually
 probably several bugs, but I'm hoping there may be a fix for all of them. It
