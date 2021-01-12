@@ -44,10 +44,12 @@
 # define IBAR_PROGINFO_ICON_BBL     4
 
 // Icon bar menu entries:
+# define IBAR_MENU_ENTRIES  5
 # define IBAR_MENU_INFO     0
 # define IBAR_MENU_CHOICES  1
 # define IBAR_MENU_HELP     2
-# define IBAR_MENU_QUIT     3
+# define IBAR_MENU_NOTES    3
+# define IBAR_MENU_QUIT     4
 
 //  Global variables:
 wimp_menu*  ibar_menu;
@@ -56,6 +58,7 @@ wimp_menu*  ibar_menu;
 // Function prototypes:
 static void ibar_menu_selection(wimp_menu *menu, wimp_selection *selection);
 static void ibar_open_help(void);
+static void ibar_open_release_notes(void);
 static osbool ibar_init_menu(wimp_w prop_info);
 static wimp_w ibar_init_prog_info(osspriteop_area* sprites);
 
@@ -124,14 +127,15 @@ void ibar_mouse_click(wimp_pointer* pointer) {
 
 // Initialise icon bar menu:
 static osbool ibar_init_menu(wimp_w prog_info) {
-    ibar_menu = menu_create(APP_TITLE, 4);
+    ibar_menu = menu_create(APP_TITLE, IBAR_MENU_ENTRIES);
     if (ibar_menu == NULL) {
         return FALSE;
     }
-    menu_entry(ibar_menu, IBAR_MENU_INFO, "Info", (wimp_menu*) prog_info);
-    menu_entry(ibar_menu, IBAR_MENU_CHOICES, "Choices...", NULL);
-    menu_entry(ibar_menu, IBAR_MENU_HELP, "Help...", NULL);
-    menu_entry(ibar_menu, IBAR_MENU_QUIT, "Quit", NULL);
+    menu_entry(ibar_menu, IBAR_MENU_INFO,       "Info", (wimp_menu*) prog_info);
+    menu_entry(ibar_menu, IBAR_MENU_CHOICES,    "Choices...", NULL);
+    menu_entry(ibar_menu, IBAR_MENU_HELP,       "Help...", NULL);
+    menu_entry(ibar_menu, IBAR_MENU_NOTES,      "Release notes...", NULL);
+    menu_entry(ibar_menu, IBAR_MENU_QUIT,       "Quit", NULL);
 
     return TRUE;
 }
@@ -151,6 +155,9 @@ static void ibar_menu_selection(
     case IBAR_MENU_HELP:
         ibar_open_help();
         break;
+    case IBAR_MENU_NOTES:
+        ibar_open_release_notes();
+        break;
     case IBAR_MENU_QUIT:
         main_quit_flag = TRUE;
         break;
@@ -165,6 +172,17 @@ static void ibar_open_help(void) {
     os_error* error;
 
     error = xos_cli("%Filer_Run " APP_DIR ".!Help");
+    if (error != NULL) {
+        report_os_error(error);
+    }
+}
+
+
+// Open application release notes:
+static void ibar_open_release_notes(void) {
+    os_error* error;
+
+    error = xos_cli("%Filer_Run " APP_DIR ".ReleaseNotes");
     if (error != NULL) {
         report_os_error(error);
     }

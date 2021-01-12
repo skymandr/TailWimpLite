@@ -194,15 +194,6 @@ void choices_mouse_click(wimp_pointer* pointer) {
         close = TRUE;
     }
 
-    // TODO:
-    // in functions written for it, use
-    // window.w = pointer->w;
-    // wimp_get_window_info_header_only(&window);
-    // to get icon_count, then loop over them with a switch
-    // as in init_icons
-    // but use get_icon_state and set_icon_state..?
-    // take inspiration from sflib
-
     switch (pointer->i) {
     case IBAR_CHOICES_ICON_SET:
         // Set settings from icons to file and memory:
