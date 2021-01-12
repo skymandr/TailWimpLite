@@ -37,7 +37,11 @@ default, only bottom padding is non-zero, in order to show the icon bar.
 ## Choices
 Paddings for left, right, top and bottom margins in os screen units (usually
 2 per 1 px). By default only bottom padding is non-zero, in order to show the
-icon bar.
+icon bar. Choices can be set by selecting _Choices_ from the icon bar menu.
+
+
+## Help
+Help and release notes are available in the icon bar menu.
 
 
 ## System requirements and compatibility

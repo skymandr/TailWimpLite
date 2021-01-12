@@ -36,14 +36,6 @@ screen_dim dimensions;
 
 
 // Function prototypes:
-static void manage_window_to_centre(
-    wimp_window_state*  state,
-    wininfo*            info
-);
-static void manage_window_to_off_screen(
-    wimp_window_state*  state,
-    wininfo*            info
-);
 static void manage_window_to_left(
     wimp_window_state*  state,
     wininfo*            info
@@ -59,6 +51,14 @@ static void manage_window_to_top(
 static void manage_window_to_bottom(
     wimp_window_state*  state,
     wininfo*            info;
+);
+static void manage_window_to_centre(
+    wimp_window_state*  state,
+    wininfo*            info
+);
+static void manage_window_to_off_screen(
+    wimp_window_state*  state,
+    wininfo*            info
 );
 static void manage_window_to_max(
     wimp_window_state*  state,
@@ -120,6 +120,101 @@ void manage_window(wimp_w handle, direction dir) {
 /* Window movement functions */
 ///////////////////////////////
 
+
+// Move window to the left of the screen:
+static void manage_window_to_left(
+    wimp_window_state*  state,
+    wininfo*            info
+) {
+    screen_padding* pad = app_choices.padding;
+    int             width;
+
+    if (info->is_left || !(info->is_top || info->is_bottom)) {
+        manage_window_max_height(state, info);
+    }
+
+    width = (dimensions.width - pad->left - pad->right) / 2
+            - info->has_vscroll * DECO_PADDING;
+    if (width > info->width_full) {
+        width = info->width_full;
+    }
+
+    state->visible.x0 = pad->left;
+    state->visible.x1 = pad->left + width;
+};
+
+
+// Move window to the right of the screen:
+static void manage_window_to_right(
+    wimp_window_state*  state,
+    wininfo*            info
+) {
+    screen_padding* pad = app_choices.padding;
+    int             width;
+
+    if (info->is_right || !(info->is_top || info->is_bottom)) {
+        manage_window_max_height(state, info);
+    }
+
+    width = (dimensions.width - pad->left - pad->right) / 2
+            - info->has_vscroll * DECO_PADDING;
+    if (width > info->width_full) {
+        width = info->width_full;
+    }
+
+    state->visible.x0 = dimensions.width - width - pad->right
+                        - info->has_vscroll * DECO_PADDING;
+    state->visible.x1 = dimensions.width - pad->right
+                        - info->has_vscroll * DECO_PADDING;
+};
+
+
+// Move window to the top of the screen:
+static void manage_window_to_top(
+    wimp_window_state*  state,
+    wininfo*            info
+) {
+    screen_padding* pad = app_choices.padding;
+    int             height;
+
+    if (info->is_top || !(info->is_left || info->is_right)) {
+        manage_window_max_width(state, info);
+    }
+
+    height = (dimensions.height - pad->top - pad->bottom) / 2
+             - (info->has_hscroll + info->has_headrow) * DECO_PADDING;
+    if (height > info->height_full) {
+        height = info->height_full;
+    }
+    state->visible.y0 = dimensions.height - height - pad->top
+                        - info->has_headrow * DECO_PADDING;
+    state->visible.y1 = dimensions.height - pad->top
+                        - info->has_headrow * DECO_PADDING;
+}
+
+
+// Move window to the bottom of the screen:
+static void manage_window_to_bottom(
+    wimp_window_state*  state,
+    wininfo*            info
+) {
+    screen_padding* pad = app_choices.padding;
+    int             height;
+
+    if (info->is_bottom || !(info->is_left || info->is_right)) {
+        manage_window_max_width(state, info);
+    }
+
+    height = (dimensions.height - pad->top - pad->bottom) / 2
+             - (info->has_hscroll + info->has_headrow) * DECO_PADDING;
+    if (height > info->height_full) {
+        height = info->height_full;
+    }
+    state->visible.y0 = pad->bottom + info->has_hscroll * DECO_PADDING;
+    state->visible.y1 = pad->bottom + height + info->has_hscroll * DECO_PADDING;
+}
+
+
 // Centre window on screen:
 static void manage_window_to_centre(
     wimp_window_state*  state,
@@ -160,127 +255,13 @@ static void manage_window_to_off_screen(
 }
 
 
-// Move window to the left of the screen:
-static void manage_window_to_left(
-    wimp_window_state*  state,
-    wininfo*            info
-) {
-    screen_padding* pad = app_choices.padding;
-    int             width, height;
-
-    if (info->is_left || !(info->is_top || info->is_bottom)) {
-        manage_window_max_height(state, info);
-    }
-
-    width = (dimensions.width - pad->left - pad->right) / 2
-            - info->has_vscroll * DECO_PADDING;
-    if (width > info->width_full) {
-        width = info->width_full;
-    }
-
-    state->visible.x0 = pad->left;
-    state->visible.x1 = pad->left + width;
-};
-
-
-// Move window to the right of the screen:
-static void manage_window_to_right(
-    wimp_window_state*  state,
-    wininfo*            info
-) {
-    screen_padding* pad = app_choices.padding;
-    int             width, height;
-
-    if (info->is_right || !(info->is_top || info->is_bottom)) {
-        manage_window_max_height(state, info);
-    }
-
-    width = (dimensions.width - pad->left - pad->right) / 2
-            - info->has_vscroll * DECO_PADDING;
-    if (width > info->width_full) {
-        width = info->width_full;
-    }
-
-    state->visible.x0 = dimensions.width - width - pad->right
-                        - info->has_vscroll * DECO_PADDING;
-    state->visible.x1 = dimensions.width - pad->right
-                        - info->has_vscroll * DECO_PADDING;
-};
-
-
-// Move window to the top of the screen:
-static void manage_window_to_top(
-    wimp_window_state*  state,
-    wininfo*            info
-) {
-    screen_padding* pad = app_choices.padding;
-    int             width, height;
-
-    if (info->is_top || !(info->is_left || info->is_right)) {
-        manage_window_max_width(state, info);
-    }
-
-    height = (dimensions.height - pad->top - pad->bottom) / 2
-             - (info->has_hscroll + info->has_headrow) * DECO_PADDING;
-    if (height > info->height_full) {
-        height = info->height_full;
-    }
-    state->visible.y0 = dimensions.height - height - pad->top
-                        - info->has_headrow * DECO_PADDING;
-    state->visible.y1 = dimensions.height - pad->top
-                        - info->has_headrow * DECO_PADDING;
-}
-
-
 // Move window to centre of screen, maximized:
 static void manage_window_to_max(
     wimp_window_state*  state,
     wininfo*            info
 ) {
-    screen_padding* pad = app_choices.padding;
-    int             width, height;
-
-    width = dimensions.width - pad->left - pad->right
-            - info->has_vscroll * DECO_PADDING;
-    if (width > info->width_full) {
-        width = info->width_full;
-    }
-
-    height = dimensions.height - pad->top - pad->bottom
-             - (info->has_hscroll + info->has_headrow) * DECO_PADDING;
-    if (height > info->height_full) {
-        height = info->height_full;
-    }
-
-    state->visible.x0 = (dimensions.width - pad->left - pad->right - width) / 2
-                        + pad->left;
-    state->visible.y0 = (dimensions.height - pad->top - pad->bottom - height) / 2
-                        + pad->bottom;
-
-    state->visible.x1 = state->visible.x0 + width;
-    state->visible.y1 = state->visible.y0 + height;
-}
-
-
-// Move window to the bottom of the screen:
-static void manage_window_to_bottom(
-    wimp_window_state*  state,
-    wininfo*            info
-) {
-    screen_padding* pad = app_choices.padding;
-    int             width, height;
-
-    if (info->is_bottom || !(info->is_left || info->is_right)) {
-        manage_window_max_width(state, info);
-    }
-
-    height = (dimensions.height - pad->top - pad->bottom) / 2
-             - (info->has_hscroll + info->has_headrow) * DECO_PADDING;
-    if (height > info->height_full) {
-        height = info->height_full;
-    }
-    state->visible.y0 = pad->bottom + info->has_hscroll * DECO_PADDING;
-    state->visible.y1 = pad->bottom + height + info->has_hscroll * DECO_PADDING;
+    manage_window_max_width(state, info);
+    manage_window_max_height(state, info);
 }
 
 
@@ -294,10 +275,19 @@ static void manage_window_max_width(
     wininfo*            info
 ) {
     screen_padding* pad = app_choices.padding;
+    int             width;
 
-    state->visible.x0 = pad->left;
-    state->visible.x1 = dimensions.width - pad->right
-                        - info->has_vscroll * DECO_PADDING;
+    width = dimensions.width - pad->left - pad->right
+            - info->has_vscroll * DECO_PADDING;
+    if (width > info->width_full) {
+        width = info->width_full;
+    }
+
+    state->visible.x0 = (
+        dimensions.width - pad->left - pad->right - width
+        - info->has_vscroll * DECO_PADDING
+    ) / 2 + pad->left;
+    state->visible.x1 = state->visible.x0 + width;
 };
 
 
@@ -307,9 +297,15 @@ static void manage_window_max_height(
     wininfo*            info
 ) {
     screen_padding* pad = app_choices.padding;
+    int             height;
 
-    state->visible.y0 = pad->bottom
-                        + info->has_hscroll * DECO_PADDING;
-    state->visible.y1 = dimensions.height - pad->top
-                        - info->has_headrow * DECO_PADDING;
+    height = dimensions.height - pad->top - pad->bottom
+             - (info->has_hscroll + info->has_headrow) * DECO_PADDING;
+    if (height > info->height_full) {
+        height = info->height_full;
+    }
+
+    state->visible.y0 = (dimensions.height - pad->top - pad->bottom - height)
+                        / 2 + pad->bottom;
+    state->visible.y1 = state->visible.y0 + height;
 };
