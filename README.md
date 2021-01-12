@@ -21,13 +21,16 @@ will maximize the current window, respecting padding, and `Ctrl+Shift+Home`
 will centre it without manipulating its size. The current window is defined
 as the topmost window over all.
 
-The window will be maximized in the perpendicular dirction to the movement,
-unless it is already anchored to one of those margins. This means that two
-moves, one vertical and one horizontal in any order, will get the window into
-a corner quadrant. The exception is if a window in a corner is moved in one of
-the directions where it is already anchored. It will then be maximized in the
+The window will be maximized (or centred, if it cannot covere the whole
+extent) in the perpendicular dirction to the movement, unless it is already
+anchored to one of those margins. This means that two moves, one vertical and
+one horizontal in any order, will get the window into a corner quadrant. The
+exception is if a window in a corner is moved in one of the directions where
+it is already anchored. It will then be maximized/centred in the
 perpendicular direction, _i.e_ a window in the bottom left corner moved left
-will be maximized vertically.
+will be maximized vertically. This gives a total of 8 positions reachable
+with the arrow keys, and an additional two configurations using the `Home`
+and `Logo` keys.
 
 If padding is specified, space on the desktop will be reserved around the
 windows to allow access to the icon bar, iconized windows and the like. By
