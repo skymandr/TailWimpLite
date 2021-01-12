@@ -1,3 +1,33 @@
+# TailWimp Lite v0.2.0
+# Choices and further movement fixes (2021-01-DD)
+
+Choices now work (issue #1) and the movements work as intended, though the
+fix for undecorated windows is a bit hacky (issue #11). In addition,
+functions for moving windows to centre and to maximize have been implemented
+and documented (issue #14), and windows moved to top or bottom will be
+centred if they cannot cover the whole width (issue #15). Finally, Release
+Notes have been added and can be opened in the menu (issue #16).
+
+The main issue that remains is the redrawing bug (issue #6). This is actually
+probably several bugs, but I'm hoping there may be a fix for all of them. It
+affects `!Edit` and `!StrongEd`, for instance, in slightly different ways,
+`!Edit` simply not redrawing the work area, and `!StrongEd` losing some of
+its _Panes_ (?). The method proposed in issue #12 might be a part of solving
+this, or maybe `wimp_force_redraw` or `wimp_update_window` or similar is
+needed.
+
+The final small issue, before taking on bigger things like configurable keys
+(issues #2 and #3) is that I would like to capture `message_WINDOW_INFO` and
+return the proper icon, so that the Choices window looks nicer minimized
+(issue #13). This is completely useless, but it annoys me to see a bland icon
+when there is one to use... ;)
+
+I'm hoping to get issues #6 and #13 fixed for next release, but then I
+predict development will go into a hiatus.
+
+
+======================
+
 # TailWimp Lite v0.1.1
 # Fix validation and movements (2021-01-11)
 
