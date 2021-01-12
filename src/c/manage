@@ -60,6 +60,10 @@ static void manage_window_to_bottom(
     wimp_window_state*  state,
     wininfo*            info;
 );
+static void manage_window_to_max(
+    wimp_window_state*  state,
+    wininfo*            info;
+);
 static void manage_window_max_width(
     wimp_window_state*  state,
     wininfo*            info
@@ -100,6 +104,9 @@ void manage_window(wimp_w handle, direction dir) {
         break;
     case manage_BOTTOM:
         manage_window_to_bottom(&state, &info);
+        break;
+    case manage_MAX:
+        manage_window_to_max(&state, &info);
         break;
     default:
         break;
@@ -222,6 +229,36 @@ static void manage_window_to_top(
                         - info->has_headrow * DECO_PADDING;
     state->visible.y1 = dimensions.height - pad->top
                         - info->has_headrow * DECO_PADDING;
+}
+
+
+// Move window to centre of screen, maximized:
+static void manage_window_to_max(
+    wimp_window_state*  state,
+    wininfo*            info
+) {
+    screen_padding* pad = app_choices.padding;
+    int             width, height;
+
+    width = dimensions.width - pad->left - pad->right
+            - info->has_vscroll * DECO_PADDING;
+    if (width > info->width_full) {
+        width = info->width_full;
+    }
+
+    height = dimensions.height - pad->top - pad->bottom
+             - (info->has_hscroll + info->has_headrow) * DECO_PADDING;
+    if (height > info->height_full) {
+        height = info->height_full;
+    }
+
+    state->visible.x0 = (dimensions.width - pad->left - pad->right - width) / 2
+                        + pad->left;
+    state->visible.y0 = (dimensions.height - pad->top - pad->bottom - height) / 2
+                        + pad->bottom;
+
+    state->visible.x1 = state->visible.x0 + width;
+    state->visible.y1 = state->visible.y0 + height;
 }
 
 

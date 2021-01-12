@@ -55,6 +55,8 @@ void control_process_key(wimp_key_no c) {
         dir = manage_BOTTOM;
     } else if (c == (app_choices.mod_key | wimp_KEY_HOME)) {
         dir = manage_CENTRE;
+    } else if (c == (app_choices.mod_key | wimp_KEY_LOGO)) {
+        dir = manage_MAX;
     } else {
         wimp_process_key(c);
         return;
