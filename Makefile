@@ -35,8 +35,9 @@ $(ODIR):
 tailwimp: $(OBJ) $()
 	$(CC) -o $(APPDIR)/!RunImage $^ $(CFLAGS)
 
-help: README.md
+help: README.md ReleaseNotes.md
 	$(CP) README/md $(APPDIR).!Help ~C F
+	$(CP) ReleaseNotes/md $(APPDIR).ReleaseNotes ~C F
 
 .PHONY: clean, cleanall
 
@@ -61,3 +62,4 @@ clean:
 cleanall: clean
 	$(RM) $(APPDIR).!RunImage
 	$(RM) $(APPDIR).!Help
+	$(RM) $(APPDIR).ReleaseNotes
