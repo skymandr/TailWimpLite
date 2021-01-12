@@ -46,7 +46,11 @@
 
 
 // Function prototypes:
-static void choices_icons_reset(wimp_icon* icons, int icon_count);
+static void choices_icons_init(wimp_icon* icons, int icon_count);
+static void choices_icons_set(wimp_w handle);
+static void choices_icons_reset(wimp_w handle);
+static void choices_icon_set_int(wimp_w handle, wimp_i icon, int value);
+static int  choices_icon_get_int(wimp_w handle, wimp_i icon);
 
 
 /////////////////////
@@ -121,7 +125,7 @@ wimp_w choices_init_choices(void) {
         return FALSE;
     }
 
-    choices_icons_reset(
+    choices_icons_init(
         window_definition->icons,
         window_definition->icon_count
     );
@@ -139,8 +143,8 @@ wimp_w choices_init_choices(void) {
 }
 
 
-// Set Choices icon values to currently stored state:
-static void choices_icons_reset(wimp_icon* icons, int icon_count) {
+// Set Choices icon values to initial state:
+static void choices_icons_init(wimp_icon* icons, int icon_count) {
     char*               text;
     char                ftext[IBAR_CHOICES_BUFFER_LEN];
     int                 size;
@@ -190,23 +194,32 @@ void choices_mouse_click(wimp_pointer* pointer) {
         close = TRUE;
     }
 
-    window.w = pointer->w;
-    wimp_get_window_info(&window);
+    // TODO:
+    // in functions written for it, use
+    // window.w = pointer->w;
+    // wimp_get_window_info_header_only(&window);
+    // to get icon_count, then loop over them with a switch
+    // as in init_icons
+    // but use get_icon_state and set_icon_state..?
+    // take inspiration from sflib
 
     switch (pointer->i) {
     case IBAR_CHOICES_ICON_SET:
-        // Set settings from icons to mem and file
-        break;
-    case IBAR_CHOICES_ICON_CANCEL:
-        // Reset icon states from mem:
-        choices_icons_reset(window.icons, window.icon_count);
+        // Set settings from icons to file and memory:
+        choices_icons_set(pointer->w);
+        choices_save();
+        choices_get(&app_choices, &app_padding);
         break;
     case IBAR_CHOICES_ICON_DEFAULT:
-        // Reset icons to default settings and save to mem and file:
+        // Reset icons to default settings and save to file and memory:
         choices_set_defaults();
         choices_save();
         choices_get(&app_choices, &app_padding);
-        choices_icons_reset(window.icons, window.icon_count);
+        choices_icons_reset(pointer->w);
+        break;
+    case IBAR_CHOICES_ICON_CANCEL:
+        // Reset icon states from mem:
+        choices_icons_reset(pointer->w);
         break;
     default:
         return;
@@ -215,4 +228,127 @@ void choices_mouse_click(wimp_pointer* pointer) {
     if (close) {
         wimp_close_window(pointer->w);
     }
+}
+
+
+// Set Choices from icon values:
+static void choices_icons_set(wimp_w handle) {
+    wimp_window_info    window;
+    int                 value;
+
+    window.w = handle;
+    wimp_get_window_info_header_only(&window);
+
+    for (int i = 0; i < window.icon_count; i++) {
+        switch (i) {
+        case IBAR_CHOICES_ICON_LEFT:
+            value = choices_icon_get_int(handle, (wimp_i) i);
+            config_int_set("pad_left", value);
+            choices_icon_set_int(handle, (wimp_i) i, value);
+            break;
+        case IBAR_CHOICES_ICON_RIGHT:
+            value = choices_icon_get_int(handle, (wimp_i) i);
+            config_int_set("pad_right", value);
+            choices_icon_set_int(handle, (wimp_i) i, value);
+            break;
+        case IBAR_CHOICES_ICON_TOP:
+            value = choices_icon_get_int(handle, (wimp_i) i);
+            config_int_set("pad_top", value);
+            choices_icon_set_int(handle, (wimp_i) i, value);
+            break;
+        case IBAR_CHOICES_ICON_BOTTOM:
+            value = choices_icon_get_int(handle, (wimp_i) i);
+            config_int_set("pad_bottom", value);
+            choices_icon_set_int(handle, (wimp_i) i, value);
+            break;
+        default:
+            break;
+        }
+    }
+}
+
+
+// Set reset Choices icons from current state:
+static void choices_icons_reset(wimp_w handle) {
+    wimp_window_info    window;
+    
+    window.w = handle;
+    wimp_get_window_info_header_only(&window);
+
+    for (int i = 0; i < window.icon_count; i++) {
+        switch (i) {
+        case IBAR_CHOICES_ICON_LEFT:
+            choices_icon_set_int(
+                handle, (wimp_i) i,
+                app_choices.padding->left
+            );
+            break;
+        case IBAR_CHOICES_ICON_RIGHT:
+            choices_icon_set_int(
+                handle, (wimp_i) i,
+                app_choices.padding->left
+            );
+            break;
+        case IBAR_CHOICES_ICON_TOP:
+            choices_icon_set_int(
+                handle, (wimp_i) i,
+                app_choices.padding->top
+            );
+            break;
+        case IBAR_CHOICES_ICON_BOTTOM:
+            choices_icon_set_int(
+                handle, (wimp_i) i,
+                app_choices.padding->bottom
+            );
+            break;
+        default:
+            break;
+        }
+    }
+}
+
+
+// Set icon integer value:
+static void choices_icon_set_int(wimp_w handle, wimp_i icon, int value) {
+    char*               text;
+    char                ftext[IBAR_CHOICES_BUFFER_LEN];
+    int                 size;
+    wimp_icon_state     icon_state;
+
+    icon_state.w = handle;
+    icon_state.i = icon;
+    wimp_get_icon_state(&icon_state);
+
+    text = icon_state.icon.data.indirected_text.text;
+    size = icon_state.icon.data.indirected_text.size;
+    if (size > IBAR_CHOICES_BUFFER_LEN) {
+        size = IBAR_CHOICES_BUFFER_LEN;
+    }
+
+    sprintf(ftext, "%d", value);
+    strncpy(text, ftext, size);
+    text[size - 1] = '\0';
+
+    wimp_set_icon_state(handle, icon, 0, 0);
+}
+
+
+// Get icon integer_value:
+static int choices_icon_get_int(wimp_w handle, wimp_i icon) {
+    char*               text;
+    int                 size;
+
+    wimp_icon_state     icon_state;
+
+    icon_state.w = handle;
+    icon_state.i = icon;
+    wimp_get_icon_state(&icon_state);
+
+    text = icon_state.icon.data.indirected_text.text;
+    size = icon_state.icon.data.indirected_text.size;
+    if (size <= 0) {
+        return 0;
+    }
+
+    return (int) strtol(text, NULL, 10);
 }
