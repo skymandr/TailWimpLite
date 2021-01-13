@@ -21,7 +21,7 @@ will maximize the current window, respecting padding, and `Ctrl+Shift+Home`
 will centre it without manipulating its size. The current window is defined
 as the topmost window over all.
 
-The window will be maximized (or centred, if it cannot covere the whole
+The window will be maximized (or centred, if it cannot cover the whole
 extent) in the perpendicular dirction to the movement, unless it is already
 anchored to one of those margins. This means that two moves, one vertical and
 one horizontal in any order, will get the window into a corner quadrant. The
