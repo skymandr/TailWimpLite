@@ -44,7 +44,7 @@ icon bar. Choices can be set by selecting _Choices_ from the icon bar menu.
 
 
 ## Help
-Help and release notes are available in the icon bar menu.
+Help, release notes and license are available in the icon bar menu.
 
 
 ## System requirements and compatibility

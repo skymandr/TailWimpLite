@@ -39,7 +39,7 @@ osbool control_process_key(wimp_key_no c) {
 
     handle = wininfo_get_active_window();
     if (handle == wimp_BOTTOM) {
-        return;
+        return FALSE;
     }
     state.w = handle;
     wimp_get_window_state(&state);
