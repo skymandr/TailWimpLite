@@ -7,7 +7,7 @@ functions for moving windows to centre and to maximize have been implemented
 and documented (issue #14), and windows moved to top or bottom will be
 centred if they cannot cover the whole width (issue #15). Finally, Release
 Notes and License have been added and can be opened in the menu (issue #16),
-which has been tidied up a bit (issue #17), and icoized windows now have the
+which has been tidied up a bit (issue #17), and iconized windows now have the
 correct icon (issue #13).
 
 The main issue that remains is the redrawing bug (issue #6). This is actually
