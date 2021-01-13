@@ -166,10 +166,17 @@ static void main_exit(wimp_t task) {
 
 // Handle user message:
 static void main_user_message(wimp_message* message) {
-    if (message->action == message_QUIT) {
+    wimp_full_message_window_info*  window_info;
+
+    switch (message->action) {
+    case message_QUIT:
         main_quit_loop();
-    } else if (message->action == message_MENUS_DELETED) {
+        break;
+    case message_MENUS_DELETED:
         menu_message_menus_deleted(message);
+        break;
+    default:
+        break;
     }
 }
 

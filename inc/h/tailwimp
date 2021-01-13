@@ -30,6 +30,7 @@
 
 // Application name and version:
 #define APP_TITLE       "TailWimp Lite"
+#define APP_TITLE_SHORT "TailWimpLt"
 #define APP_PURPOSE     "Rearrange windows using keyboard"
 #define APP_AUTHOR      "(C) Andreas Skyman, 2021"
 #define APP_VERSION     "0.2.0"
