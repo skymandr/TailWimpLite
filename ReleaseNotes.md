@@ -1,5 +1,5 @@
 # TailWimp Lite v0.2.0
-# Choices and further movement fixes (2021-01-DD)
+# Choices and further movement fixes (2021-01-13)
 
 Choices now work (issue #1) and the movements work as intended, though the
 fix for undecorated windows is a bit hacky (issue #11). In addition,
