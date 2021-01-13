@@ -6,7 +6,9 @@ fix for undecorated windows is a bit hacky (issue #11). In addition,
 functions for moving windows to centre and to maximize have been implemented
 and documented (issue #14), and windows moved to top or bottom will be
 centred if they cannot cover the whole width (issue #15). Finally, Release
-Notes and License have been added and can be opened in the menu (issue #16).
+Notes and License have been added and can be opened in the menu (issue #16),
+which has been tidied up a bit (issue #17), and icoized windows now have the
+correct icon (issue #13).
 
 The main issue that remains is the redrawing bug (issue #6). This is actually
 probably several bugs, but I'm hoping there may be a fix for all of them. It
@@ -16,14 +18,14 @@ its _Panes_ (?). The method proposed in issue #12 might be a part of solving
 this, or maybe `wimp_force_redraw` or `wimp_update_window` or similar is
 needed.
 
-The final small issue, before taking on bigger things like configurable keys
-(issues #2 and #3) is that I would like to capture `message_WINDOW_INFO` and
-return the proper icon, so that the Choices window looks nicer minimized
-(issue #13). This is completely useless, but it annoys me to see a bland icon
-when there is one to use... ;)
+The next few issues are bigger ones, and I predict that development will go
+into a hiatus before I take them on.
 
-I'm hoping to get issues #6 and #13 fixed for next release, but then I
-predict development will go into a hiatus.
+Many thanks to the users on the ROOL forums [1] for help with ironing out some
+details for this release!
+
+---
+[1]: https://www.riscosopen.org/forum
 
 
 ======================
