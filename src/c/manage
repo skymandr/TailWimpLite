@@ -299,8 +299,9 @@ static void manage_window_max_height(
     screen_padding* pad = app_choices.padding;
     int             height;
 
+    // It seems has_hscroll shouldn't be used, not sure why:
     height = dimensions.height - pad->top - pad->bottom
-             - (info->has_hscroll + info->has_headrow) * DECO_PADDING;
+             - (info->has_hscroll * 0 + 1 + info->has_headrow) * DECO_PADDING;
     if (height > info->height_full) {
         height = info->height_full;
     }
