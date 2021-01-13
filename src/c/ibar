@@ -37,20 +37,22 @@
 
 
 // Program info icons:
-# define IBAR_PROGINFO_ICON_NAME    0
-# define IBAR_PROGINFO_ICON_PURPOSE 1
-# define IBAR_PROGINFO_ICON_AUTHOR  2
-# define IBAR_PROGINFO_ICON_VERSION 3
-# define IBAR_PROGINFO_ICON_BBL     4
+#define IBAR_PROGINFO_ICON_NAME     0
+#define IBAR_PROGINFO_ICON_PURPOSE  1
+#define IBAR_PROGINFO_ICON_AUTHOR   2
+#define IBAR_PROGINFO_ICON_VERSION  3
+#define IBAR_PROGINFO_ICON_BBL      4
 
 // Icon bar menu entries:
-# define IBAR_MENU_ENTRIES  6
-# define IBAR_MENU_INFO     0
-# define IBAR_MENU_CHOICES  1
-# define IBAR_MENU_HELP     2
-# define IBAR_MENU_NOTES    3
-# define IBAR_MENU_LICENSE  4
-# define IBAR_MENU_QUIT     5
+#define IBAR_MENU_ENTRIES   6
+#define IBAR_MENU_INFO      0
+#define IBAR_MENU_CHOICES   1
+#define IBAR_MENU_HELP      2
+/*        Separator        */
+#define IBAR_MENU_NOTES     3
+#define IBAR_MENU_LICENSE   4
+/*        Separator        */
+#define IBAR_MENU_QUIT      5
 
 //  Global variables:
 wimp_menu*  ibar_menu;
@@ -133,12 +135,15 @@ static osbool ibar_init_menu(wimp_w prog_info) {
     if (ibar_menu == NULL) {
         return FALSE;
     }
-    menu_entry(ibar_menu, IBAR_MENU_INFO,       "Info", (wimp_menu*) prog_info);
-    menu_entry(ibar_menu, IBAR_MENU_CHOICES,    "Choices...", NULL);
-    menu_entry(ibar_menu, IBAR_MENU_HELP,       "Help...", NULL);
-    menu_entry(ibar_menu, IBAR_MENU_NOTES,      "Release Notes...", NULL);
-    menu_entry(ibar_menu, IBAR_MENU_LICENSE,    "License...", NULL);
-    menu_entry(ibar_menu, IBAR_MENU_QUIT,       "Quit", NULL);
+    menu_entry(ibar_menu, IBAR_MENU_INFO, "Info", (wimp_menu*) prog_info, 0);
+    menu_entry(ibar_menu, IBAR_MENU_CHOICES, "Choices...", NULL, 0);
+    menu_entry(ibar_menu, IBAR_MENU_HELP, "Help...", NULL,
+               wimp_MENU_SEPARATE);
+    menu_entry(ibar_menu, IBAR_MENU_NOTES, "Release Notes...", NULL, 0);
+    menu_entry(ibar_menu, IBAR_MENU_LICENSE, "License...", NULL,
+               wimp_MENU_SEPARATE);
+    menu_entry(ibar_menu, IBAR_MENU_QUIT, "Quit", NULL,
+               wimp_MENU_LAST);
 
     return TRUE;
 }

@@ -33,18 +33,17 @@
 // Global variables:
 static wimp_menu* menu_current_menu = NULL;
 static void (*menu_current_callback)(
-    wimp_menu* menu,
+    wimp_menu*      menu,
     wimp_selection* selection
 ) = NULL;
 
 
 // Menu creation:
-wimp_menu *menu_create(char *title, int entries)
-{
-    wimp_menu* menu         = NULL;
-    wimp_menu_entry    *entry     = NULL;
-    char *buffer             = NULL;
-    int    len, size;
+wimp_menu *menu_create(char* title, int entries) {
+    wimp_menu*          menu    = NULL;
+    wimp_menu_entry*    entry   = NULL;
+    char*               buffer  = NULL;
+    int                 len, size;
 
     // A menu must have at least one entry:
     if (entries < 1) {
@@ -75,13 +74,13 @@ wimp_menu *menu_create(char *title, int entries)
     }
 
     // Set up the remainder of the menu header:
-    menu->title_fg = wimp_COLOUR_BLACK;
-    menu->title_bg = wimp_COLOUR_LIGHT_GREY;
-    menu->work_fg = wimp_COLOUR_BLACK;
-    menu->work_bg = wimp_COLOUR_WHITE;
-    menu->width = 16;
-    menu->height = wimp_MENU_ITEM_HEIGHT;
-    menu->gap = wimp_MENU_ITEM_GAP;
+    menu->title_fg  = wimp_COLOUR_BLACK;
+    menu->title_bg  = wimp_COLOUR_LIGHT_GREY;
+    menu->work_fg   = wimp_COLOUR_BLACK;
+    menu->work_bg   = wimp_COLOUR_WHITE;
+    menu->width     = 16;
+    menu->height    = wimp_MENU_ITEM_HEIGHT;
+    menu->gap       = wimp_MENU_ITEM_GAP;
 
     // Initialise the menu entries:
     entry = menu->entries;
@@ -108,11 +107,16 @@ wimp_menu *menu_create(char *title, int entries)
 
 
 // Menu entry configuration:
-void menu_entry(wimp_menu *menu, int entry, char *text, wimp_menu *sub_menu)
-{
-    wimp_menu_entry *definition = NULL;
-    char        *buffer = NULL;
-    int        len, width;
+void menu_entry(
+    wimp_menu*      menu,
+    int             entry,
+    char*           text,
+    wimp_menu*      sub_menu,
+    wimp_menu_flags flags
+) {
+    wimp_menu_entry*    definition  = NULL;
+    char*               buffer      = NULL;
+    int                 len, width;
 
     if (menu == NULL || text == NULL)
         return;
@@ -122,8 +126,9 @@ void menu_entry(wimp_menu *menu, int entry, char *text, wimp_menu *sub_menu)
 
     // Set up the menu text:
     len = strlen(text);
-    if (len > 12)
+    if (len > 12) {
         buffer = malloc(len + 1);
+    }
 
     if (buffer != NULL) {
         strncpy(buffer, text, len);
@@ -138,10 +143,14 @@ void menu_entry(wimp_menu *menu, int entry, char *text, wimp_menu *sub_menu)
 
     definition->sub_menu = sub_menu;
 
+    // Apply any flags:
+    definition->menu_flags |= flags;
+
     // Recalculate the menu width:
     width = (16 * strlen(text)) + 16;
-    if (width > menu->width)
+    if (width > menu->width) {
         menu->width = width;
+    }
 }
 
 
@@ -156,8 +165,8 @@ osbool menu_message_menus_deleted(wimp_message* message) {
     }
 
     // Clear our saved menu details:
-    menu_current_menu = NULL;
-    menu_current_callback = NULL;
+    menu_current_menu       = NULL;
+    menu_current_callback   = NULL;
 
     return TRUE;
 }
@@ -165,8 +174,8 @@ osbool menu_message_menus_deleted(wimp_message* message) {
 
 // Handle selection event:
 void menu_process_event(wimp_selection* selection) {
-    wimp_pointer     pointer;
-    os_error*         error;
+    wimp_pointer    pointer;
+    os_error*       error;
 
     // Read the mouse button used to make the selection:
     error = xwimp_get_pointer_info(&pointer);
@@ -190,12 +199,17 @@ void menu_process_event(wimp_selection* selection) {
 
 // Open an iconbar menu:
 void menu_open_ibar(
-    wimp_menu* menu,
-    wimp_pointer* pointer,
+    wimp_menu*      menu,
+    wimp_pointer*   pointer,
     void (*callback)(wimp_menu* menu, wimp_selection* selection)
 ) {
     menu_current_menu = menu;
     menu_current_callback = callback;
 
-    wimp_create_menu(ibar_menu, pointer->pos.x - 64, 228);
+    wimp_create_menu(
+        ibar_menu,
+        pointer->pos.x - 64,
+        96 + (6 * (wimp_MENU_ITEM_HEIGHT + wimp_MENU_ITEM_GAP))
+           + (2 * wimp_MENU_ITEM_SEPARATION)
+    );
 }

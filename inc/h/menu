@@ -31,7 +31,13 @@
 wimp_menu* menu_create(char* title, int entries);
 
 // Menu entry configuration:
-void menu_entry(wimp_menu* menu, int entry, char* text, wimp_menu* sub_menu);
+void menu_entry(
+    wimp_menu*      menu,
+    int             entry,
+    char*           text,
+    wimp_menu*      sub_menu,
+    wimp_menu_flags flags
+);
 
 // message_MENUS_DELETED event handler:
 osbool menu_message_menus_deleted(wimp_message* message);
