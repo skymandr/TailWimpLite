@@ -28,6 +28,7 @@
 
 #include "appwin.h"
 #include "choices.h"
+#include "report.h"
 #include "screen.h"
 #include "sfconfig.h"
 #include "tailwimp.h"
@@ -222,6 +223,26 @@ void choices_mouse_click(wimp_pointer* pointer) {
 }
 
 
+// Handle key press in Choices:
+osbool choices_key_press(wimp_key* key) {
+    if (key->w != app_choices_handle) {
+        return FALSE;
+    } else if (key->c == wimp_KEY_RETURN) {
+        choices_icons_set(key->w);
+        choices_save();
+        choices_get(&app_choices, &app_padding);
+    } else if (key->c == wimp_KEY_ESCAPE) {
+        choices_icons_reset(key->w);
+    } else {
+        return FALSE;
+    }
+
+    wimp_close_window(key->w);
+
+    return TRUE;
+}
+
+
 // Set Choices from icon values:
 static void choices_icons_set(wimp_w handle) {
     wimp_window_info    window;
@@ -277,7 +298,7 @@ static void choices_icons_reset(wimp_w handle) {
         case IBAR_CHOICES_ICON_RIGHT:
             choices_icon_set_int(
                 handle, (wimp_i) i,
-                app_choices.padding->left
+                app_choices.padding->right
             );
             break;
         case IBAR_CHOICES_ICON_TOP:

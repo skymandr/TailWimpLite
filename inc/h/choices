@@ -61,7 +61,10 @@ osbool choices_save(void);
 // Initialise application choices window:
 wimp_w choices_init_choices(void);
 
-// Handle mouse click in Choices
+// Handle mouse click in Choices:
 void choices_mouse_click(wimp_pointer* pointer);
+
+// Handle key press in Choices:
+osbool choices_key_press(wimp_key* key);
 
 #endif

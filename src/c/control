@@ -31,7 +31,7 @@
 
 
 // Process keyboard input:
-void control_process_key(wimp_key_no c) {
+osbool control_process_key(wimp_key_no c) {
     os_error*           error;
     direction           dir;
     wimp_w              handle;
@@ -58,9 +58,9 @@ void control_process_key(wimp_key_no c) {
     } else if (c == (app_choices.mod_key | wimp_KEY_LOGO)) {
         dir = manage_MAX;
     } else {
-        wimp_process_key(c);
-        return;
+        return FALSE;
     }
     
     manage_window(handle, dir);
+    return TRUE;
 };

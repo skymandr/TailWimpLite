@@ -149,7 +149,12 @@ static void main_poll(void) {
             wimp_close_window(block.close.w);
             break;
         case wimp_KEY_PRESSED:
-            control_process_key(block.key.c);
+            if (!(
+                control_process_key(block.key.c)
+                || choices_key_press(&(block.key))
+            )) {
+                wimp_process_key(block.key.c);
+            };
             break;
         default:
             break;

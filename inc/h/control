@@ -28,6 +28,6 @@
 
 
 // Process keyboard input:
-void control_process_key(wimp_key_no c);
+osbool control_process_key(wimp_key_no c);
 
 #endif
