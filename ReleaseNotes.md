@@ -16,10 +16,9 @@ affects `!Edit` and `!StrongEd`, for instance, in slightly different ways,
 `!Edit` simply not redrawing the work area, and `!StrongEd` losing some of
 its _Panes_ (?). The method proposed in issue #12 might be a part of solving
 this, or maybe `wimp_force_redraw` or `wimp_update_window` or similar is
-needed.
-
-The next few issues are bigger ones, and I predict that development will go
-into a hiatus before I take them on.
+needed. After that, other and configurable movement keys is on the agenda
+(issues #2 and #3). Since the next few issues are bigger ones, however, I
+predict that development will go into a hiatus before I take them on.
 
 Many thanks to the users on the ROOL forums [1] for help with ironing out some
 details for this release!
@@ -28,8 +27,7 @@ details for this release!
 [1]: https://www.riscosopen.org/forum
 
 
-======================
-
+----------------------
 # TailWimp Lite v0.1.1
 # Fix validation and movements (2021-01-11)
 
@@ -52,8 +50,7 @@ solve the issues above!
 [1]: https://www.riscosopen.org/forum
 
 
-======================
-
+----------------------
 # TailWimp Lite v0.1.0
 ## Initial beta release (2021-01-10)
 
