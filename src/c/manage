@@ -112,7 +112,12 @@ void manage_window(wimp_w handle, direction dir) {
         break;
     }
 
-    wimp_open_window((wimp_open*) &state);
+    wimp_send_message_to_window(
+        wimp_OPEN_WINDOW_REQUEST,
+        (wimp_message*) &state,
+        handle,
+        NULL
+    );
 }
 
 

@@ -104,7 +104,7 @@ static osbool wininfo_window_is_manageable(wimp_window_state* state) {
 static osbool wininfo_window_is_left(
     wimp_window_info* info
 ) {
-    return info->visible.x0 - app_choices.padding->left == 0;
+    return info->visible.x0 - app_choices.padding->left <= 2;
 }
 
 
@@ -139,5 +139,5 @@ static osbool wininfo_window_is_bottom(
     int scroll_pad = ((info->flags | wininfo_BOTTOM_DECO) != 0) * DECO_PADDING;
 
     // I don't know why <= is needed, something wrong with the flags it seems:
-    return info->visible.y0 - app_choices.padding->bottom - scroll_pad <= 0;
+    return info->visible.y0 - app_choices.padding->bottom - scroll_pad <= 2;
 }
