@@ -11,11 +11,11 @@ In addition, this versions makes it so that windows that are entirely off
 screen cannot be moved, which makes sure that you won't move `GrabKeys` onto
 the desktop by mistake (issue #10).
 
-Future developments remain the same: more interesting and configurable hot
-keys (issues #2 and #3). Additionally, I would like to have a look at moving
-to using the GCCSDK, so that I can build on GNU/Linux (issue #18), with the
-intent of perhaps getting the application into `!PackMan` and/or `!Store`
-(issues #19 and #20).
+Future development targets remain the same: more interesting and configurable
+hot keys (issues #2 and #3). Additionally, I would like to have a look at
+moving to using the GCCSDK, so that I can build on GNU/Linux (issue #18),
+with the intent of perhaps getting the application into `!PackMan` and/or
+`!Store` (issues #19 and #20).
 
 Once more, my thanks to the users on the ROOL forums [1] for helpful
 suggestions, and in particular to Julie Stamp for pointing out how to solve
