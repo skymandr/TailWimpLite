@@ -1,5 +1,5 @@
 # TailWimp Lite v0.3.0
-# Windows redraw properly (2021-01-18)
+## Windows redraw properly (2021-01-18)
 
 This release replaces bare `wimp_open()` calls with proper
 `wimp_OPEN_WINDOW_REQUEST` messages, using `wimp_send_message_to_window()`
@@ -8,7 +8,7 @@ This release replaces bare `wimp_open()` calls with proper
 version.
 
 In addition, this versions makes it so that windows that are entirely off
-screen cannot be moved, which makes sure that you don't move `GrabKeys` onto
+screen cannot be moved, which makes sure that you won't move `GrabKeys` onto
 the desktop by mistake (issue #10).
 
 Future developments remain the same: more interesting and configurable hot
@@ -27,7 +27,7 @@ the redrawing issue!
 
 ----------------------
 # TailWimp Lite v0.2.0
-# Choices and further movement fixes (2021-01-13)
+## Choices and further movement fixes (2021-01-13)
 
 Choices now work (issue #1) and the movements work as intended, though the
 fix for undecorated windows is a bit hacky (issue #11). In addition,
@@ -58,7 +58,7 @@ details for this release!
 
 ----------------------
 # TailWimp Lite v0.1.1
-# Fix validation and movements (2021-01-11)
+## Fix validation and movements (2021-01-11)
 
 This release fixes the window movement crash (issue #5), removes the Choices
 sub menu (issue #7 ) and fixes the input validation (issue #8).
@@ -97,7 +97,7 @@ Rudimentary window movements work, however there are several known issues:
 Additionally input validation seems to be non-functional (issue #8)
 
 - Movements of some windows aside from choices crashes the application
-  (issue#5)
+  (issue #5)
 
 - Some windows don't update properly after moving (issue #6)
 
