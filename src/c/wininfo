@@ -40,6 +40,7 @@ static osbool wininfo_window_is_left(wimp_window_info* info);
 static osbool wininfo_window_is_right(wimp_window_info* info);
 static osbool wininfo_window_is_top(wimp_window_info* info);
 static osbool wininfo_window_is_bottom(wimp_window_info* info);
+static osbool wininfo_window_is_off_screen(wimp_window_state* state);
 
 
 // Get active window:
@@ -91,12 +92,15 @@ wininfo wininfo_get_info(wimp_w handle) {
 
 static osbool wininfo_window_is_manageable(wimp_window_state* state) {
     return (state->flags & wimp_WINDOW_MOVEABLE)
-           && !(state->flags & (
-                wimp_WINDOW_PANE
-                | wimp_WINDOW_BACK
-                | wimp_WINDOW_FURNITURE_WINDOW
-                | wimp_WINDOW_FOREGROUND_WINDOW
-    ));
+           && !(state->flags
+                & (
+                    wimp_WINDOW_PANE
+                    | wimp_WINDOW_BACK
+                    | wimp_WINDOW_FURNITURE_WINDOW
+                    | wimp_WINDOW_FOREGROUND_WINDOW
+                  )
+           )
+           && !wininfo_window_is_off_screen(state);
 }
 
 
@@ -140,4 +144,15 @@ static osbool wininfo_window_is_bottom(
 
     // I don't know why <= is needed, something wrong with the flags it seems:
     return info->visible.y0 - app_choices.padding->bottom - scroll_pad <= 2;
+}
+
+
+// Window is off screen:
+static osbool wininfo_window_is_off_screen(
+    wimp_window_state* state
+) {
+    return state->visible.x1 <= 0
+           || state->visible.y1 <= 0
+           || state->visible.x0 >= dimensions.width
+           || state->visible.y0 >= dimensions.height;
 }
