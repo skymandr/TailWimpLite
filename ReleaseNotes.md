@@ -12,13 +12,14 @@ correct icon (issue #13).
 
 The main issue that remains is the redrawing bug (issue #6). This is actually
 probably several bugs, but I'm hoping there may be a fix for all of them. It
-affects `!Edit` and `!StrongEd`, for instance, in slightly different ways,
-`!Edit` simply not redrawing the work area, and `!StrongEd` losing some of
-its _Panes_ (?). The method proposed in issue #12 might be a part of solving
-this, or maybe `wimp_force_redraw` or `wimp_update_window` or similar is
-needed. After that, other and configurable movement keys is on the agenda
-(issues #2 and #3). Since the next few issues are bigger ones, however, I
-predict that development will go into a hiatus before I take them on.
+affects `!Edit` and `!StrongEd`, for instance, in slightly different ways:
+`!Edit` is simply not redrawing the work area, and `!StrongEd` is losing
+track of some of its _Panes_ (?). The method proposed in issue #12 might be a
+part of solving this, or maybe `wimp_force_redraw` or `wimp_update_window` or
+similar is needed. After that, other and configurable movement keys is on the
+agenda (issues #2 and #3). Since the next few issues are bigger ones,
+however, I predict that development will go into a hiatus before I take them
+on.
 
 Many thanks to the users on the ROOL forums [1] for help with ironing out some
 details for this release!

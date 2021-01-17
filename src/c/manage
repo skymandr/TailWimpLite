@@ -76,8 +76,8 @@ static void manage_window_max_height(
 
 // Manage windows:
 void manage_window(wimp_w handle, direction dir) {
-    wininfo           info = wininfo_get_info(handle);
-    wimp_window_state state;
+    wininfo             info = wininfo_get_info(handle);
+    wimp_window_state   state;
 
     screen_get_dim(&dimensions);
 
