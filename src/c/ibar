@@ -203,4 +203,3 @@ static void ibar_open_license(void) {
         report_os_error(error);
     }
 }
-
