@@ -1,4 +1,4 @@
-/*  File: ibar.h
+/*  File: url.c
  *  Part of TailWimp Lite
  *  Copyright (C) 2021  Andreas Skyman (Bumbarrel Computing)
  * 
@@ -21,20 +21,33 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef TAILWIMP_IBAR
-#define TAILWIMP_IBAR
-
-#include "oslib/osspriteop.h"
+#include "oslib/os.h"
 #include "oslib/wimp.h"
+#include "oslib/wimpreadsysinfo.h"
+#include "oslib/uri.h"
+
+#include "report.h"
 
 
-// Icon bar initialisation:
-void ibar_initialise(osspriteop_area* sprites);
+osbool url_launch(const char* url) {
+    wimp_t              taskhan = 0;
+    osbool              success = TRUE;
+    uri_dispatch_flags  flags;
 
-// Handle mouse click on icon bar:
-void ibar_mouse_click(wimp_pointer* pointer);
 
-// Icon bar menu:
-extern wimp_menu* ibar_menu;
+    success = (xwimpreadsysinfo_task(&taskhan, NULL) == NULL);
 
-#endif
+    if (success) {
+        success = !(
+            xuri_dispatch(
+                uri_DISPATCH_INFORM_CALLER, url, taskhan, &flags, NULL, NULL
+            ) != NULL || flags & 1
+        );
+    }
+
+    if (!success) {
+        report_message("Could not launch web browser");
+    }
+
+    return TRUE;
+}

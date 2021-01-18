@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "oslib/osspriteop.h"
 #include "oslib/wimp.h"
 
 #include "appwin.h"
@@ -32,16 +33,11 @@
 #include "ibar.h"
 #include "manage.h"
 #include "menu.h"
+#include "prog_info.h"
 #include "report.h"
 #include "tailwimp.h"
+#include "url.h"
 
-
-// Program info icons:
-#define IBAR_PROGINFO_ICON_NAME     0
-#define IBAR_PROGINFO_ICON_PURPOSE  1
-#define IBAR_PROGINFO_ICON_AUTHOR   2
-#define IBAR_PROGINFO_ICON_VERSION  3
-#define IBAR_PROGINFO_ICON_BBL      4
 
 // Icon bar menu entries:
 #define IBAR_MENU_ENTRIES   6
@@ -64,18 +60,16 @@ static void ibar_open_help(void);
 static void ibar_open_release_notes(void);
 static void ibar_open_license(void);
 static osbool ibar_init_menu(wimp_w prop_info);
-static wimp_w ibar_init_prog_info(osspriteop_area* sprites);
 
 
 // Icon bar initialisation:
 void ibar_initialise(osspriteop_area* sprites) {
     os_error*           error;
     wimp_icon_create    icon_bar;
-    wimp_w              prog_info;
 
     // Application Info window:
-    prog_info = ibar_init_prog_info(sprites);
-    if (prog_info == NULL) {
+    app_prog_info_handle = prog_info_init(sprites);
+    if (app_prog_info_handle == NULL) {
         report_error("Failed to create Info window");
     }
 
@@ -86,7 +80,7 @@ void ibar_initialise(osspriteop_area* sprites) {
     }
 
     // Icon bar menu:
-    if (!ibar_init_menu(prog_info)) {
+    if (!ibar_init_menu(app_prog_info_handle)) {
         report_error("Failed to create Icon bar menu");
     }
 
@@ -210,49 +204,3 @@ static void ibar_open_license(void) {
     }
 }
 
-
-// Initialise application info window:
-static wimp_w ibar_init_prog_info(osspriteop_area* sprites) {
-    wimp_w              prog_info;
-    wimp_window*        window_definition;
-    wimp_icon*          icons;
-    char*               text;
-    int                 size;
-
-    window_definition = appwin_load_template("ProgInfo");
-    if (window_definition == NULL) {
-        return NULL;
-    }
-    icons = window_definition->icons;
-    for (int i = 0; i < window_definition->icon_count; i++) {
-        text = icons[i].data.indirected_text.text;
-        size = icons[i].data.indirected_text.size;
-        switch (i) {
-        case IBAR_PROGINFO_ICON_NAME:
-            strncpy(text, APP_TITLE, size);
-            text[size - 1] = '\0';
-            break;
-        case IBAR_PROGINFO_ICON_PURPOSE:
-            strncpy(text, APP_PURPOSE, size);
-            text[size - 1] = '\0';
-            break;
-        case IBAR_PROGINFO_ICON_AUTHOR:
-            strncpy(text, APP_AUTHOR, size);
-            text[size - 1] = '\0';
-            break;
-        case IBAR_PROGINFO_ICON_VERSION:
-            strncpy(text, APP_VERSION " (" APP_DATE ")", size);
-            text[size - 1] = '\0';
-            break;
-        case IBAR_PROGINFO_ICON_BBL:
-            icons[i].data.indirected_sprite.area = sprites;
-            break;
-        default:
-            break;
-        }
-    } 
-
-    prog_info = wimp_create_window(window_definition);
-    free(window_definition);
-    return prog_info;
-}

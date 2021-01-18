@@ -1,4 +1,4 @@
-/*  File: ibar.h
+/*  File: prog_info.h
  *  Part of TailWimp Lite
  *  Copyright (C) 2021  Andreas Skyman (Bumbarrel Computing)
  * 
@@ -21,20 +21,17 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef TAILWIMP_IBAR
-#define TAILWIMP_IBAR
+#ifndef TAILWIMP_PROG_INFO
+#define TAILWIMP_PROG_INFO
 
 #include "oslib/osspriteop.h"
 #include "oslib/wimp.h"
 
 
-// Icon bar initialisation:
-void ibar_initialise(osspriteop_area* sprites);
+// Initialise application info window:
+wimp_w prog_info_init(osspriteop_area* sprites);
 
-// Handle mouse click on icon bar:
-void ibar_mouse_click(wimp_pointer* pointer);
-
-// Icon bar menu:
-extern wimp_menu* ibar_menu;
+// Handle mouse click in info window:
+void prog_info_mouse_click(wimp_pointer* pointer);
 
 #endif

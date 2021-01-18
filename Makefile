@@ -20,7 +20,7 @@ CFLAGS = -std=gnu99 -LOSLib: $(LDFLAGS) -I$(IDIR) -IOSLib:
 
 # Objects:
 _OBJ = tailwimp.o ibar.o menu.o appwin.o screen.o choices.o manage.o report.o \
-       control.o wininfo.o resources.o sfstring.o sfconfig.o
+       control.o wininfo.o resources.o sfstring.o sfconfig.o url.o prog_info.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 # Targets:
@@ -43,6 +43,7 @@ help: README.md ReleaseNotes.md
 .PHONY: clean, cleanall
 
 clean:
+	$(RM) $(ODIR).o.prog_info
 	$(RM) $(ODIR).o.resources
 	$(RM) $(ODIR).o.sfconfig
 	$(RM) $(ODIR).o.sfconfig
@@ -57,6 +58,7 @@ clean:
 	$(RM) $(ODIR).o.screen
 	$(RM) $(ODIR).o.ibar
 	$(RM) $(ODIR).o.menu
+	$(RM) $(ODIR).o.url
 	$(RM) $(ODIR).o
 	$(RM) $(ODIR)
 

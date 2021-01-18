@@ -1,0 +1,104 @@
+/*  File: prog_info.c
+ *  Part of TailWimp Lite
+ *  Copyright (C) 2021  Andreas Skyman (Bumbarrel Computing)
+ * 
+ *  Many features in this program are highly derivative of Steve Fryatt's
+ *  examples from http://www.stevefryatt.org.uk/risc-os/wimp-prog which
+ *  have been relicensed from European Union Public License v1.2 for the
+ *  purpose of this program.
+ * 
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ * 
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#include <stdlib.h>
+#include <string.h>
+
+#include "oslib/osspriteop.h"
+#include "oslib/wimp.h"
+
+#include "appwin.h"
+#include "prog_info.h"
+#include "report.h"
+#include "tailwimp.h"
+#include "url.h"
+
+
+// Program info icons:
+#define IBAR_PROGINFO_ICON_NAME     0
+#define IBAR_PROGINFO_ICON_PURPOSE  1
+#define IBAR_PROGINFO_ICON_AUTHOR   2
+#define IBAR_PROGINFO_ICON_VERSION  3
+#define IBAR_PROGINFO_ICON_BBL      4
+
+
+// Initialise application info window:
+wimp_w prog_info_init(osspriteop_area* sprites) {
+    wimp_w              prog_info;
+    wimp_window*        window_definition;
+    wimp_icon*          icons;
+    char*               text;
+    int                 size;
+
+    window_definition = appwin_load_template("ProgInfo");
+    if (window_definition == NULL) {
+        return NULL;
+    }
+    icons = window_definition->icons;
+    for (int i = 0; i < window_definition->icon_count; i++) {
+        text = icons[i].data.indirected_text.text;
+        size = icons[i].data.indirected_text.size;
+        switch (i) {
+        case IBAR_PROGINFO_ICON_NAME:
+            strncpy(text, APP_TITLE, size);
+            text[size - 1] = '\0';
+            break;
+        case IBAR_PROGINFO_ICON_PURPOSE:
+            strncpy(text, APP_PURPOSE, size);
+            text[size - 1] = '\0';
+            break;
+        case IBAR_PROGINFO_ICON_AUTHOR:
+            strncpy(text, APP_AUTHOR, size);
+            text[size - 1] = '\0';
+            break;
+        case IBAR_PROGINFO_ICON_VERSION:
+            strncpy(text, APP_VERSION " (" APP_DATE ")", size);
+            text[size - 1] = '\0';
+            break;
+        case IBAR_PROGINFO_ICON_BBL:
+            icons[i].data.indirected_sprite.area = sprites;
+            break;
+        default:
+            break;
+        }
+    } 
+
+    prog_info = wimp_create_window(window_definition);
+    free(window_definition);
+    return prog_info;
+}
+
+
+// Handle mouse click on Info:
+void prog_info_mouse_click(wimp_pointer* pointer) {
+    switch (pointer->buttons) {
+    case wimp_CLICK_SELECT:
+    case wimp_CLICK_ADJUST:
+        url_launch("https://github.com/skymandr/TailWimpLite");
+        break;
+    case wimp_CLICK_MENU:
+        break;
+    default:
+        break;
+    }
+}

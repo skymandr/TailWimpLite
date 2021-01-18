@@ -29,6 +29,7 @@
 #include "control.h"
 #include "manage.h"
 #include "menu.h"
+#include "prog_info.h"
 #include "report.h"
 #include "resources.h"
 #include "screen.h"
@@ -39,6 +40,7 @@
 // Global variables:
 osbool          main_quit_flag = FALSE;
 wimp_w          app_handle;
+wimp_w          app_prog_info_handle;
 wimp_w          app_choices_handle;
 choices         app_choices;
 screen_padding  app_padding;
@@ -198,5 +200,7 @@ static void main_mouse_click(wimp_pointer* pointer) {
         ibar_mouse_click(pointer);
     } else if (pointer->w == app_choices_handle) {
         choices_mouse_click(pointer);
+    } else if (pointer->w == app_prog_info_handle) {
+        prog_info_mouse_click(pointer);
     }
 }
