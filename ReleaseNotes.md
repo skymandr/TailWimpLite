@@ -7,7 +7,7 @@ This release replaces bare `wimp_open()` calls with proper
 (issue #6). Since this is a fairly major bug-fix, I'm bumping the minor
 version.
 
-In addition, this versions makes it so that windows that are entirely off
+In addition, this version makes it so that windows that are entirely off
 screen cannot be moved, which makes sure that you won't move `GrabKeys` onto
 the desktop by mistake (issue #10).
 
