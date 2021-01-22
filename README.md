@@ -58,8 +58,8 @@ The preferred way of communicating a suggestion or a problem is to submit an
 issue in the GitHub project [5]. If you have questions, you can also try
 asking in the Risc OS Open forum [6] if you think the question is of general
 interest, or contact me directly on for example _!ChatCube_ [7], _Telegram_
-[8], _matrix_ [9], or by email me @fripost.org. I use the handle `skymandr`
-for all of these.
+[8], _matrix_ [9], or by emailing me @fripost.org. I use the handle
+`skymandr` for all of these.
 
 
 ## Why _TailWimp_?
