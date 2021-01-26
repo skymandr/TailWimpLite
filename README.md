@@ -15,13 +15,25 @@ window.
 
 
 ## Usage
-`Ctrl+Shift+Arrow Key` moves the current window in the direction specified,
-anchoring it to the margin in the direction of movement. `Ctrl+Shift+Logo`
-will maximize the current window, respecting padding, and `Ctrl+Shift+Home`
-will centre it without manipulating its size. The current window is defined
-as the topmost window over all.
+`ModKey+Arrow Key` moves the current window in the direction specified,
+anchoring it to the margin in the direction of movement. The current window
+is defined as the topmost window over all, and `ModKey` defined as is either
+`Ctrl+Shift` or `Logo` – both work, but with some differences:
 
-The window will be maximized (or centred, if it cannot cover the whole
+1. `Logo` can more be used more predictably to move windows with input focus,
+   though it may require that you press the movement key _before_ `Logo` for
+   it to work.
+2. `Logo+Space` moves the current window to the centre of the screen, without
+   manipulating its sizes. There is no corresponding movement for `Ctrl+Shift`
+   at the moment.
+3. `Logo+Return` or `Ctrl+Shift+Logo` maximizes the current window, while
+    respecting padding.
+
+The reason for two `ModKey` options in parallel is that, though `Logo` has
+some benefits to `Ctrl-Shift`, `Logo` key presses are not forwarded properly
+to Risc OS under RPCEmu [3], since it is captured by the host OS.
+
+The moved window will be maximized (or centred, if it cannot cover the whole
 extent) in the perpendicular dirction to the movement, unless it is already
 anchored to one of those margins. This means that two moves, one vertical and
 one horizontal in any order, will get the window into a corner quadrant. The
@@ -29,8 +41,8 @@ exception is if a window in a corner is moved in one of the directions where
 it is already anchored. It will then be maximized/centred in the
 perpendicular direction, _i.e_ a window in the bottom left corner moved left
 will be maximized vertically. This gives a total of 8 positions reachable
-with the arrow keys, and an additional two configurations using the `Home`
-and `Logo` keys.
+with the arrow keys, and an additional two configurations using the centre
+and maximize movements.
 
 If padding is specified, space on the desktop will be reserved around the
 windows to allow access to the icon bar, iconized windows and the like. By
@@ -41,6 +53,8 @@ default, only bottom padding is non-zero, in order to show the icon bar.
 Paddings for left, right, top and bottom margins in os screen units (usually
 2 per 1 px). By default only bottom padding is non-zero, in order to show the
 icon bar. Choices can be set by selecting _Choices_ from the icon bar menu.
+Though an option for the modkey is shown in Choices, it is currently _not_
+configurable.
 
 
 ## Help
@@ -48,18 +62,19 @@ Help, release notes and license are available in the icon bar menu.
 
 
 ## System requirements and compatibility
-This software has been tested on Risc OS Open 5.X [3] on Raspberry Pi and in
-the RPCEmu emulator [4]. It might work on earlier versions of Risc OS as
-well. If you try it, please let me know!
+This software has been tested on Risc OS Open 5.X [4] on Raspberry Pi and in
+the RPCEmu emulator [3]. It might work on earlier versions of Risc OS as
+well. If you try it, please let me know! Also, please se _Usage_ above for
+some notes on using _Tail Wimp Lite_ under RPCEmu.
 
 
 ## Getting more help, making suggestions and reporting problems
 The preferred way of communicating a suggestion or a problem is to submit an
 issue in the GitHub project [5]. If you have questions, you can also try
 asking in the Risc OS Open forum [6] if you think the question is of general
-interest, or contact me directly on for example _!ChatCube_ [7], _Telegram_
-[8], _matrix_ [9], or by emailing me @fripost.org. I use the handle
-`skymandr` for all of these.
+interest, or you can contact me directly on for example _!ChatCube_ [7],
+_Telegram_ [8], or _matrix_ [9], or by emailing me @fripost.org. I use the
+handle `skymandr` for all of these.
 
 
 ## Why _TailWimp_?
@@ -105,9 +120,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 
 [2]: https://swaywm.org
 
-[3]: https://www.riscosopen.org
+[3]: http://www.marutan.net/rpcemu
 
-[4]: http://www.marutan.net/rpcemu
+[4]: https://www.riscosopen.org
 
 [5]: https://github.com/skymandr/TailWimpLite
 

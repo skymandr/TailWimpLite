@@ -21,6 +21,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "oslib/osbyte.h"
 #include "oslib/wimp.h"
 
 #include "appwin.h"
@@ -53,10 +54,29 @@ osbool control_process_key(wimp_key_no c) {
         dir = manage_TOP;
     } else if (c == (app_choices.mod_key | wimp_KEY_DOWN)) {
         dir = manage_BOTTOM;
+    /* This doesn't work:
     } else if (c == (app_choices.mod_key | wimp_KEY_HOME)) {
         dir = manage_CENTRE;
+    */
     } else if (c == (app_choices.mod_key | wimp_KEY_LOGO)) {
         dir = manage_MAX;
+    } else if (osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_LEFT_LOGO, NULL)
+               || osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_RIGHT_LOGO, NULL)) {
+        if (osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_LEFT, NULL)) {
+            dir = manage_LEFT;
+        } else if (osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_RIGHT, NULL)) {
+            dir = manage_RIGHT;
+        } else if (osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_UP, NULL)) {
+            dir = manage_TOP;
+        } else if (osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_DOWN, NULL)) {
+            dir = manage_BOTTOM;
+        } else if (osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_SPACE, NULL)) {
+            dir = manage_CENTRE;
+        } else if (osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_RETURN, NULL)) {
+            dir = manage_MAX;
+        } else {
+            return FALSE;
+        }
     } else {
         return FALSE;
     }

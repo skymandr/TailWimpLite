@@ -1,3 +1,44 @@
+# TailWimp Lite v0.4.0
+## Improved movements and movement keys (2021-01-27)
+
+This release introduces a new modkey: `Logo`. At the moment, this is not
+configurable (see issue #3), but works in paralell to `Ctrl+Shift`. The new
+modkey has three benefits over the old:
+
+1. It doesn't clash as badly with already defined key combinations
+2. It can be used to move windows with input focus (but see below)
+3. It allows the "move to centre" command with `Logo+Space`
+
+There are two quirks:
+1. To move a window with input focus you may have to press the desired
+   movement _first_, then `Logo`.
+2. The "maximize" movement is different for the two modkeys:
+   `Ctrl+Shift+Logo` or `Logo+Return`. This is due to limitations in `OSLib`.
+
+Since this changes the interaction pattern, I'm bumping the minor version.
+
+The next logical step is to make the modkey configurable (issue #3). I think
+that this will require implementing support for _DeepKeys_ [2], unless I want
+to make a complete reimagining of the control logic (issue #25). Not sure
+which route is best. _DeepKeys_ seems very convenient, but I am reluctant to
+foist the inconvenince of installing a third-party dependency to run the
+program, especially a proprietary one. It might also be more fun to do it
+myself, but on the other hand it might be very frustrating. I guess I'll find
+out. Regardless, if I go with _DeepKeys_ I will most likely keep the current
+control logic as a fallback, if _DeepKeys_ is not detected.
+
+I have decided not to prioritise the known bugs (issues #21–#23) at the
+moment, so after the above is done, I'll probably have another look at GCCSDK
+and distribution options (issues #18–#20).
+
+As always, thanks to the users on the ROOL forums [1] for suggestions!
+
+---
+[1]: https://www.riscosopen.org/forum
+[2]: https://sites.google.com/view/nemo20000/deepkeys
+
+
+----------------------
 # TailWimp Lite v0.3.0
 ## Windows redraw properly (2021-01-18)
 
