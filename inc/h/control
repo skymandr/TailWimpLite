@@ -26,6 +26,12 @@
 
 #include "oslib/wimp.h"
 
+#define control_KEY_SHIFT       0x80 ^ 0
+#define control_KEY_LEFT_SHIFT  0x80 ^ 3
+#define control_KEY_RIGHT_SHIFT 0x80 ^ 6
+#define control_KEY_CTRL        0x80 ^ 1
+#define control_KEY_LEFT_CTRL   0x80 ^ 4
+#define control_KEY_RIGHT_CTRL  0x80 ^ 7
 #define control_KEY_ALT         0x80 ^ 2
 #define control_KEY_LEFT_ALT    0x80 ^ 5
 #define control_KEY_RIGHT_ALT   0x80 ^ 8

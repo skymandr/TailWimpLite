@@ -1,3 +1,32 @@
+# TailWimp Lite v0.4.2
+## Further improvements to movement keys (2021-01-29)
+
+This release retires `Ctrl+Shift` as modkey, and instead introduces `Alt`
+as an alternative to `Logo`. At the moment both work in parallel, but the
+idea is that it should be configurable (issue #3). This release also removes
+the quirk that you had to be careful of the order in which the keys are
+pressed in order to manage focused windows – focused windows are now as
+manageable as any others.
+
+Since this breaks previous interaction patterns, this it should probably be a
+minor release rather than a patch release, but I wanted to use `v0.4.2`, and
+I anticipate I will make another release soon, anyway.
+
+Once choices are implemented, I will probably bump the version to `v1.0.0`,
+since then the program will feel more or less complete. Then taking care of
+distribution options will be the priority (issues #18–#20), as well as having
+a look at some of the known anarchic windows that have been reported
+(issues #21–#23) – I suspect that at least some of them may be possible to
+get to behave.
+
+Once more, thanks to the users on the ROOL forums [1] for help and
+suggestions!
+
+---
+[1]: https://www.riscosopen.org/forum
+
+
+----------------------
 # TailWimp Lite v0.4.0
 ## Improved movements and movement keys (2021-01-27)
 

@@ -15,23 +15,22 @@ window.
 
 
 ## Usage
-`ModKey+Arrow Key` moves the current window in the direction specified,
-anchoring it to the margin in the direction of movement. The current window
-is defined as the topmost window over all, and `ModKey` defined as is either
-`Ctrl+Shift` or `Logo` – both work, but with some differences:
+The available movements are:
 
-1. `Logo` can more be used more predictably to move windows with input focus,
-   though it may require that you press the movement key _before_ `Logo` for
-   it to work.
-2. `Logo+Space` moves the current window to the centre of the screen, without
-   manipulating its sizes. There is no corresponding movement for `Ctrl+Shift`
-   at the moment.
-3. `Logo+Return` or `Ctrl+Shift+Logo` maximizes the current window, while
-    respecting padding.
+- `ModKey+Arrow Key` – moves the current window in the direction specified,
+anchoring it to the margin in the direction of movement. 
+- `ModKey+Space` – moves the current window to the centre of the screen,
+  without manipulating its size, not respecting padding.
+- `ModKey+Return` maximizes the current window, while respecting padding.
 
-The reason for two `ModKey` options in parallel is that, though `Logo` has
-some benefits to `Ctrl-Shift`, `Logo` key presses are not forwarded properly
-to Risc OS under RPCEmu [3], since it is captured by the host OS.
+The current window is defined as the topmost window over all, and `ModKey`
+defined as is either `Logo` or `Alt`.
+
+The reason for two `ModKey` options in parallel is that, `Logo` key presses
+are not forwarded properly to Risc OS under RPCEmu [3], since it is captured
+by the host OS. Therefore `Alt` works better in this setting, but using this
+may not be ideal, since Risc OS uses `Alt` for a lot of things. In the future
+this will be configurable.
 
 The moved window will be maximized (or centred, if it cannot cover the whole
 extent) in the perpendicular dirction to the movement, unless it is already
