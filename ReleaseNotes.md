@@ -1,5 +1,5 @@
 # TailWimp Lite v0.4.2
-## Further improvements to movement keys (2021-01-29)
+## Further improvements to movement keys (2021-01-27)
 
 This release retires `Ctrl+Shift` as modkey, and instead introduces `Alt`
 as an alternative to `Logo`. At the moment both work in parallel, but the
