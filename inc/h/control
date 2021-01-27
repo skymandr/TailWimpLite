@@ -26,6 +26,9 @@
 
 #include "oslib/wimp.h"
 
+#define control_KEY_ALT         0x80 ^ 2
+#define control_KEY_LEFT_ALT    0x80 ^ 5
+#define control_KEY_RIGHT_ALT   0x80 ^ 8
 #define control_KEY_LEFT_LOGO   0x80 ^ 125
 #define control_KEY_RIGHT_LOGO  0x80 ^ 126
 #define control_KEY_LEFT        0x80 ^ 25
@@ -39,6 +42,6 @@
 osbool control_process_key(wimp_key_no c);
 
 // Scan for keyboard input:
-osbool control_key_key(void);
+osbool control_scan_key(void);
 
 #endif

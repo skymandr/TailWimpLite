@@ -21,6 +21,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "oslib/os.h"
 #include "oslib/osspriteop.h"
 #include "oslib/wimp.h"
 
@@ -44,6 +45,8 @@ wimp_w          app_prog_info_handle;
 wimp_w          app_choices_handle;
 choices         app_choices;
 screen_padding  app_padding;
+#define         app_POLL_INTERVAL   5
+#define         app_POLL_WAIT       4 
 
 
 // Function prototypes:
@@ -119,20 +122,24 @@ static wimp_t main_init(void) {
 static void main_poll(void) {
     wimp_event_no   reason;
     wimp_block      block;
+    os_t            time;
     int             pollword;
+    osbool          has_managed = FALSE;
 
     while(!main_quit_flag) {
-        reason = wimp_poll(
-            wimp_MASK_NULL
-            | wimp_MASK_ENTERING
+        time = os_read_monotonic_time();
+        reason = wimp_poll_idle(
+            wimp_MASK_ENTERING
             | wimp_MASK_LEAVING
             | wimp_MASK_GAIN
             | wimp_MASK_LOSE
             | wimp_MASK_POLLWORD,
             &block,
+            time + app_POLL_INTERVAL * (1 + has_managed * app_POLL_WAIT),
             &pollword
         );
 
+        has_managed = FALSE;
         switch (reason) {
         case wimp_USER_MESSAGE:
         case wimp_USER_MESSAGE_RECORDED:
@@ -151,14 +158,12 @@ static void main_poll(void) {
             wimp_close_window(block.close.w);
             break;
         case wimp_KEY_PRESSED:
-            if (!(
-                control_process_key(block.key.c)
-                || choices_key_press(&(block.key))
-            )) {
+            if (!choices_key_press(&(block.key))) {
                 wimp_process_key(block.key.c);
             };
             break;
         default:
+            has_managed = control_scan_key();
             break;
         }
     }

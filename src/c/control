@@ -31,7 +31,7 @@
 #include "wininfo.h"
 
 
-// Process keyboard input:
+// Process wimp keyboard input:
 osbool control_process_key(wimp_key_no c) {
     os_error*           error;
     direction           dir;
@@ -53,23 +53,6 @@ osbool control_process_key(wimp_key_no c) {
     */
     } else if (c == (app_choices.mod_key | wimp_KEY_LOGO)) {
         dir = manage_MAX;
-    } else if (osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_LEFT_LOGO, NULL)
-               || osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_RIGHT_LOGO, NULL)) {
-        if (osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_LEFT, NULL)) {
-            dir = manage_LEFT;
-        } else if (osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_RIGHT, NULL)) {
-            dir = manage_RIGHT;
-        } else if (osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_UP, NULL)) {
-            dir = manage_TOP;
-        } else if (osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_DOWN, NULL)) {
-            dir = manage_BOTTOM;
-        } else if (osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_SPACE, NULL)) {
-            dir = manage_CENTRE;
-        } else if (osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_RETURN, NULL)) {
-            dir = manage_MAX;
-        } else {
-            return FALSE;
-        }
     } else {
         return FALSE;
     }
@@ -89,6 +72,7 @@ osbool control_process_key(wimp_key_no c) {
 };
 
 
+// Scan for keyboard input:
 osbool control_scan_key(void) {
     osbool              modkey;
     direction           dir;
@@ -97,7 +81,10 @@ osbool control_scan_key(void) {
 
     // Check if mod key is pressed:
     modkey = osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_LEFT_LOGO, NULL)
-             || osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_RIGHT_LOGO, NULL);
+             || osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_RIGHT_LOGO, NULL)
+             || osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_ALT, NULL)
+             || osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_LEFT_ALT, NULL)
+             || osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_RIGHT_ALT, NULL);
     if (!modkey) {
         return FALSE;
     }
