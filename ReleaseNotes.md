@@ -2,7 +2,7 @@
 ## Improved movements and movement keys (2021-01-27)
 
 This release introduces a new modkey: `Logo`. At the moment, this is not
-configurable (see issue #3), but works in paralell to `Ctrl+Shift`. The new
+configurable (see issue #3), but works in parallel to `Ctrl+Shift`. The new
 modkey has three benefits over the old:
 
 1. It doesn't clash as badly with already defined key combinations
@@ -21,7 +21,7 @@ The next logical step is to make the modkey configurable (issue #3). I think
 that this will require implementing support for _DeepKeys_ [2], unless I want
 to make a complete reimagining of the control logic (issue #25). Not sure
 which route is best. _DeepKeys_ seems very convenient, but I am reluctant to
-foist the inconvenince of installing a third-party dependency to run the
+foist the inconvenience of installing a third-party dependency to run the
 program, especially a proprietary one. It might also be more fun to do it
 myself, but on the other hand it might be very frustrating. I guess I'll find
 out. Regardless, if I go with _DeepKeys_ I will most likely keep the current
