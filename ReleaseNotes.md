@@ -15,17 +15,18 @@ There are two quirks:
 2. The "maximize" movement is different for the two modkeys:
    `Ctrl+Shift+Logo` or `Logo+Return`. This is due to limitations in `OSLib`.
 
-Since this changes the interaction pattern, I'm bumping the minor version.
+Since this changes the interaction pattern, and since being able to move
+focused windows is an important feature, I'm bumping the minor version.
 
 The next logical step is to make the modkey configurable (issue #3). I think
 that this will require implementing support for _DeepKeys_ [2], unless I want
 to make a complete reimagining of the control logic (issue #25). Not sure
 which route is best. _DeepKeys_ seems very convenient, but I am reluctant to
 foist the inconvenience of installing a third-party dependency to run the
-program, especially a proprietary one. It might also be more fun to do it
-myself, but on the other hand it might be very frustrating. I guess I'll find
-out. Regardless, if I go with _DeepKeys_ I will most likely keep the current
-control logic as a fallback, if _DeepKeys_ is not detected.
+program, especially a proprietary one, upon the user. It might also be more
+fun to do it myself, but on the other hand it might be very frustrating. I
+guess I'll find out. Regardless, if I go with _DeepKeys_ I will most likely
+keep the current control logic as a fallback, if _DeepKeys_ is not detected.
 
 I have decided not to prioritise the known bugs (issues #21–#23) at the
 moment, so after the above is done, I'll probably have another look at GCCSDK
