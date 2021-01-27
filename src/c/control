@@ -38,13 +38,6 @@ osbool control_process_key(wimp_key_no c) {
     wimp_w              handle;
     wimp_window_state   state;
 
-    handle = wininfo_get_active_window();
-    if (handle == wimp_BOTTOM) {
-        return FALSE;
-    }
-    state.w = handle;
-    wimp_get_window_state(&state);
-
     // Use if rather than switch to allow for mod_key setting in future:
     if (c == (app_choices.mod_key | wimp_KEY_LEFT)) {
         dir = manage_LEFT;
@@ -80,7 +73,62 @@ osbool control_process_key(wimp_key_no c) {
     } else {
         return FALSE;
     }
-    
+
+    // Find window to manage:
+    handle = wininfo_get_active_window();
+    if (handle == wimp_BOTTOM) {
+        return FALSE;
+    }
+
+    // Manage window:
+    state.w = handle;
+    wimp_get_window_state(&state);
     manage_window(handle, dir);
+
     return TRUE;
 };
+
+
+osbool control_scan_key(void) {
+    osbool              modkey;
+    direction           dir;
+    wimp_w              handle;
+    wimp_window_state   state;
+
+    // Check if mod key is pressed:
+    modkey = osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_LEFT_LOGO, NULL)
+             || osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_RIGHT_LOGO, NULL);
+    if (!modkey) {
+        return FALSE;
+    }
+
+    // Check if movement key is pressed:
+    if (osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_LEFT, NULL)) {
+        dir = manage_LEFT;
+    } else if (osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_RIGHT, NULL)) {
+        dir = manage_RIGHT;
+    } else if (osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_UP, NULL)) {
+        dir = manage_TOP;
+    } else if (osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_DOWN, NULL)) {
+        dir = manage_BOTTOM;
+    } else if (osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_SPACE, NULL)) {
+        dir = manage_CENTRE;
+    } else if (osbyte1(osbyte_SCAN_KEYBOARD, control_KEY_RETURN, NULL)) {
+        dir = manage_MAX;
+    } else {
+        return FALSE;
+    }
+
+    // Find window to manage:
+    handle = wininfo_get_active_window();
+    if (handle == wimp_BOTTOM) {
+        return FALSE;
+    }
+
+    // Manage window:
+    state.w = handle;
+    wimp_get_window_state(&state);
+    manage_window(handle, dir);
+
+    return TRUE;
+}

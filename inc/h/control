@@ -38,4 +38,7 @@
 // Process keyboard input:
 osbool control_process_key(wimp_key_no c);
 
+// Scan for keyboard input:
+osbool control_key_key(void);
+
 #endif
