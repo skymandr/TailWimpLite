@@ -1,3 +1,25 @@
+# TailWimp Lite v1.0.0
+## Further improvements to movement keys (2021-01-29)
+
+Modkeys are now configurable (issue #3), which means that I consider this
+software mature enough to warrant a major release: say hi to _v1.0.0_!
+
+That aside, this release mostly contains some tidying up, updates to the
+Help/ReadMe, but also the official unveiling of a link to the GitHub project,
+accessible from the Program information window (issue #24).
+
+With this, I think I will take a break, but I've said that before. Next steps
+are to look into distribution (issues #18–#20) and to investigate the
+irregularities affecting certain windows (issues #21–#23).
+
+Thanks to the users on the ROOL forums [1] for help, suggestions, and for
+keeping the ROOL wiki up to date!
+
+---
+[1]: https://www.riscosopen.org/forum
+
+
+----------------------
 # TailWimp Lite v0.4.2
 ## Further improvements to movement keys (2021-01-27)
 
