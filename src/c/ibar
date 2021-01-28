@@ -40,15 +40,15 @@
 
 
 // Icon bar menu entries:
-#define IBAR_MENU_ENTRIES   6
-#define IBAR_MENU_INFO      0
-#define IBAR_MENU_CHOICES   1
-#define IBAR_MENU_HELP      2
+#define ibar_MENU_ENTRIES   6
+#define ibar_MENU_INFO      0
+#define ibar_MENU_CHOICES   1
+#define ibar_MENU_HELP      2
 /*        Separator        */
-#define IBAR_MENU_NOTES     3
-#define IBAR_MENU_LICENSE   4
+#define ibar_MENU_NOTES     3
+#define ibar_MENU_LICENSE   4
 /*        Separator        */
-#define IBAR_MENU_QUIT      5
+#define ibar_MENU_QUIT      5
 
 //  Global variables:
 wimp_menu*  ibar_menu;
@@ -125,18 +125,18 @@ void ibar_mouse_click(wimp_pointer* pointer) {
 
 // Initialise icon bar menu:
 static osbool ibar_init_menu(wimp_w prog_info) {
-    ibar_menu = menu_create(APP_TITLE, IBAR_MENU_ENTRIES);
+    ibar_menu = menu_create(APP_TITLE, ibar_MENU_ENTRIES);
     if (ibar_menu == NULL) {
         return FALSE;
     }
-    menu_entry(ibar_menu, IBAR_MENU_INFO, "Info", (wimp_menu*) prog_info, 0);
-    menu_entry(ibar_menu, IBAR_MENU_CHOICES, "Choices...", NULL, 0);
-    menu_entry(ibar_menu, IBAR_MENU_HELP, "Help...", NULL,
+    menu_entry(ibar_menu, ibar_MENU_INFO, "Info", (wimp_menu*) prog_info, 0);
+    menu_entry(ibar_menu, ibar_MENU_CHOICES, "Choices...", NULL, 0);
+    menu_entry(ibar_menu, ibar_MENU_HELP, "Help...", NULL,
                wimp_MENU_SEPARATE);
-    menu_entry(ibar_menu, IBAR_MENU_NOTES, "Release Notes...", NULL, 0);
-    menu_entry(ibar_menu, IBAR_MENU_LICENSE, "License...", NULL,
+    menu_entry(ibar_menu, ibar_MENU_NOTES, "Release Notes...", NULL, 0);
+    menu_entry(ibar_menu, ibar_MENU_LICENSE, "License...", NULL,
                wimp_MENU_SEPARATE);
-    menu_entry(ibar_menu, IBAR_MENU_QUIT, "Quit", NULL,
+    menu_entry(ibar_menu, ibar_MENU_QUIT, "Quit", NULL,
                wimp_MENU_LAST);
 
     return TRUE;
@@ -149,21 +149,21 @@ static void ibar_menu_selection(
     wimp_selection* selection
 ) {
     switch (selection->items[0]) {
-    case IBAR_MENU_INFO:
+    case ibar_MENU_INFO:
         break;
-    case IBAR_MENU_CHOICES:
+    case ibar_MENU_CHOICES:
         appwin_open(app_choices_handle, manage_CENTRE);
         break;
-    case IBAR_MENU_HELP:
+    case ibar_MENU_HELP:
         ibar_open_help();
         break;
-    case IBAR_MENU_NOTES:
+    case ibar_MENU_NOTES:
         ibar_open_release_notes();
         break;
-    case IBAR_MENU_LICENSE:
+    case ibar_MENU_LICENSE:
         ibar_open_license();
         break;
-    case IBAR_MENU_QUIT:
+    case ibar_MENU_QUIT:
         main_quit_flag = TRUE;
         break;
     default:

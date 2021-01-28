@@ -44,9 +44,6 @@
 #define control_KEY_SPACE       0x80 ^ 98
 #define control_KEY_RETURN      0x80 ^ 73
 
-// Process keyboard input:
-osbool control_process_key(wimp_key_no c);
-
 // Scan for keyboard input:
 osbool control_scan_key(void);
 

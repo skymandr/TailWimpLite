@@ -21,8 +21,8 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef EXAMPLEAPP_REPBOX
-#define EXAMPLEAPP_REPBOX
+#ifndef TAILWIMP_REPORT
+#define TAILWIMP_REPORT
 
 #include "oslib/os.h"
 

@@ -24,13 +24,11 @@ anchoring it to the margin in the direction of movement.
 - `ModKey+Return` maximizes the current window, while respecting padding.
 
 The current window is defined as the topmost window over all, and `ModKey`
-defined as is either `Logo` or `Alt`.
-
-The reason for two `ModKey` options in parallel is that, `Logo` key presses
-are not forwarded properly to Risc OS under RPCEmu [3], since it is captured
-by the host OS. Therefore `Alt` works better in this setting, but using this
-may not be ideal, since Risc OS uses `Alt` for a lot of things. In the future
-this will be configurable.
+defined as is either `Logo` or `Alt`. The default is `Logo`, but note that
+`Logo` key presses are not forwarded properly to Risc OS under RPCEmu [3],
+since they are captured by the host OS. Therefore `Alt` works better in this
+setting, but using this may not be ideal, since Risc OS uses `Alt` for a lot
+of things. The `ModKey` is configurable, see _Choices_ below.
 
 The moved window will be maximized (or centred, if it cannot cover the whole
 extent) in the perpendicular dirction to the movement, unless it is already
@@ -45,15 +43,17 @@ and maximize movements.
 
 If padding is specified, space on the desktop will be reserved around the
 windows to allow access to the icon bar, iconized windows and the like. By
-default, only bottom padding is non-zero, in order to show the icon bar.
+default, only bottom padding is non-zero, in order to show the icon bar. See
+_Choices_ below for information on how to configure padding.
 
 
 ## Choices
-Paddings for left, right, top and bottom margins in os screen units (usually
-2 per 1 px). By default only bottom padding is non-zero, in order to show the
-icon bar. Choices can be set by selecting _Choices_ from the icon bar menu.
-Though an option for the modkey is shown in Choices, it is currently _not_
-configurable.
+Choices can be set by selecting _Choices..._ from the icon bar menu. Thir
+allows you to set paddings for left, right, top and bottom margins in os
+screen units (usually 2 per 1 px). By default only bottom padding is
+non-zero, in order to show the icon bar. You can also select whether you want
+`Logo` or `Alt` as `ModKey`. The default is `Logo` – see _Usage_ above for
+some considerations on which to choose.
 
 
 ## Help
@@ -72,7 +72,7 @@ The preferred way of communicating a suggestion or a problem is to submit an
 issue in the GitHub project [5]. If you have questions, you can also try
 asking in the Risc OS Open forum [6] if you think the question is of general
 interest, or you can contact me directly on for example _!ChatCube_ [7],
-_Telegram_ [8], or _matrix_ [9], or by emailing me @fripost.org. I use the
+_Telegram_ [8], or _matrix_ [9], or by emailing me _@fripost.org_. I use the
 handle `skymandr` for all of these.
 
 

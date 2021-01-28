@@ -35,11 +35,11 @@
 
 
 // Program info icons:
-#define IBAR_PROGINFO_ICON_NAME     0
-#define IBAR_PROGINFO_ICON_PURPOSE  1
-#define IBAR_PROGINFO_ICON_AUTHOR   2
-#define IBAR_PROGINFO_ICON_VERSION  3
-#define IBAR_PROGINFO_ICON_BBL      4
+#define proginfo_ICON_NAME      0
+#define proginfo_ICON_PURPOSE   1
+#define proginfo_ICON_AUTHOR    2
+#define proginfo_ICON_VERSION   3
+#define proginfo_ICON_BBL       4
 
 
 // Initialise application info window:
@@ -59,23 +59,23 @@ wimp_w prog_info_init(osspriteop_area* sprites) {
         text = icons[i].data.indirected_text.text;
         size = icons[i].data.indirected_text.size;
         switch (i) {
-        case IBAR_PROGINFO_ICON_NAME:
+        case proginfo_ICON_NAME:
             strncpy(text, APP_TITLE, size);
             text[size - 1] = '\0';
             break;
-        case IBAR_PROGINFO_ICON_PURPOSE:
+        case proginfo_ICON_PURPOSE:
             strncpy(text, APP_PURPOSE, size);
             text[size - 1] = '\0';
             break;
-        case IBAR_PROGINFO_ICON_AUTHOR:
+        case proginfo_ICON_AUTHOR:
             strncpy(text, APP_AUTHOR, size);
             text[size - 1] = '\0';
             break;
-        case IBAR_PROGINFO_ICON_VERSION:
+        case proginfo_ICON_VERSION:
             strncpy(text, APP_VERSION " (" APP_DATE ")", size);
             text[size - 1] = '\0';
             break;
-        case IBAR_PROGINFO_ICON_BBL:
+        case proginfo_ICON_BBL:
             icons[i].data.indirected_sprite.area = sprites;
             break;
         default:

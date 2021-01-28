@@ -35,15 +35,17 @@
 
 
 // Choice icons:
-# define IBAR_CHOICES_ICON_LEFT     2
-# define IBAR_CHOICES_ICON_RIGHT    3
-# define IBAR_CHOICES_ICON_TOP      4
-# define IBAR_CHOICES_ICON_BOTTOM   5
-# define IBAR_CHOICES_ICON_MODKEY   6
-# define IBAR_CHOICES_ICON_DEFAULT  7
-# define IBAR_CHOICES_ICON_CANCEL   8
-# define IBAR_CHOICES_ICON_SET      9
-# define IBAR_CHOICES_BUFFER_LEN    7
+# define choices_ICON_LEFT          1
+# define choices_ICON_RIGHT         2
+# define choices_ICON_TOP           3
+# define choices_ICON_BOTTOM        4
+# define choices_ICON_MOD_ALT       6
+# define choices_ICON_MOD_LOGO      7
+# define choices_ICON_DEFAULT       8
+# define choices_ICON_CANCEL        9
+# define choices_ICON_SET          10
+# define choices_BUFFER_LEN         7
+
 
 
 // Function prototypes:
@@ -52,6 +54,7 @@ static void choices_icons_set(wimp_w handle);
 static void choices_icons_reset(wimp_w handle);
 static void choices_icon_set_int(wimp_w handle, wimp_i icon, int value);
 static int  choices_icon_get_int(wimp_w handle, wimp_i icon);
+static osbool choices_icon_selected(wimp_w handle, wimp_i icon);
 
 
 /////////////////////
@@ -60,7 +63,7 @@ static int  choices_icon_get_int(wimp_w handle, wimp_i icon);
 
 // Get choices:
 void choices_get(choices* choices, screen_padding* padding) {
-    choices->mod_key    = config_int_read("modkey");
+    choices->modkey     = config_int_read("modkey");
     choices->padding    = padding;
     padding->left       = config_int_read("pad_left");
     padding->right      = config_int_read("pad_right");
@@ -75,11 +78,11 @@ osbool choices_init(void) {
         return FALSE;
     }
 
-    config_int_init("modkey",       CHOICES_MODKEY);
-    config_int_init("pad_left",     CHOICES_PAD_LEFT);
-    config_int_init("pad_right",    CHOICES_PAD_RIGHT);
-    config_int_init("pad_top",      CHOICES_PAD_RIGHT);
-    config_int_init("pad_bottom",   CHOICES_PAD_BOTTOM);
+    config_int_init("modkey",       choices_MODKEY);
+    config_int_init("pad_left",     choices_PAD_LEFT);
+    config_int_init("pad_right",    choices_PAD_RIGHT);
+    config_int_init("pad_top",      choices_PAD_RIGHT);
+    config_int_init("pad_bottom",   choices_PAD_BOTTOM);
 
     choices_load();
 
@@ -89,11 +92,11 @@ osbool choices_init(void) {
 
 // Set default choices:
 void choices_set_defaults(void) {
-    config_int_set("modkey",        CHOICES_MODKEY);
-    config_int_set("pad_left",      CHOICES_PAD_LEFT);
-    config_int_set("pad_right",     CHOICES_PAD_RIGHT);
-    config_int_set("pad_top",       CHOICES_PAD_RIGHT);
-    config_int_set("pad_bottom",    CHOICES_PAD_BOTTOM);
+    config_int_set("modkey",        choices_MODKEY);
+    config_int_set("pad_left",      choices_PAD_LEFT);
+    config_int_set("pad_right",     choices_PAD_RIGHT);
+    config_int_set("pad_top",       choices_PAD_RIGHT);
+    config_int_set("pad_bottom",    choices_PAD_BOTTOM);
 }
 
 
@@ -133,12 +136,8 @@ wimp_w choices_init_choices(void) {
 
     app_choices_handle = wimp_create_window(window_definition);
     free(window_definition);
-    wimp_set_icon_state(
-        app_choices_handle,
-        IBAR_CHOICES_ICON_MODKEY,
-        wimp_ICON_SELECTED,
-        wimp_ICON_SELECTED
-    );
+
+    choices_icons_reset(app_choices_handle);
 
     return app_choices_handle;
 }
@@ -147,34 +146,32 @@ wimp_w choices_init_choices(void) {
 // Set Choices icon values to initial state:
 static void choices_icons_init(wimp_icon* icons, int icon_count) {
     char*               text;
-    char                ftext[IBAR_CHOICES_BUFFER_LEN];
+    char                ftext[choices_BUFFER_LEN];
     int                 size;
 
     for (int i = 0; i < icon_count; i++) {
         text = icons[i].data.indirected_text.text;
         size = icons[i].data.indirected_text.size;
         switch (i) {
-        case IBAR_CHOICES_ICON_LEFT:
+        case choices_ICON_LEFT:
             sprintf(ftext, "%d", app_choices.padding->left);
             strncpy(text, ftext, size);
             text[size - 1] = '\0';
             break;
-        case IBAR_CHOICES_ICON_RIGHT:
+        case choices_ICON_RIGHT:
             sprintf(ftext, "%d", app_choices.padding->right);
             strncpy(text, ftext, size);
             text[size - 1] = '\0';
             break;
-        case IBAR_CHOICES_ICON_TOP:
+        case choices_ICON_TOP:
             sprintf(ftext, "%d", app_choices.padding->top);
             strncpy(text, ftext, size);
             text[size - 1] = '\0';
             break;
-        case IBAR_CHOICES_ICON_BOTTOM:
+        case choices_ICON_BOTTOM:
             sprintf(ftext, "%d", app_choices.padding->bottom);
             strncpy(text, ftext, size);
             text[size - 1] = '\0';
-            break;
-        case IBAR_CHOICES_ICON_MODKEY:
             break;
         default:
             break;
@@ -196,20 +193,20 @@ void choices_mouse_click(wimp_pointer* pointer) {
     }
 
     switch (pointer->i) {
-    case IBAR_CHOICES_ICON_SET:
+    case choices_ICON_SET:
         // Set settings from icons to file and memory:
         choices_icons_set(pointer->w);
         choices_save();
         choices_get(&app_choices, &app_padding);
         break;
-    case IBAR_CHOICES_ICON_DEFAULT:
+    case choices_ICON_DEFAULT:
         // Reset icons to default settings and save to file and memory:
         choices_set_defaults();
         choices_save();
         choices_get(&app_choices, &app_padding);
         choices_icons_reset(pointer->w);
         break;
-    case IBAR_CHOICES_ICON_CANCEL:
+    case choices_ICON_CANCEL:
         // Reset icon states from mem:
         choices_icons_reset(pointer->w);
         break;
@@ -253,25 +250,33 @@ static void choices_icons_set(wimp_w handle) {
 
     for (int i = 0; i < window.icon_count; i++) {
         switch (i) {
-        case IBAR_CHOICES_ICON_LEFT:
+        case choices_ICON_LEFT:
             value = choices_icon_get_int(handle, (wimp_i) i);
             config_int_set("pad_left", value);
             choices_icon_set_int(handle, (wimp_i) i, value);
             break;
-        case IBAR_CHOICES_ICON_RIGHT:
+        case choices_ICON_RIGHT:
             value = choices_icon_get_int(handle, (wimp_i) i);
             config_int_set("pad_right", value);
             choices_icon_set_int(handle, (wimp_i) i, value);
             break;
-        case IBAR_CHOICES_ICON_TOP:
+        case choices_ICON_TOP:
             value = choices_icon_get_int(handle, (wimp_i) i);
             config_int_set("pad_top", value);
             choices_icon_set_int(handle, (wimp_i) i, value);
             break;
-        case IBAR_CHOICES_ICON_BOTTOM:
+        case choices_ICON_BOTTOM:
             value = choices_icon_get_int(handle, (wimp_i) i);
             config_int_set("pad_bottom", value);
             choices_icon_set_int(handle, (wimp_i) i, value);
+            break;
+        case choices_ICON_MOD_ALT:
+        case choices_ICON_MOD_LOGO:
+            if (choices_icon_selected(handle, choices_ICON_MOD_ALT)) {
+                config_int_set("modkey", choices_MOD_ALT);
+            } else {
+                config_int_set("modkey", choices_MOD_LOGO);
+            }
             break;
         default:
             break;
@@ -289,29 +294,59 @@ static void choices_icons_reset(wimp_w handle) {
 
     for (int i = 0; i < window.icon_count; i++) {
         switch (i) {
-        case IBAR_CHOICES_ICON_LEFT:
+        case choices_ICON_LEFT:
             choices_icon_set_int(
                 handle, (wimp_i) i,
                 app_choices.padding->left
             );
             break;
-        case IBAR_CHOICES_ICON_RIGHT:
+        case choices_ICON_RIGHT:
             choices_icon_set_int(
                 handle, (wimp_i) i,
                 app_choices.padding->right
             );
             break;
-        case IBAR_CHOICES_ICON_TOP:
+        case choices_ICON_TOP:
             choices_icon_set_int(
                 handle, (wimp_i) i,
                 app_choices.padding->top
             );
             break;
-        case IBAR_CHOICES_ICON_BOTTOM:
+        case choices_ICON_BOTTOM:
             choices_icon_set_int(
                 handle, (wimp_i) i,
                 app_choices.padding->bottom
             );
+            break;
+        case choices_ICON_MOD_ALT:
+        case choices_ICON_MOD_LOGO:
+            if (app_choices.modkey == choices_MOD_ALT) {
+                wimp_set_icon_state(
+                    handle,
+                    choices_ICON_MOD_ALT,
+                    wimp_ICON_SELECTED,
+                    wimp_ICON_SELECTED
+                );
+                wimp_set_icon_state(
+                    handle,
+                    choices_ICON_MOD_LOGO,
+                    0,
+                    wimp_ICON_SELECTED
+                );
+            } else {
+                wimp_set_icon_state(
+                    handle,
+                    choices_ICON_MOD_ALT,
+                    0,
+                    wimp_ICON_SELECTED
+                );
+                wimp_set_icon_state(
+                    handle,
+                    choices_ICON_MOD_LOGO,
+                    wimp_ICON_SELECTED,
+                    wimp_ICON_SELECTED
+                );
+            }
             break;
         default:
             break;
@@ -323,7 +358,7 @@ static void choices_icons_reset(wimp_w handle) {
 // Set icon integer value:
 static void choices_icon_set_int(wimp_w handle, wimp_i icon, int value) {
     char*               text;
-    char                ftext[IBAR_CHOICES_BUFFER_LEN];
+    char                ftext[choices_BUFFER_LEN];
     int                 size;
     wimp_icon_state     icon_state;
 
@@ -333,8 +368,8 @@ static void choices_icon_set_int(wimp_w handle, wimp_i icon, int value) {
 
     text = icon_state.icon.data.indirected_text.text;
     size = icon_state.icon.data.indirected_text.size;
-    if (size > IBAR_CHOICES_BUFFER_LEN) {
-        size = IBAR_CHOICES_BUFFER_LEN;
+    if (size > choices_BUFFER_LEN) {
+        size = choices_BUFFER_LEN;
     }
 
     sprintf(ftext, "%d", value);
@@ -349,7 +384,6 @@ static void choices_icon_set_int(wimp_w handle, wimp_i icon, int value) {
 static int choices_icon_get_int(wimp_w handle, wimp_i icon) {
     char*               text;
     int                 size;
-
     wimp_icon_state     icon_state;
 
     icon_state.w = handle;
@@ -363,4 +397,14 @@ static int choices_icon_get_int(wimp_w handle, wimp_i icon) {
     }
 
     return (int) strtol(text, NULL, 10);
+}
+
+
+static osbool choices_icon_selected(wimp_w handle, wimp_i icon) {
+    wimp_icon_state     icon_state;
+    icon_state.w = handle;
+    icon_state.i = icon;
+    wimp_get_icon_state(&icon_state);
+
+    return (icon_state.icon.flags & wimp_ICON_SELECTED) != 0;
 }
