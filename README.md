@@ -60,6 +60,15 @@ some considerations on which to choose.
 Help, release notes and license are available in the icon bar menu.
 
 
+## Updates
+You can find the latest released version under _Releases_ on the GitHub
+project [3], where you can also find the source, in case you want to modify
+it or build it your self. Be advised that the source may contain untested
+features! The GitHub project page can be opened by clicking the _Bumbarrel_
+icon in the Program information window, available from the icon bar menu
+under _Info_.
+
+
 ## System requirements and compatibility
 This software has been tested on Risc OS Open 5.X [4] on Raspberry Pi and in
 the RPCEmu emulator [3]. It might work on earlier versions of Risc OS as
