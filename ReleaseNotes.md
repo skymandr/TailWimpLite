@@ -1,7 +1,7 @@
 # TailWimp Lite v1.0.0
-## Further improvements to movement keys (2021-01-29)
+## Configurable modkey (2021-01-29)
 
-Modkeys are now configurable (issue #3), which – along with the improvements
+Modkey is now configurable (issue #3), which – along with the improvements
 in controls from `v0.4.2` – means that I consider this software mature enough
 to warrant a major release: say hi to `!TailWmpLt v1.0.0!
 
