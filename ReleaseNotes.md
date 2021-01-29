@@ -3,7 +3,7 @@
 
 Modkey is now configurable (issue #3), which – along with the improvements
 in controls from `v0.4.2` – means that I consider this software mature enough
-to warrant a major release: say hi to `!TailWmpLt v1.0.0!
+to warrant a major release: say hi to `!TailWmpLt v1.0.0`!
 
 That aside, this release mostly contains some tidying up, updates to the
 Help/ReadMe, but also the official unveiling of a link to the GitHub project,
