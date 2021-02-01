@@ -182,7 +182,6 @@ static void choices_icons_init(wimp_icon* icons, int icon_count) {
 
 // Handle mouse click in Choices
 void choices_mouse_click(wimp_pointer* pointer) {
-    wimp_window_info    window;
     osbool              close = FALSE;
 
     switch (pointer->buttons) {

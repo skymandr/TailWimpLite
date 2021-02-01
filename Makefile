@@ -16,7 +16,8 @@ APPDIR = !TailWmpLt
 LDFLAGS = -lOSLib32
 
 # Compiler options:
-CFLAGS = -std=gnu99 -LOSLib: $(LDFLAGS) -I$(IDIR) -IOSLib:
+CFLAGS = -std=gnu99 -LOSLib: $(LDFLAGS) -I$(IDIR) -IOSLib: \
+		 -W -Wall -Wextra -pedantic
 
 # Objects:
 _OBJ = tailwimp.o ibar.o menu.o appwin.o screen.o choices.o manage.o report.o \
