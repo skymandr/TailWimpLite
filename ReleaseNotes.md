@@ -1,3 +1,13 @@
+# TailWimp Lite v1.0.1
+## Clean-up build and code
+
+This release doesn't implement any new features, merely cleans up the build
+and tidies the code. Pleas refer to release notes for `v1.0.0` for details on
+newest features and fixes!
+
+---
+
+----------------------
 # TailWimp Lite v1.0.0
 ## Configurable modkey (2021-01-29)
 
