@@ -1,5 +1,5 @@
 # TailWimp Lite v1.0.1
-## Clean-up build and code
+## Clean-up build and code (2021-02-05)
 
 This release doesn't implement any new features, merely cleans up the build
 and tidies the code. Pleas refer to release notes for `v1.0.0` for details on
