@@ -72,7 +72,7 @@ under _Info_.
 ## System requirements and compatibility
 This software has been tested on Risc OS Open 5.X [4] on Raspberry Pi and in
 the RPCEmu emulator [3]. It might work on earlier versions of Risc OS as
-well. If you try it, please let me know! Also, please se _Usage_ above for
+well. If you try it, please let me know! Also, please see _Usage_ above for
 some notes on using _Tail Wimp Lite_ under RPCEmu.
 
 
