@@ -49,7 +49,7 @@ _Choices_ below for information on how to configure padding.
 
 ## Choices
 Choices can be set by selecting _Choices..._ from the icon bar menu. Thir
-allows you to set paddings for left, right, top and bottom margins in os
+allows you to set paddings for left, right, top and bottom margins in OS
 screen units (usually 2 per 1 px). By default only bottom padding is
 non-zero, in order to show the icon bar. You can also select whether you want
 `Logo` or `Alt` as `ModKey`. The default is `Logo` – see _Usage_ above for
