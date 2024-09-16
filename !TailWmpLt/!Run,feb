@@ -1,5 +1,5 @@
 | !Run for !TailWmpLt
-| (C) Andreas Skyman (Bumbarrel Computing) 2021
+| (C) Ida-Sofia Skyman (Bumbarrel Computing) 2021
 
 RMEnsure UtilityModule 3.10 Error This application requires RISC OS 3.10 or later
 

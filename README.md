@@ -100,7 +100,7 @@ that will be called just _TailWimp_.
 ## License and disclaimer
 TailWimp Lite - utility for rearranging Wimp windows using keyboard
 
-Copyright (C) 2021  Andreas Skyman (Bumbarrel Computing)
+Copyright (C) 2021  Ida-Sofia Skyman (Bumbarrel Computing)
 
 Many features in this program are highly derivative of Steve Fryatt's
 examples from http://www.stevefryatt.org.uk/risc-os/wimp-prog which have been
